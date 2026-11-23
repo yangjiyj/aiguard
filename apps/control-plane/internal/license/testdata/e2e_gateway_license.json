@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "license.v2",
+  "payload": {
+    "schemaVersion": "license.v2",
+    "licenseId": "lic_e2e_gw",
+    "customer": {
+      "id": "cust_e2e",
+      "displayName": "E2E验签夹具"
+    },
+    "subject": {
+      "displayName": "大模型安全测评平台授权",
+      "products": [
+        "newapi-enterprise"
+      ]
+    },
+    "edition": "enterprise",
+    "issuedAt": "2026-06-25T02:24:34Z",
+    "notBefore": "2026-06-25T02:24:34Z",
+    "expiresAt": "2036-06-23T02:24:34Z",
+    "maxUsers": 100000,
+    "features": [
+      "agent_audit",
+      "content_retention",
+      "ide_proxy",
+      "sensitive_data_guard",
+      "web_ai"
+    ],
+    "deploymentBinding": {
+      "mode": "required",
+      "bindingId": "dep_e2e_fixture",
+      "fingerprints": [
+        {
+          "scope": "deployment",
+          "algorithm": "sha256",
+          "value": "bf8d8f857b48b3d5694f906ee1f5369bd79dd1ea7bfd9f369ac7c6084365fcf1"
+        }
+      ]
+    },
+    "gracePolicy": {
+      "expiryGraceDays": 30,
+      "clockRollbackGraceHours": 24,
+      "offlineRevocationStaleDays": 30
+    },
+    "revocationInfo": {
+      "mode": "none"
+    },
+    "issuer": "huoxianbao-license-authority-prod"
+  },
+  "signatureAlgorithm": "Ed25519-JCS-B64URL",
+  "keyId": "lse-lic-2026",
+  "signature": "ErMT9-8PTG3Om0MJfSwL4gWgkbsMMKaCquCvZ-mxTvdPOfd8e-axF5s61PALigAx3DUDe7O2h5G4GqXnm4T3DQ"
+}

@@ -1,0 +1,31 @@
+{
+  "id": "provider-openrouter",
+  "name": "OpenRouter",
+  "vendor": "OpenRouter",
+  "catalog_entries": [
+    {
+      "id": "openrouter_api",
+      "provider": "openrouter",
+      "provider_cn": "OpenRouter",
+      "product": "openrouter_api",
+      "product_cn": "OpenRouter",
+      "category": "router",
+      "region": "global",
+      "domains": [
+        "openrouter.ai"
+      ],
+      "path_rules": [
+        "/api/v1/",
+        "/"
+      ],
+      "request_decoder": "openai_compatible",
+      "response_decoder": "openai_compatible",
+      "retain_level": "content",
+      "risk_profile": "model_router",
+      "enabled": true,
+      "priority": 85,
+      "source_url": "https://openrouter.ai/"
+    }
+  ],
+  "agent_definitions": []
+}

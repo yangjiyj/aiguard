@@ -1,0 +1,34 @@
+{
+  "id": "provider-poe",
+  "name": "Poe",
+  "vendor": "Poe",
+  "catalog_entries": [
+    {
+      "id": "poe",
+      "provider": "poe",
+      "provider_cn": "Poe",
+      "product": "poe",
+      "product_cn": "Poe",
+      "category": "chat",
+      "region": "global",
+      "domains": [
+        "poe.com",
+        "www.poe.com"
+      ],
+      "path_rules": [
+        "/",
+        "/chat",
+        "contains:/chat",
+        "contains:/message"
+      ],
+      "request_decoder": "poe_web",
+      "response_decoder": "poe_web",
+      "retain_level": "content",
+      "risk_profile": "llm_web",
+      "enabled": true,
+      "priority": 70,
+      "source_url": "https://poe.com/"
+    }
+  ],
+  "agent_definitions": []
+}

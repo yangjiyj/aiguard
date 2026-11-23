@@ -1,0 +1,113 @@
+{
+  "id": "provider-moonshot",
+  "name": "月之暗面",
+  "vendor": "月之暗面",
+  "catalog_entries": [
+    {
+      "id": "kimi_upload",
+      "provider": "moonshot",
+      "provider_cn": "月之暗面",
+      "product": "kimi",
+      "product_cn": "Kimi",
+      "category": "chat",
+      "region": "cn",
+      "domains": [
+        "kimi.moonshot.cn",
+        "www.kimi.com",
+        "kimi.com"
+      ],
+      "path_rules": [
+        "contains:/file",
+        "contains:/upload",
+        "contains:/attachment",
+        "contains:/document"
+      ],
+      "request_decoder": "kimi_web",
+      "response_decoder": "kimi_web",
+      "retain_level": "content",
+      "risk_profile": "llm_web",
+      "enabled": true,
+      "priority": 102,
+      "source_url": "https://www.kimi.com/"
+    },
+    {
+      "id": "moonshot_api",
+      "provider": "moonshot",
+      "provider_cn": "月之暗面",
+      "product": "moonshot_api",
+      "product_cn": "Moonshot API",
+      "category": "api",
+      "region": "cn",
+      "domains": [
+        "api.moonshot.cn",
+        "platform.moonshot.ai",
+        "platform.kimi.com",
+        "*.moonshot.cn"
+      ],
+      "path_rules": [
+        "/v1/"
+      ],
+      "request_decoder": "openai_compatible",
+      "response_decoder": "openai_compatible",
+      "retain_level": "content",
+      "risk_profile": "llm_api",
+      "enabled": true,
+      "priority": 101,
+      "source_url": "https://www.kimi.com/help/kimi-api/api-overview"
+    },
+    {
+      "id": "kimi",
+      "provider": "moonshot",
+      "provider_cn": "月之暗面",
+      "product": "kimi",
+      "product_cn": "Kimi",
+      "category": "chat",
+      "region": "cn",
+      "domains": [
+        "kimi.moonshot.cn",
+        "*.kimi.moonshot.cn",
+        "kimi.com",
+        "www.kimi.com",
+        "*.kimi.com"
+      ],
+      "path_rules": [
+        "/",
+        "contains:/chat",
+        "contains:/completion",
+        "contains:/message",
+        "contains:/conversation"
+      ],
+      "request_decoder": "kimi_web",
+      "response_decoder": "kimi_web",
+      "retain_level": "content",
+      "risk_profile": "llm_web",
+      "enabled": true,
+      "priority": 100,
+      "source_url": "https://www.kimi.com/"
+    },
+    {
+      "id": "kimi_web_support",
+      "provider": "moonshot",
+      "provider_cn": "月之暗面",
+      "product": "kimi",
+      "product_cn": "Kimi",
+      "category": "chat",
+      "region": "cn",
+      "domains": [
+        "kimi.com",
+        "*.kimi.com",
+        "statics.moonshot.cn",
+        "avatar.moonshot.cn"
+      ],
+      "path_rules": null,
+      "request_decoder": "web_support",
+      "response_decoder": "web_support",
+      "retain_level": "summary",
+      "risk_profile": "llm_web",
+      "enabled": true,
+      "priority": 80,
+      "source_url": "https://www.kimi.com/"
+    }
+  ],
+  "agent_definitions": []
+}

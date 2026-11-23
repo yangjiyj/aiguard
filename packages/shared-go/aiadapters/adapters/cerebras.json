@@ -1,0 +1,32 @@
+{
+  "id": "provider-cerebras",
+  "name": "Cerebras",
+  "vendor": "Cerebras",
+  "catalog_entries": [
+    {
+      "id": "cerebras_api",
+      "provider": "cerebras",
+      "provider_cn": "Cerebras",
+      "product": "cerebras_api",
+      "product_cn": "Cerebras Cloud",
+      "category": "api",
+      "region": "global",
+      "domains": [
+        "cloud.cerebras.ai",
+        "api.cerebras.ai"
+      ],
+      "path_rules": [
+        "/",
+        "/v1/"
+      ],
+      "request_decoder": "openai_compatible",
+      "response_decoder": "openai_compatible",
+      "retain_level": "content",
+      "risk_profile": "llm_api",
+      "enabled": true,
+      "priority": 60,
+      "source_url": "https://cloud.cerebras.ai/"
+    }
+  ],
+  "agent_definitions": []
+}

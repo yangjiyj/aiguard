@@ -1,0 +1,78 @@
+{
+  "id": "provider-mistral",
+  "name": "Mistral",
+  "vendor": "Mistral",
+  "catalog_entries": [
+    {
+      "id": "mistral_api",
+      "provider": "mistral",
+      "provider_cn": "Mistral",
+      "product": "mistral_api",
+      "product_cn": "Mistral API",
+      "category": "api",
+      "region": "global",
+      "domains": [
+        "api.mistral.ai"
+      ],
+      "path_rules": [
+        "/v1/"
+      ],
+      "request_decoder": "mistral",
+      "response_decoder": "mistral",
+      "retain_level": "content",
+      "risk_profile": "llm_api",
+      "enabled": true,
+      "priority": 80,
+      "source_url": "https://docs.mistral.ai/"
+    },
+    {
+      "id": "mistral_chat",
+      "provider": "mistral",
+      "provider_cn": "Mistral",
+      "product": "mistral_chat",
+      "product_cn": "Le Chat",
+      "category": "chat",
+      "region": "global",
+      "domains": [
+        "chat.mistral.ai",
+        "console.mistral.ai"
+      ],
+      "path_rules": [
+        "/",
+        "/chat",
+        "contains:/chat",
+        "contains:/message",
+        "contains:/conversation"
+      ],
+      "request_decoder": "mistral_web",
+      "response_decoder": "mistral_web",
+      "retain_level": "content",
+      "risk_profile": "llm_web",
+      "enabled": true,
+      "priority": 80,
+      "source_url": "https://docs.mistral.ai/le-chat/overview/"
+    },
+    {
+      "id": "mistral_chat_support",
+      "provider": "mistral",
+      "provider_cn": "Mistral",
+      "product": "mistral_chat",
+      "product_cn": "Le Chat",
+      "category": "chat",
+      "region": "global",
+      "domains": [
+        "chat.mistral.ai",
+        "console.mistral.ai"
+      ],
+      "path_rules": null,
+      "request_decoder": "web_support",
+      "response_decoder": "web_support",
+      "retain_level": "summary",
+      "risk_profile": "llm_web",
+      "enabled": true,
+      "priority": 60,
+      "source_url": "https://docs.mistral.ai/le-chat/overview/"
+    }
+  ],
+  "agent_definitions": []
+}

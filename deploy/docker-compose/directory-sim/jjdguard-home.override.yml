@@ -1,0 +1,19 @@
+services:
+  chat-idp:
+    networks:
+      - jjdguard-net
+      - directory-sim
+
+  control-plane:
+    environment:
+      DIRECTORY_LDAP_TARGET_ALLOWLIST: "ldap-sim.jjdguard.test:636,dc-sim.ad.jjdguard.test:636"
+      DIRECTORY_LDAP_ALLOWED_CIDRS: "172.30.0.0/24"
+      JJD_IDP_ALLOW_CIDRS: "172.30.0.20/32"
+    networks:
+      - jjdguard-net
+      - directory-sim
+
+networks:
+  directory-sim:
+    external: true
+    name: jjdguard-directory-sim_directory-sim

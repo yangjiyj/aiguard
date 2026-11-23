@@ -1,0 +1,10 @@
+{
+  "schema": "jjdguard-owned-judge-7b-lock/v2",
+  "model_id": "qwen2.5-7b-judge-v4",
+  "origin": "user-trained",
+  "model": {
+    "file": "judge-v4-Q4_K_M.gguf",
+    "size": 4683073408,
+    "sha256": "65f5e861b9abe9e63438f6aab4362c8c46536c2fc85cd88d7cf54856c7ec7a4a"
+  }
+}

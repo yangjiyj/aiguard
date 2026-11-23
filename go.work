@@ -1,0 +1,10 @@
+go 1.25.0
+
+use (
+	apps/control-plane
+	apps/diag-agent
+	apps/gateway-core
+	apps/proxy-server
+	apps/worker
+	packages/shared-go
+)

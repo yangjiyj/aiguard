@@ -1,0 +1,108 @@
+{
+  "name": "provider_down_policy_ref",
+  "description": "已停用渠道上没有在用模型，但 v2 路由策略的候选里启用了它：必须靠结构化解析 providers[].provider_id 发现",
+  "fixture": {
+    "teams": [
+      {
+        "key": "dev",
+        "mode": "allowlist",
+        "models": [
+          "sol"
+        ]
+      }
+    ],
+    "providers": [
+      {
+        "key": "p1",
+        "name": "主渠道",
+        "type": "openai",
+        "base_url": "https://api.example.com"
+      },
+      {
+        "key": "p2",
+        "name": "旧备用渠道",
+        "type": "openai",
+        "base_url": "https://old.example.com",
+        "status": "disabled"
+      }
+    ],
+    "models": [
+      {
+        "key": "sol",
+        "provider": "p1",
+        "name": "gpt-6.1-sol"
+      }
+    ],
+    "users": [
+      {
+        "key": "zs",
+        "username": "zhangsan",
+        "team": "dev"
+      }
+    ],
+    "routing_policies": [
+      {
+        "scope_type": "model",
+        "scope_ref": "gpt-6.1-sol",
+        "strategy": "priority",
+        "schema_version": 2,
+        "config": {
+          "strategy": "priority",
+          "cost_basis": "none",
+          "providers": [
+            {
+              "provider_id": "{prov:p1}",
+              "enabled": true,
+              "priority": 1,
+              "weight": 0
+            },
+            {
+              "provider_id": "{prov:p2}",
+              "enabled": true,
+              "priority": 2,
+              "weight": 0
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "input": {
+    "kind": "health",
+    "scope": "admin"
+  },
+  "expect": {
+    "tier": "L2",
+    "must_check_ids_any": [
+      "provider_down"
+    ],
+    "must_keywords": [
+      "旧备用渠道",
+      "停用"
+    ],
+    "must_level": {
+      "provider_down": "confirmed"
+    },
+    "l3": {
+      "level_by_kw": [
+        {
+          "kw": [
+            "旧备用渠道"
+          ],
+          "level": "confirmed"
+        }
+      ],
+      "must_keywords": [
+        "旧备用渠道"
+      ],
+      "must_keywords_any": [
+        "停用",
+        "禁用"
+      ],
+      "must_keywords_any2": [
+        "路由",
+        "策略"
+      ]
+    }
+  }
+}

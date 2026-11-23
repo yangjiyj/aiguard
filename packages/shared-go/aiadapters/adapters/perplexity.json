@@ -1,0 +1,79 @@
+{
+  "id": "provider-perplexity",
+  "name": "Perplexity",
+  "vendor": "Perplexity",
+  "catalog_entries": [
+    {
+      "id": "perplexity",
+      "provider": "perplexity",
+      "provider_cn": "Perplexity",
+      "product": "perplexity",
+      "product_cn": "Perplexity",
+      "category": "search",
+      "region": "global",
+      "domains": [
+        "perplexity.ai",
+        "www.perplexity.ai"
+      ],
+      "path_rules": [
+        "/",
+        "/search",
+        "contains:/search",
+        "contains:/chat",
+        "contains:/answer"
+      ],
+      "request_decoder": "search_web",
+      "response_decoder": "search_web",
+      "retain_level": "content",
+      "risk_profile": "ai_search",
+      "enabled": true,
+      "priority": 80,
+      "source_url": "https://www.perplexity.ai/"
+    },
+    {
+      "id": "perplexity_api",
+      "provider": "perplexity",
+      "provider_cn": "Perplexity",
+      "product": "perplexity_api",
+      "product_cn": "Perplexity API",
+      "category": "api",
+      "region": "global",
+      "domains": [
+        "api.perplexity.ai"
+      ],
+      "path_rules": [
+        "/chat/completions",
+        "/"
+      ],
+      "request_decoder": "openai_compatible",
+      "response_decoder": "openai_compatible",
+      "retain_level": "content",
+      "risk_profile": "llm_api",
+      "enabled": true,
+      "priority": 80,
+      "source_url": "https://docs.perplexity.ai/"
+    },
+    {
+      "id": "perplexity_support",
+      "provider": "perplexity",
+      "provider_cn": "Perplexity",
+      "product": "perplexity",
+      "product_cn": "Perplexity",
+      "category": "search",
+      "region": "global",
+      "domains": [
+        "perplexity.ai",
+        "www.perplexity.ai"
+      ],
+      "path_rules": null,
+      "request_decoder": "web_support",
+      "response_decoder": "web_support",
+      "retain_level": "summary",
+      "risk_profile": "ai_search",
+      "enabled": true,
+      "priority": 60,
+      "source_url": "https://www.perplexity.ai/"
+    }
+  ],
+  "agent_definitions": []
+}

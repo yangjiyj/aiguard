@@ -1,0 +1,35 @@
+{
+  "id": "provider-monica",
+  "name": "Monica",
+  "vendor": "Monica",
+  "catalog_entries": [
+    {
+      "id": "monica",
+      "provider": "monica",
+      "provider_cn": "Monica",
+      "product": "monica",
+      "product_cn": "Monica",
+      "category": "chat",
+      "region": "global",
+      "domains": [
+        "monica.im",
+        "www.monica.im"
+      ],
+      "path_rules": [
+        "/",
+        "/chat",
+        "contains:/chat",
+        "contains:/message",
+        "contains:/conversation"
+      ],
+      "request_decoder": "monica_web",
+      "response_decoder": "monica_web",
+      "retain_level": "content",
+      "risk_profile": "llm_web",
+      "enabled": true,
+      "priority": 65,
+      "source_url": "https://monica.im/"
+    }
+  ],
+  "agent_definitions": []
+}

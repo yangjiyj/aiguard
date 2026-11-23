@@ -1,0 +1,35 @@
+{
+  "name": "user_message_illegal_system_command",
+  "note": "the human typed an illegal-system-command instruction: injection may have succeeded.",
+  "event": {
+    "event_type": "prompt_injection",
+    "severity": "critical",
+    "action_taken": "audit",
+    "principal_key": "user_3",
+    "matched_summary": {
+      "agent_type": "agent_claude_code",
+      "findings": [
+        {
+          "rule_type": "agent_detect",
+          "type": "agent_behavior",
+          "category": "agent_claude_code",
+          "severity": "low",
+          "confidence": 0.9,
+          "counts_as_security_finding": false
+        },
+        {
+          "category": "illegal_system_command_instructions",
+          "severity": "critical",
+          "confidence": 0.95,
+          "counts_as_security_finding": true,
+          "type": "prompt_injection",
+          "content_source": "user",
+          "message_role": "user"
+        }
+      ]
+    }
+  },
+  "expect": {
+    "routed": false
+  }
+}

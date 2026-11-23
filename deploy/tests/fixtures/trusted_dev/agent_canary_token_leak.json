@@ -1,0 +1,35 @@
+{
+  "name": "agent_canary_token_leak",
+  "note": "canary leak proves an exfiltration path: never downgraded.",
+  "event": {
+    "event_type": "agent_canary_token_leak",
+    "severity": "critical",
+    "action_taken": "audit",
+    "principal_key": "user_5",
+    "matched_summary": {
+      "agent_type": "agent_claude_code",
+      "findings": [
+        {
+          "rule_type": "agent_detect",
+          "type": "agent_behavior",
+          "category": "agent_claude_code",
+          "severity": "low",
+          "confidence": 0.9,
+          "counts_as_security_finding": false
+        },
+        {
+          "category": "agent_canary_token_leak",
+          "severity": "critical",
+          "confidence": 0.9,
+          "counts_as_security_finding": true,
+          "type": "canary",
+          "content_source": "tool_result",
+          "message_role": "tool"
+        }
+      ]
+    }
+  },
+  "expect": {
+    "routed": false
+  }
+}

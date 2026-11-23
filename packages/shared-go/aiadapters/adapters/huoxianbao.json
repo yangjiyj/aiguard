@@ -1,0 +1,35 @@
+{
+  "id": "provider-examplegw",
+  "name": "火线宝",
+  "vendor": "火线宝",
+  "catalog_entries": [
+    {
+      "id": "examplegw_gateway",
+      "provider": "examplegw",
+      "provider_cn": "火线宝",
+      "product": "examplegw_gateway",
+      "product_cn": "火线宝自营中转",
+      "category": "coding",
+      "region": "cn",
+      "domains": [
+        "api.example-gateway.com"
+      ],
+      "path_rules": [
+        "/v1/chat/completions",
+        "/v1/responses",
+        "/v1/completions",
+        "/v1/files",
+        "/v1/images",
+        "/v1/uploads"
+      ],
+      "request_decoder": "openai_compatible",
+      "response_decoder": "openai_compatible",
+      "retain_level": "content",
+      "risk_profile": "ai_ide_agent",
+      "enabled": true,
+      "priority": 93,
+      "source_url": "https://api.example-gateway.com/"
+    }
+  ],
+  "agent_definitions": []
+}

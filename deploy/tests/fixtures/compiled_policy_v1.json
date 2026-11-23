@@ -1,0 +1,26 @@
+{
+  "policy_code": "contract.scene.phone",
+  "policy_id": "contract_policy_phone",
+  "policy_name": "手机号场景",
+  "policy_type": "scene_policy",
+  "scene": "data_leak",
+  "action": "mask",
+  "enabled": true,
+  "binding_mode": "any",
+  "capabilities": [
+    {
+      "category": "phone_cn",
+      "supported_stages": [
+        "input",
+        "output"
+      ],
+      "allowed_actions": [
+        "audit",
+        "block",
+        "mask"
+      ],
+      "mask_capable": true
+    }
+  ],
+  "severity": "high"
+}

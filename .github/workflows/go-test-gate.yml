@@ -1,0 +1,137 @@
+name: Go Test Gate
+
+# Build and vet all Go modules, and gate the alert / audit / identity regression
+# tests on PostgreSQL 16 (the deployment major version). The three complete
+# integration suites still contain unrelated baseline failures; do not run the
+# whole suites as a mandatory gate until those failures have been triaged.
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - gitee/main
+
+env:
+  GO_VERSION: '1.25.x'
+  PG_DSN: postgres://postgres:bench@127.0.0.1:5432/jjdguard_repo_it?sslmode=disable
+
+jobs:
+  build-and-vet:
+    name: Build and vet (${{ matrix.module }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        module:
+          - packages/shared-go
+          - apps/control-plane
+          - apps/gateway-core
+          - apps/proxy-server
+          - apps/worker
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+      - name: Build
+        working-directory: ${{ matrix.module }}
+        run: go build -buildvcs=false ./...
+      - name: Vet
+        working-directory: ${{ matrix.module }}
+        run: go vet -buildvcs=false ./...
+
+  integration-tests:
+    name: PostgreSQL integration suites
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: bench
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+      - name: Ensure a psql client is available
+        run: sudo apt-get install -y -qq postgresql-client
+
+      - name: Initialise the test database from the migration set
+        env:
+          PGPASSWORD: bench
+          TEST_DB: jjdguard_repo_it
+        run: |
+          set -euo pipefail
+          psql -X -h 127.0.0.1 -p 5432 -U postgres -d postgres -v ON_ERROR_STOP=1 \
+            -c "CREATE DATABASE ${TEST_DB}"
+
+          mkdir -p /tmp/base-migrations
+          cp deploy/migrations/001_init_schema.sql /tmp/base-migrations/
+
+          cat >/tmp/migration-psql <<'SH'
+          #!/usr/bin/env bash
+          exec psql -X -h "$MIGRATION_HOST" -p "$MIGRATION_PORT" -U "$MIGRATION_USER" -d "$MIGRATION_DB" "$@"
+          SH
+          chmod +x /tmp/migration-psql
+
+          env MIGRATION_HOST=127.0.0.1 MIGRATION_PORT=5432 MIGRATION_USER=postgres \
+              MIGRATION_DB="${TEST_DB}" MIGRATION_PSQL=/tmp/migration-psql \
+              bash deploy/lib/migration-runner.sh --migrations-dir /tmp/base-migrations
+
+          psql -X -h 127.0.0.1 -p 5432 -U postgres -d "${TEST_DB}" -v ON_ERROR_STOP=1 \
+            -c "INSERT INTO tenants(id,name,edition,status) VALUES ('tenant_default','default-unit','enterprise','active') ON CONFLICT DO NOTHING" \
+            -c "INSERT INTO users(id,tenant_id,username,role,status) VALUES ('user_admin','tenant_default','admin','platform_admin','active') ON CONFLICT DO NOTHING"
+
+          PGPASSWORD=bench bash deploy/migrate-private.sh 127.0.0.1 5432 "${TEST_DB}" postgres
+
+      - name: Run targeted database regression tests
+        working-directory: apps/control-plane
+        env:
+          CONTENT_LOGS_TEST_DATABASE_URL: ${{ env.PG_DSN }}
+        run: |
+          set -euo pipefail
+          export TZ=Asia/Shanghai
+          go test -buildvcs=false -count=1 -timeout 10m -run '^(TestAccessContentSchemaRepairMigrationIsIdempotentAndComplete|TestContentEvidenceLifecycleMigrationPersistsExpiryWithoutContent|TestWorkBuddyEvidenceRunMigrationBackfillsStableWorkspaceIdentity|TestWorkBuddyMultiTurnRepairAndTitleHelperIntegration|TestListGroupEventsConversationViewAndPhysicalDrilldown|TestForwardProxyAccessTurnGrouping|TestListSessionsCollapsesRequestSnapshots|TestEmbeddedCapabilityDocsMatchTheEngineSource)$' ./internal/repository
+          go test -buildvcs=false -count=1 -timeout 10m -run '^(TestPostgresProvisioner.*|TestEnsurePortalUserUnassignedGetsChatAllowed)$' ./internal/localidentity ./internal/handler
+          go test -buildvcs=false -count=1 -timeout 10m -run '^(TestPortalUsageByKeyProjectFilter|TestGetAuditRequestDetailReturnsContentWhenAuditFlagDisabled)$' ./internal/handler
+
+      - name: Run alert case store and retention database tests
+        working-directory: apps/control-plane
+        env:
+          # 告警案件物化（等价、触发器摘要、读前与处置后消化、分批与隔离）和留存（预算列失效、关键字倒序）的真库用例。
+          ALERT_CASES_TEST_DATABASE_URL: ${{ env.PG_DSN }}
+          CONTENT_LOGS_TEST_DATABASE_URL: ${{ env.PG_DSN }}
+        run: |
+          set -euo pipefail
+          export TZ=Asia/Shanghai
+          go test -buildvcs=false -count=1 -p 1 -timeout 20m -run '^(TestAlertCaseStoreMatchesLiveQuery|TestAlertCaseDispositionsAreVisibleImmediately|TestAlertCaseStoreFallsBack.*|TestAlertCaseTriggerDigest.*|TestAlertCaseStoreRebuildsWhenLogicChanges|TestAlertCaseReadDrainTakesNewestEntriesFirst|TestAlertCaseDrainFailureFallsBackAndDoesNotStopOtherTenants|TestAlertCaseAuthorizationDrainGivesUpWhenTheTenantIsBusy|TestAlertCaseSyncDrainLeavesLargeGroupsToTheBackground|TestAlertCaseBackgroundDrainSplitsLargeEntries|TestAlertCaseBadEntriesAreQuarantinedAndRetried|TestAlertCaseStoreStatusExplainsTriggerMismatch|TestAlertCaseRebuildDropsMembersOfDeletedEvents|TestAlertCaseQuerySplicing.*|TestAlertCaseLogicVersionCoversBothAggregations|TestAlertOccurrencesExposeRawEvidenceOmitted|TestRetentionSummary.*|TestRetentionKeyword.*|TestForwardProxyKeywordSearchCanonicalSourcesAndFilters)$' ./internal/repository
+
+      - name: Run alert case store migration scripts
+        env:
+          ALERT_CASE_STORE_TEST_DATABASE_URL: ${{ env.PG_DSN }}
+        run: |
+          set -euo pipefail
+          bash deploy/tests/test_1002_1003_alert_case_store.sh
+          bash deploy/tests/test_alert_case_rollback_order.sh
+
+      - name: Run agent identity database tests
+        env:
+          # 缺少数据库变量时这些测试在 CI 下会 t.Fatal，而不是静默跳过。
+          CI: 'true'
+          JJD_BACKFILL_AGENT_UA_TEST_DATABASE_URL: ${{ env.PG_DSN }}
+          JJD_AGENT_SESSION_TEST_DATABASE_URL: ${{ env.PG_DSN }}
+        run: |
+          set -euo pipefail
+          export TZ=Asia/Shanghai
+          (cd apps/worker && go test -buildvcs=false -count=1 -timeout 10m -run '^(TestAgentUAIdentity.*|TestAgentRegistryTypesAreKnownToIdentityFunctionOnMigratedSchema)$' ./internal/backfill)
+          (cd apps/gateway-core && go test -buildvcs=false -count=1 -timeout 10m -run '^(TestAgentSession.*|TestBackfillRequestAgentType.*)$' ./internal/handler)

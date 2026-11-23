@@ -1,0 +1,1 @@
+# Customer LDAP/AD CA certificates (PEM or unencrypted PKCS12) are provisioned at deployment time.

@@ -1,0 +1,901 @@
+{
+  "policy_pack_sha256": "4f2d4b68a84aedc6bbcb969a010d1cad01222302903aa86c9cbabc7d1e201d11",
+  "policy_pack_version": "def2b828ee7e0081",
+  "compiled_matchers": 5,
+  "compiled_policies": 245,
+  "python": "3.11.15",
+  "transport": "authenticated_loopback_http",
+  "reports": [
+    {
+      "audit_only": false,
+      "confidence_gating": true,
+      "source_aware": true,
+      "summary": {
+        "requests": 20,
+        "benign_requests": 5,
+        "benign_with_security_finding": 0,
+        "benign_actions": {
+          "allow": 5
+        },
+        "risk_and_mixed_requests": 15,
+        "risk_and_mixed_with_security_finding": 15,
+        "risk_and_mixed_actions": {
+          "audit": 3,
+          "block": 12
+        }
+      },
+      "results": [
+        {
+          "sample_group": 1,
+          "kind": "benign",
+          "text_sha256": "e85bc2207449abfac7e188b301210db7ad976d01d4a8627e6c4f14e8caa3f9ef",
+          "action": "allow",
+          "semantic_status": "skipped",
+          "semantic_reason": "deferred",
+          "findings": [
+            {
+              "category": "illegal_hazardous_chemical_instructions",
+              "source_rule_id": "",
+              "policy_code": "",
+              "action": "allow",
+              "confidence": 0.95,
+              "counts_as_security_finding": false,
+              "disposition": "observation"
+            }
+          ]
+        },
+        {
+          "sample_group": 1,
+          "kind": "risk",
+          "text_sha256": "100e114027c1a4f10625b5cf7460a871758053ec6f0b0464a6dcd8d4e5ae4747",
+          "action": "audit",
+          "semantic_status": "skipped",
+          "semantic_reason": "deferred",
+          "findings": [
+            {
+              "category": "illegal_hazardous_chemical_instructions",
+              "source_rule_id": "",
+              "policy_code": "",
+              "action": "",
+              "confidence": 0.95,
+              "counts_as_security_finding": true,
+              "disposition": ""
+            }
+          ]
+        },
+        {
+          "sample_group": 1,
+          "kind": "benign_then_risk",
+          "text_sha256": "164401194df33018a6cb0f1fec47f851e36110486b8efa2cc4bf84bc2bd8b716",
+          "action": "audit",
+          "semantic_status": "skipped",
+          "semantic_reason": "deferred",
+          "findings": [
+            {
+              "category": "illegal_hazardous_chemical_instructions",
+              "source_rule_id": "",
+              "policy_code": "",
+              "action": "",
+              "confidence": 0.95,
+              "counts_as_security_finding": true,
+              "disposition": ""
+            }
+          ]
+        },
+        {
+          "sample_group": 1,
+          "kind": "risk_then_benign",
+          "text_sha256": "df224031d3edbc9d7f3afa400e7ffe556f4795ed4f2e08c9d10e50ee41b4b34b",
+          "action": "audit",
+          "semantic_status": "skipped",
+          "semantic_reason": "deferred",
+          "findings": [
+            {
+              "category": "illegal_hazardous_chemical_instructions",
+              "source_rule_id": "",
+              "policy_code": "",
+              "action": "",
+              "confidence": 0.95,
+              "counts_as_security_finding": true,
+              "disposition": ""
+            }
+          ]
+        },
+        {
+          "sample_group": 2,
+          "kind": "benign",
+          "text_sha256": "d5eab023856dc8f16034dd4f0adf624d64d4b391206017c56f01218401030a7c",
+          "action": "allow",
+          "semantic_status": "skipped",
+          "semantic_reason": "deferred",
+          "findings": [
+            {
+              "category": "illegal_drugs",
+              "source_rule_id": "",
+              "policy_code": "",
+              "action": "allow",
+              "confidence": 0.9,
+              "counts_as_security_finding": false,
+              "disposition": "observation"
+            }
+          ]
+        },
+        {
+          "sample_group": 2,
+          "kind": "risk",
+          "text_sha256": "6e54ed3c33f6bc5f7a67e63b85f291c88ae5f4eb565f754f826d60c5cbcc5653",
+          "action": "block",
+          "semantic_status": "skipped",
+          "semantic_reason": "deferred",
+          "findings": [
+            {
+              "category": "illegal_drug_trade",
+              "source_rule_id": "catalog_illegal_drug_trade",
+              "policy_code": "builtin.illegal_trade.103b0604b9ae8e51",
+              "action": "block",
+              "confidence": 0.9,
+              "counts_as_security_finding": true,
+              "disposition": ""
+            },
+            {
+              "category": "illegal_drugs",
+              "source_rule_id": "",
+              "policy_code": "",
+              "action": "",
+              "confidence": 0.9,
+              "counts_as_security_finding": true,
+              "disposition": ""
+            }
+          ]
+        },
+        {
+          "sample_group": 2,
+          "kind": "benign_then_risk",
+          "text_sha256": "6610ae2eff32ea7d91a6917c872aaea00dd4faf40ffef5ce9fa79383bb76c9b9",
+          "action": "block",
+          "semantic_status": "skipped",
+          "semantic_reason": "deferred",
+          "findings": [
+            {
+              "category": "illegal_drug_trade",
+              "source_rule_id": "catalog_illegal_drug_trade",
+              "policy_code": "builtin.illegal_trade.103b0604b9ae8e51",
+              "action": "block",
+              "confidence": 0.9,
+              "counts_as_security_finding": true,
+              "disposition": ""
+            },
+            {
+              "category": "illegal_drugs",
+              "source_rule_id": "",
+              "policy_code": "",
+              "action": "",
+              "confidence": 0.9,
+              "counts_as_security_finding": true,
+              "disposition": ""
+            }
+          ]
+        },
+        {
+          "sample_group": 2,
+          "kind": "risk_then_benign",
+          "text_sha256": "7a4d349293fc7138546a359e313894e5b1d6f0b1d985232d2149736f9055b5f5",
+          "action": "block",
+          "semantic_status": "skipped",
+          "semantic_reason": "deferred",
+          "findings": [
+            {
+              "category": "illegal_drug_trade",
+              "source_rule_id": "catalog_illegal_drug_trade",
+              "policy_code": "builtin.illegal_trade.103b0604b9ae8e51",
+              "action": "block",
+              "confidence": 0.9,
+              "counts_as_security_finding": true,
+              "disposition": ""
+            },
+            {
+              "category": "illegal_drugs",
+              "source_rule_id": "",
+              "policy_code": "",
+              "action": "",
+              "confidence": 0.9,
+              "counts_as_security_finding": true,
+              "disposition": ""
+            }
+          ]
+        },
+        {
+          "sample_group": 3,
+          "kind": "benign",
+          "text_sha256": "f5088bcbf04902197c8c70e7bde978ab07fbadfd41bbabb256c3e8931e2cd500",
+          "action": "allow",
+          "semantic_status": "skipped",
+          "semantic_reason": "deferred",
+          "findings": [
+            {
+              "category": "political_leader_name",
+              "source_rule_id": "",
+              "policy_code": "",
+              "action": "allow",
+              "confidence": 0.9,
+              "counts_as_security_finding": false,
+              "disposition": "observation"
+            }
+          ]
+        },
+        {
+          "sample_group": 3,
+          "kind": "risk",
+          "text_sha256": "aa30a41edafbe4ef9e984a07ce7b3937f645d15b4f86cd728c89c052781da82c",
+          "action": "block",
+          "semantic_status": "skipped",
+          "semantic_reason": "deferred",
+          "findings": [
+            {
+              "category": "illegal_violence_terror",
+              "source_rule_id": "content_safety_illegal_violence_terror",
+              "policy_code": "builtin.content_safety.a33fdb67d98f1e9d",
+              "action": "block",
+              "confidence": 0.9,
+              "counts_as_security_finding": true,
+              "disposition": ""
+            }
+          ]
+        },
+        {
+          "sample_group": 3,
+          "kind": "benign_then_risk",
+          "text_sha256": "49eaeec77e4667509efb8945d988e7fd974d1c7c01ec61abdd504c973ab8d3d9",
+          "action": "block",
+          "semantic_status": "skipped",
+          "semantic_reason": "deferred",
+          "findings": [
+            {
+              "category": "political_leader_name",
+              "source_rule_id": "",
+              "policy_code": "",
+              "action": "allow",
+              "confidence": 0.9,
+              "counts_as_security_finding": false,
+              "disposition": "observation"
+            },
+            {
+              "category": "illegal_violence_terror",
+              "source_rule_id": "content_safety_illegal_violence_terror",
+              "policy_code": "builtin.content_safety.a33fdb67d98f1e9d",
+              "action": "block",
+              "confidence": 0.9,
+              "counts_as_security_finding": true,
+              "disposition": ""
+            }
+          ]
+        },
+        {
+          "sample_group": 3,
+          "kind": "risk_then_benign",
+          "text_sha256": "c7d46f104111f3be290bd800b82ebba44f38b166cc50f0b3e2f545f92212d26c",
+          "action": "block",
+          "semantic_status": "skipped",
+          "semantic_reason": "deferred",
+          "findings": [
+            {
+              "category": "political_leader_name",
+              "source_rule_id": "",
+              "policy_code": "",
+              "action": "allow",
+              "confidence": 0.9,
+              "counts_as_security_finding": false,
+              "disposition": "observation"
+            },
+            {
+              "category": "illegal_violence_terror",
+              "source_rule_id": "content_safety_illegal_violence_terror",
+              "policy_code": "builtin.content_safety.a33fdb67d98f1e9d",
+              "action": "block",
+              "confidence": 0.9,
+              "counts_as_security_finding": true,
+              "disposition": ""
+            }
+          ]
+        },
+        {
+          "sample_group": 4,
+          "kind": "benign",
+          "text_sha256": "cab6ab56abe1abee11056bb5df7a5a07b84340d9ec35e7249b5a74633f02e217",
+          "action": "allow",
+          "semantic_status": "skipped",
+          "semantic_reason": "deferred",
+          "findings": [
+            {
+              "category": "illegal_violence_terror",
+              "source_rule_id": "content_safety_illegal_violence_terror",
+              "policy_code": "builtin.content_safety.a33fdb67d98f1e9d",
+              "action": "allow",
+              "confidence": 0.5,
+              "counts_as_security_finding": false,
+              "disposition": "observation"
+            }
+          ]
+        },
+        {
+          "sample_group": 4,
+          "kind": "risk",
+          "text_sha256": "2245e7d1522f6dff2084d0559de024db5a3c075d4bb4540255252e19aadfc68f",
+          "action": "block",
+          "semantic_status": "skipped",
+          "semantic_reason": "deferred",
+          "findings": [
+            {
+              "category": "illegal_violence_terror",
+              "source_rule_id": "content_safety_illegal_violence_terror",
+              "policy_code": "builtin.content_safety.a33fdb67d98f1e9d",
+              "action": "block",
+              "confidence": 0.9,
+              "counts_as_security_finding": true,
+              "disposition": ""
+            }
+          ]
+        },
+        {
+          "sample_group": 4,
+          "kind": "benign_then_risk",
+          "text_sha256": "2e0e7c9c61c2079a25370acd8de3644fabc3f0166c750108860f053f24398219",
+          "action": "block",
+          "semantic_status": "skipped",
+          "semantic_reason": "deferred",
+          "findings": [
+            {
+              "category": "illegal_violence_terror",
+              "source_rule_id": "content_safety_illegal_violence_terror",
+              "policy_code": "builtin.content_safety.a33fdb67d98f1e9d",
+              "action": "block",
+              "confidence": 0.9,
+              "counts_as_security_finding": true,
+              "disposition": ""
+            }
+          ]
+        },
+        {
+          "sample_group": 4,
+          "kind": "risk_then_benign",
+          "text_sha256": "0cc55513d83f0a2375adb8b35af5c2d72109edd139c892deedfad30f83cf1689",
+          "action": "block",
+          "semantic_status": "skipped",
+          "semantic_reason": "deferred",
+          "findings": [
+            {
+              "category": "illegal_violence_terror",
+              "source_rule_id": "content_safety_illegal_violence_terror",
+              "policy_code": "builtin.content_safety.a33fdb67d98f1e9d",
+              "action": "block",
+              "confidence": 0.9,
+              "counts_as_security_finding": true,
+              "disposition": ""
+            }
+          ]
+        },
+        {
+          "sample_group": 5,
+          "kind": "benign",
+          "text_sha256": "2c67847d91ed146054cbc0ead7e374985df3f712c6274b921334c676a4e4aca5",
+          "action": "allow",
+          "semantic_status": "skipped",
+          "semantic_reason": "deferred",
+          "findings": [
+            {
+              "category": "keyword_classic_injection",
+              "source_rule_id": "prompt_injection_classic_injection",
+              "policy_code": "builtin.prompt_injection.8894ce9a632bada9",
+              "action": "allow",
+              "confidence": 0.85,
+              "counts_as_security_finding": false,
+              "disposition": "observation"
+            }
+          ]
+        },
+        {
+          "sample_group": 5,
+          "kind": "risk",
+          "text_sha256": "97df3ca019b3bb9230372b0697548c687ddc1ae1c819aaa1dc25ce21641c54e7",
+          "action": "block",
+          "semantic_status": "skipped",
+          "semantic_reason": "deferred",
+          "findings": [
+            {
+              "category": "keyword_classic_injection",
+              "source_rule_id": "prompt_injection_classic_injection",
+              "policy_code": "builtin.prompt_injection.8894ce9a632bada9",
+              "action": "block",
+              "confidence": 0.85,
+              "counts_as_security_finding": true,
+              "disposition": ""
+            }
+          ]
+        },
+        {
+          "sample_group": 5,
+          "kind": "benign_then_risk",
+          "text_sha256": "761da45da1758b62fca58888b9c0f67e18bcad896edfe1b72d360e253c3da8df",
+          "action": "block",
+          "semantic_status": "skipped",
+          "semantic_reason": "deferred",
+          "findings": [
+            {
+              "category": "keyword_classic_injection",
+              "source_rule_id": "prompt_injection_classic_injection",
+              "policy_code": "builtin.prompt_injection.8894ce9a632bada9",
+              "action": "block",
+              "confidence": 0.85,
+              "counts_as_security_finding": true,
+              "disposition": ""
+            }
+          ]
+        },
+        {
+          "sample_group": 5,
+          "kind": "risk_then_benign",
+          "text_sha256": "9f53d1cecefc217181ef6032ff5e0f7d1581d48c029f925b829af458c61e64c1",
+          "action": "block",
+          "semantic_status": "skipped",
+          "semantic_reason": "deferred",
+          "findings": [
+            {
+              "category": "keyword_classic_injection",
+              "source_rule_id": "prompt_injection_classic_injection",
+              "policy_code": "builtin.prompt_injection.8894ce9a632bada9",
+              "action": "block",
+              "confidence": 0.85,
+              "counts_as_security_finding": true,
+              "disposition": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "audit_only": true,
+      "confidence_gating": true,
+      "source_aware": true,
+      "summary": {
+        "requests": 20,
+        "benign_requests": 5,
+        "benign_with_security_finding": 0,
+        "benign_actions": {
+          "allow": 5
+        },
+        "risk_and_mixed_requests": 15,
+        "risk_and_mixed_with_security_finding": 15,
+        "risk_and_mixed_actions": {
+          "audit": 15
+        }
+      },
+      "results": [
+        {
+          "sample_group": 1,
+          "kind": "benign",
+          "text_sha256": "e85bc2207449abfac7e188b301210db7ad976d01d4a8627e6c4f14e8caa3f9ef",
+          "action": "allow",
+          "semantic_status": "skipped",
+          "semantic_reason": "deferred",
+          "findings": [
+            {
+              "category": "illegal_hazardous_chemical_instructions",
+              "source_rule_id": "",
+              "policy_code": "",
+              "action": "allow",
+              "confidence": 0.95,
+              "counts_as_security_finding": false,
+              "disposition": "observation"
+            }
+          ]
+        },
+        {
+          "sample_group": 1,
+          "kind": "risk",
+          "text_sha256": "100e114027c1a4f10625b5cf7460a871758053ec6f0b0464a6dcd8d4e5ae4747",
+          "action": "audit",
+          "semantic_status": "skipped",
+          "semantic_reason": "deferred",
+          "findings": [
+            {
+              "category": "illegal_hazardous_chemical_instructions",
+              "source_rule_id": "",
+              "policy_code": "",
+              "action": "",
+              "confidence": 0.95,
+              "counts_as_security_finding": true,
+              "disposition": ""
+            }
+          ]
+        },
+        {
+          "sample_group": 1,
+          "kind": "benign_then_risk",
+          "text_sha256": "164401194df33018a6cb0f1fec47f851e36110486b8efa2cc4bf84bc2bd8b716",
+          "action": "audit",
+          "semantic_status": "skipped",
+          "semantic_reason": "deferred",
+          "findings": [
+            {
+              "category": "illegal_hazardous_chemical_instructions",
+              "source_rule_id": "",
+              "policy_code": "",
+              "action": "",
+              "confidence": 0.95,
+              "counts_as_security_finding": true,
+              "disposition": ""
+            }
+          ]
+        },
+        {
+          "sample_group": 1,
+          "kind": "risk_then_benign",
+          "text_sha256": "df224031d3edbc9d7f3afa400e7ffe556f4795ed4f2e08c9d10e50ee41b4b34b",
+          "action": "audit",
+          "semantic_status": "skipped",
+          "semantic_reason": "deferred",
+          "findings": [
+            {
+              "category": "illegal_hazardous_chemical_instructions",
+              "source_rule_id": "",
+              "policy_code": "",
+              "action": "",
+              "confidence": 0.95,
+              "counts_as_security_finding": true,
+              "disposition": ""
+            }
+          ]
+        },
+        {
+          "sample_group": 2,
+          "kind": "benign",
+          "text_sha256": "d5eab023856dc8f16034dd4f0adf624d64d4b391206017c56f01218401030a7c",
+          "action": "allow",
+          "semantic_status": "skipped",
+          "semantic_reason": "deferred",
+          "findings": [
+            {
+              "category": "illegal_drugs",
+              "source_rule_id": "",
+              "policy_code": "",
+              "action": "allow",
+              "confidence": 0.9,
+              "counts_as_security_finding": false,
+              "disposition": "observation"
+            }
+          ]
+        },
+        {
+          "sample_group": 2,
+          "kind": "risk",
+          "text_sha256": "6e54ed3c33f6bc5f7a67e63b85f291c88ae5f4eb565f754f826d60c5cbcc5653",
+          "action": "audit",
+          "semantic_status": "skipped",
+          "semantic_reason": "deferred",
+          "findings": [
+            {
+              "category": "illegal_drug_trade",
+              "source_rule_id": "catalog_illegal_drug_trade",
+              "policy_code": "builtin.illegal_trade.103b0604b9ae8e51",
+              "action": "block",
+              "confidence": 0.9,
+              "counts_as_security_finding": true,
+              "disposition": ""
+            },
+            {
+              "category": "illegal_drugs",
+              "source_rule_id": "",
+              "policy_code": "",
+              "action": "",
+              "confidence": 0.9,
+              "counts_as_security_finding": true,
+              "disposition": ""
+            }
+          ]
+        },
+        {
+          "sample_group": 2,
+          "kind": "benign_then_risk",
+          "text_sha256": "6610ae2eff32ea7d91a6917c872aaea00dd4faf40ffef5ce9fa79383bb76c9b9",
+          "action": "audit",
+          "semantic_status": "skipped",
+          "semantic_reason": "deferred",
+          "findings": [
+            {
+              "category": "illegal_drug_trade",
+              "source_rule_id": "catalog_illegal_drug_trade",
+              "policy_code": "builtin.illegal_trade.103b0604b9ae8e51",
+              "action": "block",
+              "confidence": 0.9,
+              "counts_as_security_finding": true,
+              "disposition": ""
+            },
+            {
+              "category": "illegal_drugs",
+              "source_rule_id": "",
+              "policy_code": "",
+              "action": "",
+              "confidence": 0.9,
+              "counts_as_security_finding": true,
+              "disposition": ""
+            }
+          ]
+        },
+        {
+          "sample_group": 2,
+          "kind": "risk_then_benign",
+          "text_sha256": "7a4d349293fc7138546a359e313894e5b1d6f0b1d985232d2149736f9055b5f5",
+          "action": "audit",
+          "semantic_status": "skipped",
+          "semantic_reason": "deferred",
+          "findings": [
+            {
+              "category": "illegal_drug_trade",
+              "source_rule_id": "catalog_illegal_drug_trade",
+              "policy_code": "builtin.illegal_trade.103b0604b9ae8e51",
+              "action": "block",
+              "confidence": 0.9,
+              "counts_as_security_finding": true,
+              "disposition": ""
+            },
+            {
+              "category": "illegal_drugs",
+              "source_rule_id": "",
+              "policy_code": "",
+              "action": "",
+              "confidence": 0.9,
+              "counts_as_security_finding": true,
+              "disposition": ""
+            }
+          ]
+        },
+        {
+          "sample_group": 3,
+          "kind": "benign",
+          "text_sha256": "f5088bcbf04902197c8c70e7bde978ab07fbadfd41bbabb256c3e8931e2cd500",
+          "action": "allow",
+          "semantic_status": "skipped",
+          "semantic_reason": "deferred",
+          "findings": [
+            {
+              "category": "political_leader_name",
+              "source_rule_id": "",
+              "policy_code": "",
+              "action": "allow",
+              "confidence": 0.9,
+              "counts_as_security_finding": false,
+              "disposition": "observation"
+            }
+          ]
+        },
+        {
+          "sample_group": 3,
+          "kind": "risk",
+          "text_sha256": "aa30a41edafbe4ef9e984a07ce7b3937f645d15b4f86cd728c89c052781da82c",
+          "action": "audit",
+          "semantic_status": "skipped",
+          "semantic_reason": "deferred",
+          "findings": [
+            {
+              "category": "illegal_violence_terror",
+              "source_rule_id": "content_safety_illegal_violence_terror",
+              "policy_code": "builtin.content_safety.a33fdb67d98f1e9d",
+              "action": "block",
+              "confidence": 0.9,
+              "counts_as_security_finding": true,
+              "disposition": ""
+            }
+          ]
+        },
+        {
+          "sample_group": 3,
+          "kind": "benign_then_risk",
+          "text_sha256": "49eaeec77e4667509efb8945d988e7fd974d1c7c01ec61abdd504c973ab8d3d9",
+          "action": "audit",
+          "semantic_status": "skipped",
+          "semantic_reason": "deferred",
+          "findings": [
+            {
+              "category": "political_leader_name",
+              "source_rule_id": "",
+              "policy_code": "",
+              "action": "allow",
+              "confidence": 0.9,
+              "counts_as_security_finding": false,
+              "disposition": "observation"
+            },
+            {
+              "category": "illegal_violence_terror",
+              "source_rule_id": "content_safety_illegal_violence_terror",
+              "policy_code": "builtin.content_safety.a33fdb67d98f1e9d",
+              "action": "block",
+              "confidence": 0.9,
+              "counts_as_security_finding": true,
+              "disposition": ""
+            }
+          ]
+        },
+        {
+          "sample_group": 3,
+          "kind": "risk_then_benign",
+          "text_sha256": "c7d46f104111f3be290bd800b82ebba44f38b166cc50f0b3e2f545f92212d26c",
+          "action": "audit",
+          "semantic_status": "skipped",
+          "semantic_reason": "deferred",
+          "findings": [
+            {
+              "category": "political_leader_name",
+              "source_rule_id": "",
+              "policy_code": "",
+              "action": "allow",
+              "confidence": 0.9,
+              "counts_as_security_finding": false,
+              "disposition": "observation"
+            },
+            {
+              "category": "illegal_violence_terror",
+              "source_rule_id": "content_safety_illegal_violence_terror",
+              "policy_code": "builtin.content_safety.a33fdb67d98f1e9d",
+              "action": "block",
+              "confidence": 0.9,
+              "counts_as_security_finding": true,
+              "disposition": ""
+            }
+          ]
+        },
+        {
+          "sample_group": 4,
+          "kind": "benign",
+          "text_sha256": "cab6ab56abe1abee11056bb5df7a5a07b84340d9ec35e7249b5a74633f02e217",
+          "action": "allow",
+          "semantic_status": "skipped",
+          "semantic_reason": "deferred",
+          "findings": [
+            {
+              "category": "illegal_violence_terror",
+              "source_rule_id": "content_safety_illegal_violence_terror",
+              "policy_code": "builtin.content_safety.a33fdb67d98f1e9d",
+              "action": "allow",
+              "confidence": 0.5,
+              "counts_as_security_finding": false,
+              "disposition": "observation"
+            }
+          ]
+        },
+        {
+          "sample_group": 4,
+          "kind": "risk",
+          "text_sha256": "2245e7d1522f6dff2084d0559de024db5a3c075d4bb4540255252e19aadfc68f",
+          "action": "audit",
+          "semantic_status": "skipped",
+          "semantic_reason": "deferred",
+          "findings": [
+            {
+              "category": "illegal_violence_terror",
+              "source_rule_id": "content_safety_illegal_violence_terror",
+              "policy_code": "builtin.content_safety.a33fdb67d98f1e9d",
+              "action": "block",
+              "confidence": 0.9,
+              "counts_as_security_finding": true,
+              "disposition": ""
+            }
+          ]
+        },
+        {
+          "sample_group": 4,
+          "kind": "benign_then_risk",
+          "text_sha256": "2e0e7c9c61c2079a25370acd8de3644fabc3f0166c750108860f053f24398219",
+          "action": "audit",
+          "semantic_status": "skipped",
+          "semantic_reason": "deferred",
+          "findings": [
+            {
+              "category": "illegal_violence_terror",
+              "source_rule_id": "content_safety_illegal_violence_terror",
+              "policy_code": "builtin.content_safety.a33fdb67d98f1e9d",
+              "action": "block",
+              "confidence": 0.9,
+              "counts_as_security_finding": true,
+              "disposition": ""
+            }
+          ]
+        },
+        {
+          "sample_group": 4,
+          "kind": "risk_then_benign",
+          "text_sha256": "0cc55513d83f0a2375adb8b35af5c2d72109edd139c892deedfad30f83cf1689",
+          "action": "audit",
+          "semantic_status": "skipped",
+          "semantic_reason": "deferred",
+          "findings": [
+            {
+              "category": "illegal_violence_terror",
+              "source_rule_id": "content_safety_illegal_violence_terror",
+              "policy_code": "builtin.content_safety.a33fdb67d98f1e9d",
+              "action": "block",
+              "confidence": 0.9,
+              "counts_as_security_finding": true,
+              "disposition": ""
+            }
+          ]
+        },
+        {
+          "sample_group": 5,
+          "kind": "benign",
+          "text_sha256": "2c67847d91ed146054cbc0ead7e374985df3f712c6274b921334c676a4e4aca5",
+          "action": "allow",
+          "semantic_status": "skipped",
+          "semantic_reason": "deferred",
+          "findings": [
+            {
+              "category": "keyword_classic_injection",
+              "source_rule_id": "prompt_injection_classic_injection",
+              "policy_code": "builtin.prompt_injection.8894ce9a632bada9",
+              "action": "allow",
+              "confidence": 0.85,
+              "counts_as_security_finding": false,
+              "disposition": "observation"
+            }
+          ]
+        },
+        {
+          "sample_group": 5,
+          "kind": "risk",
+          "text_sha256": "97df3ca019b3bb9230372b0697548c687ddc1ae1c819aaa1dc25ce21641c54e7",
+          "action": "audit",
+          "semantic_status": "skipped",
+          "semantic_reason": "deferred",
+          "findings": [
+            {
+              "category": "keyword_classic_injection",
+              "source_rule_id": "prompt_injection_classic_injection",
+              "policy_code": "builtin.prompt_injection.8894ce9a632bada9",
+              "action": "block",
+              "confidence": 0.85,
+              "counts_as_security_finding": true,
+              "disposition": ""
+            }
+          ]
+        },
+        {
+          "sample_group": 5,
+          "kind": "benign_then_risk",
+          "text_sha256": "761da45da1758b62fca58888b9c0f67e18bcad896edfe1b72d360e253c3da8df",
+          "action": "audit",
+          "semantic_status": "skipped",
+          "semantic_reason": "deferred",
+          "findings": [
+            {
+              "category": "keyword_classic_injection",
+              "source_rule_id": "prompt_injection_classic_injection",
+              "policy_code": "builtin.prompt_injection.8894ce9a632bada9",
+              "action": "block",
+              "confidence": 0.85,
+              "counts_as_security_finding": true,
+              "disposition": ""
+            }
+          ]
+        },
+        {
+          "sample_group": 5,
+          "kind": "risk_then_benign",
+          "text_sha256": "9f53d1cecefc217181ef6032ff5e0f7d1581d48c029f925b829af458c61e64c1",
+          "action": "audit",
+          "semantic_status": "skipped",
+          "semantic_reason": "deferred",
+          "findings": [
+            {
+              "category": "keyword_classic_injection",
+              "source_rule_id": "prompt_injection_classic_injection",
+              "policy_code": "builtin.prompt_injection.8894ce9a632bada9",
+              "action": "block",
+              "confidence": 0.85,
+              "counts_as_security_finding": true,
+              "disposition": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

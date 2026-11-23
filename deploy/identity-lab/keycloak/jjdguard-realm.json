@@ -1,0 +1,689 @@
+{
+  "realm": "jjdguard",
+  "displayName": "JJDGuard Identity (lab)",
+  "enabled": true,
+  "sslRequired": "external",
+  "registrationAllowed": false,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": true,
+  "resetPasswordAllowed": false,
+  "editUsernameAllowed": false,
+  "bruteForceProtected": true,
+  "accessTokenLifespan": 300,
+  "ssoSessionIdleTimeout": 1800,
+  "users": [
+    {
+      "username": "local-admin-jjdguard",
+      "enabled": true,
+      "email": "local-admin@jjdguard-lab.test",
+      "emailVerified": true,
+      "firstName": "Local",
+      "lastName": "Admin (lab)",
+      "realmRoles": [
+        "default-roles-jjdguard",
+        "offline_access"
+      ],
+      "credentials": [
+        {
+          "type": "password",
+          "value": "${LOCAL_ADMIN_PASSWORD}",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "local-alice",
+      "enabled": true,
+      "email": "local-alice@jjdguard-lab.test",
+      "emailVerified": true,
+      "realmRoles": [
+        "default-roles-jjdguard"
+      ],
+      "credentials": [
+        {
+          "type": "password",
+          "value": "${LOCAL_ALICE_PASSWORD}",
+          "temporary": false
+        }
+      ],
+      "firstName": "Local",
+      "lastName": "Alice"
+    },
+    {
+      "username": "service-account-jjdguard-control-plane",
+      "enabled": true,
+      "serviceAccountClientId": "jjdguard-control-plane",
+      "clientRoles": {
+        "realm-management": [
+          "manage-identity-providers"
+        ]
+      }
+    },
+    {
+      "username": "service-account-jjdguard-directory-orchestrator",
+      "enabled": true,
+      "serviceAccountClientId": "jjdguard-directory-orchestrator",
+      "clientRoles": {
+        "realm-management": [
+          "manage-realm",
+          "manage-users",
+          "view-realm"
+        ]
+      }
+    }
+  ],
+  "clients": [
+    {
+      "clientId": "enterprise-ai-portal",
+      "name": "员工门户（任务10 account-login + enterprise-sso 共用）",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "secret": "${PORTAL_OIDC_CLIENT_SECRET}",
+      "redirectUris": [
+        "http://localhost:3000/chat/api/auth/callback/account-login",
+        "http://localhost:3000/chat/api/auth/callback/enterprise-sso",
+        "https://chat-portal-ui:3000/chat/api/auth/callback/account-login",
+        "https://chat-portal-ui:3000/chat/api/auth/callback/enterprise-sso",
+        "http://identity-portal:3100/chat/api/auth/callback/account-login",
+        "http://identity-portal:3100/chat/api/auth/callback/enterprise-sso"
+      ],
+      "webOrigins": [
+        "http://localhost:3000",
+        "https://chat-portal-ui:3000",
+        "http://identity-portal:3100"
+      ],
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "frontchannelLogout": false,
+      "attributes": {
+        "post.logout.redirect.uris": "http://localhost:3000/chat##http://localhost:3000/chat/*##https://chat-portal-ui:3000/chat##https://chat-portal-ui:3000/chat/*##http://identity-portal:3100/chat##http://identity-portal:3100/chat/*",
+        "pkce.code.challenge.method": "S256"
+      },
+      "protocolMappers": [
+        {
+          "name": "groups",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-group-membership-mapper",
+          "consentRequired": false,
+          "config": {
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "userinfo.token.claim": "true",
+            "claim.name": "groups",
+            "full.path": "false"
+          }
+        },
+        {
+          "name": "department",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.attribute": "department",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "userinfo.token.claim": "true",
+            "jsonType.label": "String",
+            "claim.name": "department"
+          }
+        }
+      ],
+      "optionalClientScopes": [
+        "groups"
+      ],
+      "defaultClientScopes": [
+        "profile",
+        "email"
+      ]
+    },
+    {
+      "clientId": "admin-cli",
+      "enabled": true,
+      "publicClient": true,
+      "protocol": "openid-connect",
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": false
+    },
+    {
+      "clientId": "jjdguard-control-plane",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "secret": "${IDENTITY_RUNTIME_CLIENT_SECRET}",
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": true,
+      "defaultClientScopes": [
+        "runtime-realm-management-roles"
+      ]
+    },
+    {
+      "clientId": "jjdguard-directory-orchestrator",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "secret": "${DIRECTORY_RUNTIME_CLIENT_SECRET}",
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": true,
+      "defaultClientScopes": [
+        "runtime-realm-management-roles"
+      ]
+    }
+  ],
+  "identityProviders": [
+    {
+      "alias": "enterprise",
+      "displayName": "企业 SSO（external enterprise realm）",
+      "providerId": "oidc",
+      "enabled": true,
+      "trustEmail": false,
+      "storeToken": false,
+      "authenticateByDefault": false,
+      "linkOnly": false,
+      "firstBrokerLoginFlowAlias": "identity-lab first broker login",
+      "config": {
+        "issuer": "https://enterprise-keycloak:8443/realms/enterprise",
+        "authorizationUrl": "https://enterprise-keycloak:8443/realms/enterprise/protocol/openid-connect/auth",
+        "tokenUrl": "https://enterprise-keycloak:8443/realms/enterprise/protocol/openid-connect/token",
+        "jwksUrl": "https://enterprise-keycloak:8443/realms/enterprise/protocol/openid-connect/certs",
+        "logoutUrl": "https://enterprise-keycloak:8443/realms/enterprise/protocol/openid-connect/logout",
+        "clientId": "jjdguard-broker",
+        "clientSecret": "${ENTERPRISE_BROKER_CLIENT_SECRET}",
+        "defaultScope": "openid email profile",
+        "validateSignature": "true",
+        "useJwksUrl": "true",
+        "syncMode": "FORCE"
+      }
+    }
+  ],
+  "components": {
+    "org.keycloak.storage.UserStorageProvider": [
+      {
+        "name": "jjdguard-directory",
+        "providerId": "ldap",
+        "subComponents": {
+          "org.keycloak.storage.ldap.mappers.LDAPStorageMapper": [
+            {
+              "providerId": "user-attribute-ldap-mapper",
+              "name": "username",
+              "config": {
+                "ldap.attribute": [
+                  "uid"
+                ],
+                "user.model.attribute": [
+                  "username"
+                ],
+                "read.only": [
+                  "true"
+                ],
+                "always.read.value.from.ldap": [
+                  "true"
+                ],
+                "is.mandatory.in.ldap": [
+                  "true"
+                ]
+              }
+            },
+            {
+              "providerId": "group-ldap-mapper",
+              "name": "group-mapper",
+              "config": {
+                "mode": [
+                  "LDAP_ONLY"
+                ],
+                "groups.dn": [
+                  "ou=Groups,dc=jjdguard-lab,dc=test"
+                ],
+                "group.object.classes": [
+                  "groupOfNames"
+                ],
+                "membership.attribute.types": [
+                  "DN"
+                ],
+                "membership.ldap.attribute": [
+                  "member"
+                ],
+                "user.groups.retrieve.strategy": [
+                  "LOAD_GROUPS_BY_MEMBER_ATTRIBUTE"
+                ]
+              }
+            },
+            {
+              "providerId": "user-attribute-ldap-mapper",
+              "name": "email",
+              "config": {
+                "ldap.attribute": [
+                  "mail"
+                ],
+                "user.model.attribute": [
+                  "email"
+                ],
+                "read.only": [
+                  "true"
+                ],
+                "always.read.value.from.ldap": [
+                  "true"
+                ],
+                "is.mandatory.in.ldap": [
+                  "false"
+                ]
+              }
+            }
+          ]
+        },
+        "config": {
+          "vendor": [
+            "other"
+          ],
+          "usernameLDAPAttribute": [
+            "uid"
+          ],
+          "rdnLDAPAttribute": [
+            "uid"
+          ],
+          "uuidLDAPAttribute": [
+            "entryUUID"
+          ],
+          "userObjectClasses": [
+            "inetOrgPerson",
+            "organizationalPerson"
+          ],
+          "connectionUrl": [
+            "ldaps://openldap:636"
+          ],
+          "usersDn": [
+            "ou=People,dc=jjdguard-lab,dc=test"
+          ],
+          "authType": [
+            "simple"
+          ],
+          "bindDn": [
+            "cn=admin,dc=jjdguard-lab,dc=test"
+          ],
+          "bindCredential": [
+            "${LDAP_BIND_CREDENTIAL}"
+          ],
+          "searchScope": [
+            "2"
+          ],
+          "useTruststoreSpi": [
+            "never"
+          ],
+          "connectionTimeout": [
+            "5000"
+          ],
+          "readTimeout": [
+            "10000"
+          ],
+          "pagination": [
+            "true"
+          ],
+          "enabled": [
+            "true"
+          ],
+          "priority": [
+            "1"
+          ],
+          "fullSyncPeriod": [
+            "-1"
+          ],
+          "changedSyncPeriod": [
+            "-1"
+          ],
+          "cachePolicy": [
+            "NO_CACHE"
+          ],
+          "editMode": [
+            "READ_ONLY"
+          ]
+        }
+      },
+      {
+        "name": "ad-federation",
+        "providerId": "ldap",
+        "subComponents": {
+          "org.keycloak.storage.ldap.mappers.LDAPStorageMapper": [
+            {
+              "providerId": "user-attribute-ldap-mapper",
+              "name": "username",
+              "config": {
+                "ldap.attribute": [
+                  "sAMAccountName"
+                ],
+                "user.model.attribute": [
+                  "username"
+                ],
+                "read.only": [
+                  "true"
+                ],
+                "always.read.value.from.ldap": [
+                  "true"
+                ],
+                "is.mandatory.in.ldap": [
+                  "true"
+                ]
+              }
+            },
+            {
+              "providerId": "group-ldap-mapper",
+              "name": "ad-group-mapper",
+              "config": {
+                "mode": [
+                  "LDAP_ONLY"
+                ],
+                "groups.dn": [
+                  "CN=Users,DC=ad,DC=jjdguard-lab,DC=test"
+                ],
+                "group.object.classes": [
+                  "group"
+                ],
+                "membership.attribute.types": [
+                  "DN"
+                ],
+                "membership.ldap.attribute": [
+                  "member"
+                ],
+                "user.groups.retrieve.strategy": [
+                  "LOAD_GROUPS_BY_MEMBER_ATTRIBUTE"
+                ]
+              }
+            },
+            {
+              "providerId": "user-attribute-ldap-mapper",
+              "name": "department",
+              "config": {
+                "ldap.attribute": [
+                  "department"
+                ],
+                "user.model.attribute": [
+                  "department"
+                ],
+                "read.only": [
+                  "true"
+                ],
+                "always.read.value.from.ldap": [
+                  "true"
+                ],
+                "is.mandatory.in.ldap": [
+                  "false"
+                ]
+              }
+            },
+            {
+              "providerId": "user-attribute-ldap-mapper",
+              "name": "email",
+              "config": {
+                "ldap.attribute": [
+                  "mail"
+                ],
+                "user.model.attribute": [
+                  "email"
+                ],
+                "read.only": [
+                  "true"
+                ],
+                "always.read.value.from.ldap": [
+                  "true"
+                ],
+                "is.mandatory.in.ldap": [
+                  "false"
+                ]
+              }
+            }
+          ]
+        },
+        "config": {
+          "vendor": [
+            "ad"
+          ],
+          "usernameLDAPAttribute": [
+            "sAMAccountName"
+          ],
+          "rdnLDAPAttribute": [
+            "cn"
+          ],
+          "uuidLDAPAttribute": [
+            "objectGUID"
+          ],
+          "userObjectClasses": [
+            "user"
+          ],
+          "connectionUrl": [
+            "ldaps://samba-ad:636"
+          ],
+          "usersDn": [
+            "CN=Users,DC=ad,DC=jjdguard-lab,DC=test"
+          ],
+          "authType": [
+            "simple"
+          ],
+          "bindDn": [
+            "CN=Administrator,CN=Users,DC=ad,DC=jjdguard-lab,DC=test"
+          ],
+          "bindCredential": [
+            "${AD_BIND_CREDENTIAL}"
+          ],
+          "searchScope": [
+            "2"
+          ],
+          "useTruststoreSpi": [
+            "never"
+          ],
+          "pagination": [
+            "true"
+          ],
+          "enabled": [
+            "true"
+          ],
+          "priority": [
+            "2"
+          ],
+          "fullSyncPeriod": [
+            "-1"
+          ],
+          "changedSyncPeriod": [
+            "-1"
+          ],
+          "cachePolicy": [
+            "NO_CACHE"
+          ],
+          "editMode": [
+            "READ_ONLY"
+          ]
+        }
+      }
+    ]
+  },
+  "authenticationFlows": [
+    {
+      "alias": "identity-lab first broker login",
+      "description": "Create distinct broker users without email linking",
+      "providerId": "basic-flow",
+      "topLevel": true,
+      "builtIn": false,
+      "authenticationExecutions": [
+        {
+          "authenticator": "idp-create-user-if-unique",
+          "requirement": "REQUIRED",
+          "priority": 10
+        }
+      ]
+    },
+    {
+      "alias": "account-login browser",
+      "description": "Default browser flow (lab)",
+      "providerId": "basic-flow",
+      "topLevel": true,
+      "builtIn": false,
+      "authenticationExecutions": [
+        {
+          "authenticator": "auth-cookie",
+          "requirement": "ALTERNATIVE"
+        },
+        {
+          "authenticator": "identity-provider-redirector",
+          "requirement": "ALTERNATIVE",
+          "priority": 25
+        },
+        {
+          "flowAlias": "account-login forms",
+          "requirement": "ALTERNATIVE",
+          "priority": 30
+        }
+      ]
+    },
+    {
+      "alias": "account-login forms",
+      "description": "Forms flow (lab)",
+      "providerId": "basic-flow",
+      "topLevel": false,
+      "builtIn": false,
+      "authenticationExecutions": [
+        {
+          "authenticator": "auth-username-password-form",
+          "requirement": "REQUIRED"
+        }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "name": "dept-research"
+    },
+    {
+      "name": "dept-marketing"
+    }
+  ],
+  "identityProviderMappers": [
+    {
+      "name": "enterprise-department",
+      "identityProviderAlias": "enterprise",
+      "identityProviderMapper": "oidc-user-attribute-idp-mapper",
+      "config": {
+        "claim": "department",
+        "user.attribute": "department",
+        "syncMode": "INHERIT"
+      }
+    },
+    {
+      "name": "enterprise-research-group",
+      "identityProviderAlias": "enterprise",
+      "identityProviderMapper": "oidc-advanced-group-idp-mapper",
+      "config": {
+        "claims": "[{\"key\":\"groups\",\"value\":\"dept-research\"}]",
+        "group": "/dept-research",
+        "syncMode": "INHERIT"
+      }
+    },
+    {
+      "name": "enterprise-marketing-group",
+      "identityProviderAlias": "enterprise",
+      "identityProviderMapper": "oidc-advanced-group-idp-mapper",
+      "config": {
+        "claims": "[{\"key\":\"groups\",\"value\":\"dept-marketing\"}]",
+        "group": "/dept-marketing",
+        "syncMode": "INHERIT"
+      }
+    }
+  ],
+  "clientScopes": [
+    {
+      "name": "email",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": [
+        {
+          "name": "email",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-property-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.attribute": "email",
+            "claim.name": "email",
+            "jsonType.label": "String",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "userinfo.token.claim": "true"
+          }
+        }
+      ]
+    },
+    {
+      "name": "profile",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": [
+        {
+          "name": "username",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-property-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.attribute": "username",
+            "claim.name": "preferred_username",
+            "jsonType.label": "String",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "userinfo.token.claim": "true"
+          }
+        },
+        {
+          "name": "full name",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-full-name-mapper",
+          "consentRequired": false,
+          "config": {
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "userinfo.token.claim": "true"
+          }
+        }
+      ]
+    },
+    {
+      "name": "groups",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": []
+    },
+    {
+      "name": "runtime-realm-management-roles",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "false",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": [
+        {
+          "name": "realm-management client roles",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-client-role-mapper",
+          "consentRequired": false,
+          "config": {
+            "usermodel.clientRoleMapping.clientId": "realm-management",
+            "claim.name": "resource_access.realm-management.roles",
+            "jsonType.label": "String",
+            "multivalued": "true",
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "userinfo.token.claim": "false"
+          }
+        }
+      ]
+    }
+  ]
+}

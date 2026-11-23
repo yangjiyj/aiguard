@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "JJDGuard offline acceptance receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "status", "artifact", "release", "scenarios", "evidence_index_sha256", "non_promotable_reasons", "completed_at"],
+  "properties": {
+    "schema": {"const": "jjdguard-acceptance-receipt/v1"},
+    "status": {"const": "PASS"},
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["run_sha256", "run_size", "inner_tar_sha256"],
+      "properties": {
+        "run_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "run_size": {"type": "integer", "minimum": 1},
+        "inner_tar_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "release": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_revision", "source_tree", "image_provenance_sha256", "sbom_index_sha256"],
+      "properties": {
+        "source_revision": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "source_tree": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "image_provenance_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "sbom_index_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "scenarios": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "n1-install",
+        "clean-install",
+        "offline-reboot",
+        "upgrade-n1-r7",
+        "rollback-r7-n1",
+        "reupgrade-n1-r7",
+        "tamper-run",
+        "tamper-manifest",
+        "tamper-sbom",
+        "tamper-provenance",
+        "tamper-receipt",
+        "browser-login",
+        "model-api",
+        "model-stream",
+        "security-benign",
+        "security-block",
+        "security-audit",
+        "portal-proxy-idp-chat"
+      ],
+      "properties": {
+        "n1-install": {"const": "PASS"},
+        "clean-install": {"const": "PASS"},
+        "offline-reboot": {"const": "PASS"},
+        "upgrade-n1-r7": {"const": "PASS"},
+        "rollback-r7-n1": {"const": "PASS"},
+        "reupgrade-n1-r7": {"const": "PASS"},
+        "tamper-run": {"const": "PASS"},
+        "tamper-manifest": {"const": "PASS"},
+        "tamper-sbom": {"const": "PASS"},
+        "tamper-provenance": {"const": "PASS"},
+        "tamper-receipt": {"const": "PASS"},
+        "browser-login": {"const": "PASS"},
+        "model-api": {"const": "PASS"},
+        "model-stream": {"const": "PASS"},
+        "security-benign": {"const": "PASS"},
+        "security-block": {"const": "PASS"},
+        "security-audit": {"const": "PASS"},
+        "portal-proxy-idp-chat": {"const": "PASS"}
+      }
+    },
+    "evidence_index_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "non_promotable_reasons": {"type": "array", "maxItems": 0},
+    "completed_at": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"}
+  }
+}

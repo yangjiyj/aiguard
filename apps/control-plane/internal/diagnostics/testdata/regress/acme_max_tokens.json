@@ -1,0 +1,98 @@
+{
+  "name": "acme_max_tokens",
+  "description": "客户现场：anthropic 渠道 max_tokens 超过模型输出上限，上游 400",
+  "fixture": {
+    "providers": [
+      {
+        "key": "anth",
+        "name": "Anthropic官方",
+        "type": "anthropic",
+        "base_url": "https://api.anthropic.example.com"
+      }
+    ],
+    "models": [
+      {
+        "key": "opus",
+        "provider": "anth",
+        "name": "claude-opus-5-5"
+      }
+    ],
+    "users": [
+      {
+        "key": "u1",
+        "username": "acme_dev"
+      }
+    ],
+    "internal_keys": [
+      {
+        "key": "k1",
+        "user": "u1"
+      }
+    ],
+    "request_logs": [
+      {
+        "label": "err",
+        "count": 5,
+        "user": "u1",
+        "key": "k1",
+        "provider": "anth",
+        "model": "opus",
+        "endpoint_type": "chat",
+        "status": "provider_unsupported",
+        "upstream_status": 400,
+        "from": "-55m",
+        "to": "-5m",
+        "hint": "max_tokens: 1000000 > 128000, which is the maximum allowed number of output tokens for claude-opus-5-5",
+        "upstream_error_code": "invalid_request_error",
+        "error_message": "max_tokens: 1000000 > 128000, which is the maximum allowed number of output tokens for claude-opus-5-5"
+      }
+    ]
+  },
+  "input": {
+    "kind": "request",
+    "ref": "@err:2",
+    "scope": "admin"
+  },
+  "expect": {
+    "tier": "L2",
+    "must_check_ids_any": [
+      "up_param"
+    ],
+    "must_keywords_any": [
+      "输出长度",
+      "max_tokens"
+    ],
+    "must_level": {
+      "up_param": "confirmed"
+    },
+    "forbid_keywords": [
+      "限流",
+      "欠费"
+    ],
+    "l3": {
+      "must_keywords_any": [
+        "max_tokens",
+        "输出长度",
+        "输出令牌",
+        "输出上限",
+        "令牌上限"
+      ],
+      "level_by_kw": [
+        {
+          "kw": [
+            "输出长度",
+            "输出令牌",
+            "令牌上限",
+            "max_tokens",
+            "参数"
+          ],
+          "level": "confirmed"
+        }
+      ],
+      "forbid_keywords": [
+        "欠费",
+        "额度不足"
+      ]
+    }
+  }
+}

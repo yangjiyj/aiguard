@@ -1,0 +1,32 @@
+{
+  "id": "provider-replicate",
+  "name": "Replicate",
+  "vendor": "Replicate",
+  "catalog_entries": [
+    {
+      "id": "replicate",
+      "provider": "replicate",
+      "provider_cn": "Replicate",
+      "product": "replicate",
+      "product_cn": "Replicate",
+      "category": "model-platform",
+      "region": "global",
+      "domains": [
+        "replicate.com",
+        "api.replicate.com"
+      ],
+      "path_rules": [
+        "/",
+        "/v1/"
+      ],
+      "request_decoder": "model_platform",
+      "response_decoder": "model_platform",
+      "retain_level": "summary",
+      "risk_profile": "model_platform",
+      "enabled": true,
+      "priority": 50,
+      "source_url": "https://replicate.com/"
+    }
+  ],
+  "agent_definitions": []
+}

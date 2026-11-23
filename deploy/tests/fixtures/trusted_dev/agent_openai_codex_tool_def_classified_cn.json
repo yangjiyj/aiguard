@@ -1,0 +1,36 @@
+{
+  "name": "agent_openai_codex_tool_def_classified_cn",
+  "note": "codex was handed a tool schema that carried a classified marker.",
+  "event": {
+    "event_type": "classified_classified_cn",
+    "severity": "high",
+    "action_taken": "audit",
+    "principal_key": "key_abcd",
+    "matched_summary": {
+      "agent_type": "agent_openai_codex",
+      "findings": [
+        {
+          "rule_type": "agent_detect",
+          "type": "agent_behavior",
+          "category": "agent_openai_codex",
+          "severity": "low",
+          "confidence": 0.9,
+          "counts_as_security_finding": false
+        },
+        {
+          "category": "classified_classified_cn",
+          "severity": "high",
+          "confidence": 0.9,
+          "counts_as_security_finding": true,
+          "type": "classified",
+          "content_source": "tool_def",
+          "message_role": "system"
+        }
+      ]
+    }
+  },
+  "expect": {
+    "routed": true,
+    "reason": "tool_def_of_agent_openai_codex"
+  }
+}

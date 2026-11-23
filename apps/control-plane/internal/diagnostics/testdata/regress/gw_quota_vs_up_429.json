@@ -1,0 +1,153 @@
+{
+  "name": "gw_quota_vs_up_429",
+  "description": "同一窗口内网关额度拦截与上游 429 并存，必须分别列出",
+  "fixture": {
+    "license": {
+      "state": "valid"
+    },
+    "providers": [
+      {
+        "key": "p1",
+        "name": "主渠道",
+        "type": "openai",
+        "base_url": "https://api1.example.com"
+      },
+      {
+        "key": "p2",
+        "name": "备用渠道",
+        "type": "openai",
+        "base_url": "https://api2.example.com"
+      }
+    ],
+    "models": [
+      {
+        "key": "m1",
+        "provider": "p1",
+        "name": "gpt-6.1-sol"
+      },
+      {
+        "key": "m2",
+        "provider": "p2",
+        "name": "gpt-6-luna"
+      }
+    ],
+    "users": [
+      {
+        "key": "u1",
+        "username": "alice"
+      }
+    ],
+    "internal_keys": [
+      {
+        "key": "k1",
+        "user": "u1"
+      }
+    ],
+    "quota_policies": [
+      {
+        "key": "q1",
+        "scope_type": "user",
+        "user": "u1",
+        "daily_token_limit": 1000,
+        "overage_action": "block",
+        "enforcement_mode": "hard"
+      }
+    ],
+    "request_logs": [
+      {
+        "label": "gwq",
+        "count": 10,
+        "user": "u1",
+        "key": "k1",
+        "provider": "p1",
+        "model": "m1",
+        "endpoint_type": "chat",
+        "status": "quota_exceeded",
+        "from": "-50m",
+        "to": "-5m"
+      },
+      {
+        "label": "up429",
+        "count": 6,
+        "user": "u1",
+        "key": "k1",
+        "provider": "p2",
+        "model": "m2",
+        "endpoint_type": "chat",
+        "status": "provider_error",
+        "upstream_status": 429,
+        "from": "-50m",
+        "to": "-5m",
+        "hint": "Rate limit reached for requests",
+        "upstream_error_code": "rate_limit_exceeded",
+        "error_message": "Rate limit reached for requests"
+      },
+      {
+        "label": "ok2",
+        "count": 14,
+        "user": "u1",
+        "key": "k1",
+        "provider": "p2",
+        "model": "m2",
+        "endpoint_type": "chat",
+        "status": "success",
+        "upstream_status": 200,
+        "from": "-55m",
+        "to": "-6m"
+      }
+    ]
+  },
+  "input": {
+    "kind": "health",
+    "scope": "admin"
+  },
+  "expect": {
+    "tier": "L2",
+    "must_check_ids_all": [
+      "gw_quota",
+      "up_429"
+    ],
+    "title_not_contains": {
+      "gw_quota": [
+        "上游"
+      ]
+    },
+    "title_contains": {
+      "up_429": [
+        "上游"
+      ]
+    },
+    "must_level": {
+      "gw_quota": "confirmed",
+      "up_429": "confirmed"
+    },
+    "l3": {
+      "must_keywords_any": [
+        "额度",
+        "配额"
+      ],
+      "must_keywords_any2": [
+        "上游"
+      ],
+      "title_rules": [
+        {
+          "match_any": [
+            "额度",
+            "配额"
+          ],
+          "title_require": [
+            "网关"
+          ]
+        },
+        {
+          "match": [
+            "限流"
+          ],
+          "title_require": [
+            "上游"
+          ]
+        }
+      ]
+    }
+  }
+}

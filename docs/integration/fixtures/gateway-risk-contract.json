@@ -1,0 +1,473 @@
+{
+  "schema_version": "jjdguard.gateway-risk/v1",
+  "cases": [
+    {
+      "name": "a4_a5_multi_hit",
+      "native_findings": [
+        {
+          "type": "data_leak",
+          "category": "code_leak_database_url",
+          "severity": "critical"
+        },
+        {
+          "type": "secret",
+          "category": "plain_password",
+          "severity": "critical"
+        },
+        {
+          "type": "prompt_injection",
+          "category": "keyword_classic_injection_en",
+          "severity": "high"
+        }
+      ],
+      "event_type": "security_check",
+      "matched_summary": {
+        "action_taken": "audit",
+        "category": "plain_password",
+        "findings": [
+          {
+            "category": "code_leak_database_url",
+            "confidence": 0,
+            "rule_id": "contract_code_leak_database_url",
+            "severity": "critical",
+            "type": "data_leak"
+          },
+          {
+            "category": "plain_password",
+            "confidence": 0,
+            "rule_id": "contract_plain_password",
+            "severity": "critical",
+            "type": "secret"
+          },
+          {
+            "category": "keyword_classic_injection_en",
+            "confidence": 0,
+            "rule_id": "contract_keyword_classic_injection_en",
+            "severity": "high",
+            "type": "prompt_injection"
+          }
+        ],
+        "findings_count": 3,
+        "primary_finding": {
+          "category": "plain_password",
+          "confidence": 0,
+          "findings_index": 1,
+          "rule_id": "contract_plain_password",
+          "severity": "critical",
+          "type": "secret"
+        },
+        "rule_id": "contract_plain_password",
+        "rule_name": "",
+        "rule_type": "secret",
+        "source": "gateway",
+        "stage": "input",
+        "summary": "synthetic native metadata contract"
+      },
+      "expected_risk_factors": [
+        "credential_exposure",
+        "dangerous_capability",
+        "data_exfiltration",
+        "prompt_injection"
+      ],
+      "expected_risk_category": "data_leak"
+    },
+    {
+      "name": "pii_native_fine_category",
+      "native_findings": [
+        {
+          "type": "pii",
+          "category": "id_card_cn",
+          "severity": "high"
+        }
+      ],
+      "event_type": "security_check",
+      "matched_summary": {
+        "action_taken": "audit",
+        "category": "id_card_cn",
+        "findings": [
+          {
+            "category": "id_card_cn",
+            "confidence": 0,
+            "rule_id": "contract_id_card_cn",
+            "severity": "high",
+            "type": "pii"
+          }
+        ],
+        "findings_count": 1,
+        "primary_finding": {
+          "category": "id_card_cn",
+          "confidence": 0,
+          "findings_index": 0,
+          "rule_id": "contract_id_card_cn",
+          "severity": "high",
+          "type": "pii"
+        },
+        "rule_id": "contract_id_card_cn",
+        "rule_name": "",
+        "rule_type": "pii",
+        "source": "gateway",
+        "stage": "input",
+        "summary": "synthetic native metadata contract"
+      },
+      "expected_risk_factors": [
+        "dangerous_capability",
+        "data_exfiltration"
+      ],
+      "expected_risk_category": "pii"
+    },
+    {
+      "name": "observation_false",
+      "native_findings": [
+        {
+          "type": "secret",
+          "category": "plain_password",
+          "severity": "critical",
+          "counts_as_security_finding": false
+        },
+        {
+          "type": "prompt_injection",
+          "category": "prompt_injection",
+          "severity": "high",
+          "counts_as_security_finding": false
+        }
+      ],
+      "event_type": "security_check",
+      "matched_summary": {
+        "action_taken": "audit",
+        "findings": [
+          {
+            "category": "plain_password",
+            "confidence": 0,
+            "counts_as_security_finding": false,
+            "rule_id": "contract_plain_password",
+            "severity": "critical",
+            "type": "secret"
+          },
+          {
+            "category": "prompt_injection",
+            "confidence": 0,
+            "counts_as_security_finding": false,
+            "rule_id": "contract_prompt_injection",
+            "severity": "high",
+            "type": "prompt_injection"
+          }
+        ],
+        "findings_count": 0,
+        "source": "gateway",
+        "stage": "input",
+        "summary": "synthetic native metadata contract"
+      },
+      "expected_risk_factors": [],
+      "expected_risk_category": ""
+    },
+    {
+      "name": "unknown_labels",
+      "native_findings": [
+        {
+          "type": "unknown_native_type",
+          "category": "secret_but_unregistered",
+          "severity": "critical",
+          "policy_scene": "unknown_scene"
+        }
+      ],
+      "event_type": "security_check",
+      "matched_summary": {
+        "action_taken": "audit",
+        "category": "secret_but_unregistered",
+        "findings": [
+          {
+            "category": "secret_but_unregistered",
+            "confidence": 0,
+            "policy_scene": "unknown_scene",
+            "rule_id": "contract_secret_but_unregistered",
+            "severity": "critical",
+            "type": "unknown_native_type"
+          }
+        ],
+        "findings_count": 1,
+        "primary_finding": {
+          "category": "secret_but_unregistered",
+          "confidence": 0,
+          "findings_index": 0,
+          "policy_scene": "unknown_scene",
+          "rule_id": "contract_secret_but_unregistered",
+          "severity": "critical",
+          "type": "unknown_native_type"
+        },
+        "rule_id": "contract_secret_but_unregistered",
+        "rule_name": "",
+        "rule_type": "unknown_native_type",
+        "source": "gateway",
+        "stage": "input",
+        "summary": "synthetic native metadata contract"
+      },
+      "expected_risk_factors": [],
+      "expected_risk_category": ""
+    },
+    {
+      "name": "mcp_poison",
+      "native_findings": [
+        {
+          "type": "agent",
+          "category": "mcp_description_poison",
+          "severity": "high"
+        }
+      ],
+      "event_type": "security_check",
+      "matched_summary": {
+        "action_taken": "audit",
+        "category": "mcp_description_poison",
+        "findings": [
+          {
+            "category": "mcp_description_poison",
+            "confidence": 0,
+            "rule_id": "contract_mcp_description_poison",
+            "severity": "high",
+            "type": "agent"
+          }
+        ],
+        "findings_count": 1,
+        "primary_finding": {
+          "category": "mcp_description_poison",
+          "confidence": 0,
+          "findings_index": 0,
+          "rule_id": "contract_mcp_description_poison",
+          "severity": "high",
+          "type": "agent"
+        },
+        "rule_id": "contract_mcp_description_poison",
+        "rule_name": "",
+        "rule_type": "agent",
+        "source": "gateway",
+        "stage": "input",
+        "summary": "synthetic native metadata contract"
+      },
+      "expected_risk_factors": [
+        "dangerous_capability",
+        "prompt_injection",
+        "supply_chain"
+      ],
+      "expected_risk_category": "tool_poisoning"
+    },
+    {
+      "name": "mcp_policy",
+      "native_findings": [
+        {
+          "type": "agent_policy",
+          "category": "mcp_policy",
+          "severity": "high"
+        }
+      ],
+      "event_type": "security_check",
+      "matched_summary": {
+        "action_taken": "audit",
+        "category": "mcp_policy",
+        "findings": [
+          {
+            "category": "mcp_policy",
+            "confidence": 0,
+            "rule_id": "contract_mcp_policy",
+            "severity": "high",
+            "type": "agent_policy"
+          }
+        ],
+        "findings_count": 1,
+        "primary_finding": {
+          "category": "mcp_policy",
+          "confidence": 0,
+          "findings_index": 0,
+          "rule_id": "contract_mcp_policy",
+          "severity": "high",
+          "type": "agent_policy"
+        },
+        "rule_id": "contract_mcp_policy",
+        "rule_name": "",
+        "rule_type": "agent_policy",
+        "source": "gateway",
+        "stage": "input",
+        "summary": "synthetic native metadata contract"
+      },
+      "expected_risk_factors": [
+        "dangerous_capability"
+      ],
+      "expected_risk_category": "mcp_policy"
+    },
+    {
+      "name": "destructive_command",
+      "native_findings": [
+        {
+          "type": "tool_destructive_intent",
+          "category": "destructive_change",
+          "severity": "high"
+        }
+      ],
+      "event_type": "tool_destructive_intent",
+      "matched_summary": {
+        "action_taken": "audit",
+        "category": "destructive_change",
+        "findings": [
+          {
+            "category": "destructive_change",
+            "confidence": 0,
+            "rule_id": "contract_destructive_change",
+            "severity": "high",
+            "type": "tool_destructive_intent"
+          }
+        ],
+        "findings_count": 1,
+        "primary_finding": {
+          "category": "destructive_change",
+          "confidence": 0,
+          "findings_index": 0,
+          "rule_id": "contract_destructive_change",
+          "severity": "high",
+          "type": "tool_destructive_intent"
+        },
+        "rule_id": "contract_destructive_change",
+        "rule_name": "",
+        "rule_type": "tool_destructive_intent",
+        "source": "gateway",
+        "stage": "input",
+        "summary": "synthetic native metadata contract"
+      },
+      "expected_risk_factors": [
+        "dangerous_capability"
+      ],
+      "expected_risk_category": "dangerous_capability"
+    },
+    {
+      "name": "resource_exhaustion",
+      "native_findings": [
+        {
+          "type": "prompt_injection",
+          "category": "dos_resource_exhaustion_instruction",
+          "severity": "high",
+          "policy_scene": "resource_exhaustion"
+        }
+      ],
+      "event_type": "security_check",
+      "matched_summary": {
+        "action_taken": "audit",
+        "category": "dos_resource_exhaustion_instruction",
+        "findings": [
+          {
+            "category": "dos_resource_exhaustion_instruction",
+            "confidence": 0,
+            "policy_scene": "resource_exhaustion",
+            "rule_id": "contract_dos_resource_exhaustion_instruction",
+            "severity": "high",
+            "type": "prompt_injection"
+          }
+        ],
+        "findings_count": 1,
+        "primary_finding": {
+          "category": "dos_resource_exhaustion_instruction",
+          "confidence": 0,
+          "findings_index": 0,
+          "policy_scene": "resource_exhaustion",
+          "rule_id": "contract_dos_resource_exhaustion_instruction",
+          "severity": "high",
+          "type": "prompt_injection"
+        },
+        "rule_id": "contract_dos_resource_exhaustion_instruction",
+        "rule_name": "",
+        "rule_type": "prompt_injection",
+        "source": "gateway",
+        "stage": "input",
+        "summary": "synthetic native metadata contract"
+      },
+      "expected_risk_factors": [
+        "dangerous_capability",
+        "prompt_injection",
+        "unattended_automation"
+      ],
+      "expected_risk_category": "resource_exhaustion"
+    },
+    {
+      "name": "identity_spoofing",
+      "native_findings": [
+        {
+          "type": "agent",
+          "category": "identity_spoofing",
+          "severity": "high"
+        }
+      ],
+      "event_type": "security_check",
+      "matched_summary": {
+        "action_taken": "audit",
+        "category": "identity_spoofing",
+        "findings": [
+          {
+            "category": "identity_spoofing",
+            "confidence": 0,
+            "rule_id": "contract_identity_spoofing",
+            "severity": "high",
+            "type": "agent"
+          }
+        ],
+        "findings_count": 1,
+        "primary_finding": {
+          "category": "identity_spoofing",
+          "confidence": 0,
+          "findings_index": 0,
+          "rule_id": "contract_identity_spoofing",
+          "severity": "high",
+          "type": "agent"
+        },
+        "rule_id": "contract_identity_spoofing",
+        "rule_name": "",
+        "rule_type": "agent",
+        "source": "gateway",
+        "stage": "input",
+        "summary": "synthetic native metadata contract"
+      },
+      "expected_risk_factors": [
+        "shadow_agent"
+      ],
+      "expected_risk_category": "identity_spoofing"
+    },
+    {
+      "name": "unapproved_model_egress",
+      "native_findings": [
+        {
+          "type": "agent_policy",
+          "category": "unapproved_model_egress",
+          "severity": "high"
+        }
+      ],
+      "event_type": "security_check",
+      "matched_summary": {
+        "action_taken": "audit",
+        "category": "unapproved_model_egress",
+        "findings": [
+          {
+            "category": "unapproved_model_egress",
+            "confidence": 0,
+            "rule_id": "contract_unapproved_model_egress",
+            "severity": "high",
+            "type": "agent_policy"
+          }
+        ],
+        "findings_count": 1,
+        "primary_finding": {
+          "category": "unapproved_model_egress",
+          "confidence": 0,
+          "findings_index": 0,
+          "rule_id": "contract_unapproved_model_egress",
+          "severity": "high",
+          "type": "agent_policy"
+        },
+        "rule_id": "contract_unapproved_model_egress",
+        "rule_name": "",
+        "rule_type": "agent_policy",
+        "source": "gateway",
+        "stage": "input",
+        "summary": "synthetic native metadata contract"
+      },
+      "expected_risk_factors": [
+        "unapproved_model_egress"
+      ],
+      "expected_risk_category": "unapproved_model_egress"
+    }
+  ]
+}

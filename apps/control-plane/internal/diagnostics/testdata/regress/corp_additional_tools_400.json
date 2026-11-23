@@ -1,0 +1,129 @@
+{
+  "name": "corp_additional_tools_400",
+  "description": "客户现场：升级到 2.9.7 后 AOAI responses 请求报 Unknown parameter input[0].content",
+  "fixture": {
+    "providers": [
+      {
+        "key": "aoai",
+        "name": "AOAI",
+        "type": "azure",
+        "base_url": "https://corp-aoai.openai.azure.example.com"
+      }
+    ],
+    "models": [
+      {
+        "key": "sol",
+        "provider": "aoai",
+        "name": "gpt-6.1-sol"
+      }
+    ],
+    "users": [
+      {
+        "key": "u1",
+        "username": "corp_dev"
+      }
+    ],
+    "internal_keys": [
+      {
+        "key": "k1",
+        "user": "u1"
+      }
+    ],
+    "upgrade_history": [
+      {
+        "version_from": "2.6.15",
+        "version_to": "2.9.7",
+        "status": "completed",
+        "created_at": "-122m",
+        "completed_at": "-120m"
+      }
+    ],
+    "request_logs": [
+      {
+        "label": "err",
+        "count": 12,
+        "user": "u1",
+        "key": "k1",
+        "provider": "aoai",
+        "model": "sol",
+        "endpoint_type": "responses",
+        "status": "provider_error",
+        "upstream_status": 400,
+        "from": "-110m",
+        "to": "-20m",
+        "hint": "Unknown parameter: 'input[0].content'.",
+        "upstream_error_code": "unknown_parameter",
+        "error_message": "Unknown parameter: 'input[0].content'."
+      },
+      {
+        "label": "old_ok",
+        "count": 20,
+        "user": "u1",
+        "key": "k1",
+        "provider": "aoai",
+        "model": "sol",
+        "endpoint_type": "responses",
+        "status": "success",
+        "upstream_status": 200,
+        "from": "-26h",
+        "to": "-24h"
+      }
+    ]
+  },
+  "input": {
+    "kind": "request",
+    "ref": "@err:6",
+    "scope": "admin"
+  },
+  "expect": {
+    "tier": "L2",
+    "must_check_ids_any": [
+      "up_param"
+    ],
+    "must_check_ids_all": [
+      "up_param",
+      "tree_change_correlation"
+    ],
+    "must_keywords": [
+      "2.9.7",
+      "诊断包",
+      "联系厂商"
+    ],
+    "must_level": {
+      "up_param": "confirmed",
+      "tree_change_correlation": "suspected"
+    },
+    "forbid_keywords": [
+      "请检查客户端"
+    ],
+    "l3": {
+      "must_keywords_any": [
+        "2.9.7",
+        "升级"
+      ],
+      "must_keywords_any2": [
+        "诊断包",
+        "联系厂商"
+      ],
+      "level_by_kw": [
+        {
+          "kw": [
+            "参数",
+            "上游"
+          ],
+          "level": "confirmed"
+        },
+        {
+          "kw": [
+            "升级",
+            "疑似"
+          ],
+          "level": "suspected"
+        }
+      ],
+      "forbid_keywords": [
+        "请检查客户端"
+      ]
+    }
+  }
+}

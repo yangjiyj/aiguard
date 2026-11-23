@@ -1,0 +1,26 @@
+/*
+ * 控制台图表令牌与少量排版整理（政企克制版）。在 index.css 之后引入。
+ * 页面里的 var(--chart-N) / var(--status-*) 依赖这里，数值必须与 utils/chartPalette.ts 一致（有单测守着）。
+ * 不加发光、背景网格、扫描光和无限动画。
+ */
+:root[data-theme='light'] {
+  --chart-1: #2a78d6; --chart-2: #d4622c; --chart-3: #17966a; --chart-4: #6250d6; --chart-5: #b97f00; --chart-6: #d4588e;
+  --chart-other: #8a94a3;
+  --status-ok: #18765e; --status-warn: #95601b; --status-high: #c2581d; --status-danger: #b34444;
+  --status-danger-bg: rgba(179, 68, 68, 0.08);
+}
+:root[data-theme='dark'] {
+  --chart-1: #3987e5; --chart-2: #d95926; --chart-3: #199e70; --chart-4: #9085e9; --chart-5: #c98500; --chart-6: #d55181;
+  --chart-other: #6b7686;
+  --status-ok: #8bd3b7; --status-warn: #eac185; --status-high: #f0a875; --status-danger: #f0a0a0;
+  --status-danger-bg: rgba(240, 160, 160, 0.1);
+}
+
+/* 数字等宽对齐：统计值、指标卡、表格 */
+.ant-statistic-content, .ant-table, .enterprise-metric-card { font-variant-numeric: tabular-nums; }
+
+/* 侧栏选中项：在原有浅底上加一条品牌色细边线，位置更易辨认 */
+.ant-layout-sider .ant-menu-item-selected { position: relative; }
+.ant-layout-sider .ant-menu-item-selected::before {
+  content: ''; position: absolute; left: 0; top: 10px; bottom: 10px; width: 3px; border-radius: 0 2px 2px 0; background: var(--brand-blue);
+}

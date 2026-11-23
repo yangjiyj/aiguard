@@ -1,0 +1,515 @@
+{
+ "typical": [
+  "git status",
+  "git diff --stat HEAD~1",
+  "git log --oneline -20",
+  "git add -A && git commit -m \"$(cat <<'EOF'\nfix: handle empty config\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\"",
+  "ls -la src/",
+  "cat README.md",
+  "grep -rn \"TODO\" src/ --include='*.go' | head -50",
+  "find . -name '*.go' -not -path './vendor/*' | xargs wc -l | sort -n | tail -5",
+  "sed -n '1,80p' internal/server/server.go",
+  "go test ./... -count=1 2>&1 | tail -30",
+  "npm run build && npm test -- --watch=false",
+  "python3 -m pytest -q tests/ -k 'not slow'",
+  "docker compose up -d && docker compose ps",
+  "kubectl get pods -n prod -o wide | grep -v Running",
+  "curl -fsS http://localhost:8080/healthz | jq .",
+  "source .venv/bin/activate && pip install -r requirements.txt",
+  "cd web && pnpm install --frozen-lockfile && pnpm lint",
+  "for f in $(git diff --name-only); do gofmt -l \"$f\"; done",
+  "mkdir -p build && cmake -S . -B build && cmake --build build -j8",
+  "tail -n 200 logs/app.log | grep -i error | awk '{print $1, $2, $NF}'"
+ ],
+ "pathological": [
+  {
+   "name": "超长单词 64KB",
+   "parts": [
+    {
+     "text": "cat "
+    },
+    {
+     "text": "a/",
+     "repeat": 32700
+    }
+   ]
+  },
+  {
+   "name": "大量单词 64KB",
+   "parts": [
+    {
+     "text": "echo "
+    },
+    {
+     "text": "word ",
+     "repeat": 13000
+    }
+   ]
+  },
+  {
+   "name": "深层嵌套花括号 2000 层",
+   "parts": [
+    {
+     "text": "cat "
+    },
+    {
+     "text": "{a,",
+     "repeat": 2000
+    },
+    {
+     "text": "b"
+    },
+    {
+     "text": "}",
+     "repeat": 2000
+    }
+   ]
+  },
+  {
+   "name": "花括号列表 12000 个",
+   "parts": [
+    {
+     "text": "echo "
+    },
+    {
+     "text": "{a,b}",
+     "repeat": 12000
+    }
+   ]
+  },
+  {
+   "name": "深层嵌套 $() 2000 层",
+   "parts": [
+    {
+     "text": "$(echo ",
+     "repeat": 2000
+    },
+    {
+     "text": "x"
+    },
+    {
+     "text": ")",
+     "repeat": 2000
+    }
+   ]
+  },
+  {
+   "name": "深层嵌套反引号 200 层",
+   "parts": [
+    {
+     "text": "`echo "
+    },
+    {
+     "text": "\\`echo ",
+     "repeat": 200
+    },
+    {
+     "text": "x"
+    },
+    {
+     "text": "\\`",
+     "repeat": 200
+    },
+    {
+     "text": "`"
+    }
+   ]
+  },
+  {
+   "name": "heredoc 3000 个",
+   "parts": [
+    {
+     "text": "cat <<'EOF'\nline\nEOF\n",
+     "repeat": 3000
+    }
+   ]
+  },
+  {
+   "name": "长 heredoc 正文 60KB",
+   "parts": [
+    {
+     "text": "cat <<'EOF'\n"
+    },
+    {
+     "text": "x y z\n",
+     "repeat": 10000
+    },
+    {
+     "text": "EOF"
+    }
+   ]
+  },
+  {
+   "name": "重复引号 60KB",
+   "parts": [
+    {
+     "text": "echo "
+    },
+    {
+     "text": "\"a\"'b'",
+     "repeat": 10000
+    }
+   ]
+  },
+  {
+   "name": "命令 7000 条",
+   "parts": [
+    {
+     "text": "echo hi; ",
+     "repeat": 7000
+    }
+   ]
+  },
+  {
+   "name": "管道 6000 级",
+   "parts": [
+    {
+     "text": "cat x | ",
+     "repeat": 6000
+    },
+    {
+     "text": "wc -l"
+    }
+   ]
+  },
+  {
+   "name": "GIT_SSH_COMMAND 赋值 64KB",
+   "parts": [
+    {
+     "text": "export "
+    },
+    {
+     "text": "GIT_SSH_COMMAND=a ",
+     "repeat": 3600
+    }
+   ]
+  },
+  {
+   "name": "超过 64KB 尾部读取",
+   "parts": [
+    {
+     "text": "echo "
+    },
+    {
+     "text": "a",
+     "repeat": 71680
+    },
+    {
+     "text": "; cat ~/.ssh/id_rsa"
+    }
+   ]
+  },
+  {
+   "name": "超过 64KB 尾部 rm",
+   "parts": [
+    {
+     "text": "echo "
+    },
+    {
+     "text": "a",
+     "repeat": 71680
+    },
+    {
+     "text": "; rm -rf /"
+    }
+   ]
+  },
+  {
+   "name": "1MB 注释",
+   "parts": [
+    {
+     "text": "export "
+    },
+    {
+     "text": "GIT_SSH_COMMAND=a ",
+     "repeat": 3640
+    },
+    {
+     "text": " # "
+    },
+    {
+     "text": "GIT_SSH_COMMAND ",
+     "repeat": 65536
+    }
+   ]
+  },
+  {
+   "name": "1MB 互不相同的词",
+   "parts": [
+    {
+     "text": "echo "
+    },
+    {
+     "text": "w%06d ",
+     "repeat": 131072,
+     "indexed": true
+    }
+   ]
+  },
+  {
+   "name": "引号里未闭合的 $( 21000 个",
+   "parts": [
+    {
+     "text": "echo \""
+    },
+    {
+     "text": "$(\"",
+     "repeat": 21000
+    }
+   ]
+  },
+  {
+   "name": "未闭合的 $( 21000 个",
+   "parts": [
+    {
+     "text": "$(",
+     "repeat": 21000
+    }
+   ]
+  },
+  {
+   "name": "末尾才闭合的 $( 20000 个",
+   "parts": [
+    {
+     "text": "$(",
+     "repeat": 20000
+    },
+    {
+     "text": ")"
+    }
+   ]
+  },
+  {
+   "name": "未闭合的 ${ 20000 个",
+   "parts": [
+    {
+     "text": "${",
+     "repeat": 20000
+    }
+   ]
+  },
+  {
+   "name": "末尾才闭合的 ${ 20000 个",
+   "parts": [
+    {
+     "text": "${",
+     "repeat": 20000
+    },
+    {
+     "text": "}"
+    }
+   ]
+  },
+  {
+   "name": "未闭合的 $(( 20000 个",
+   "parts": [
+    {
+     "text": "$((",
+     "repeat": 20000
+    }
+   ]
+  },
+  {
+   "name": "未闭合的 $[ 20000 个",
+   "parts": [
+    {
+     "text": "$[",
+     "repeat": 20000
+    }
+   ]
+  },
+  {
+   "name": "未闭合的 (( 20000 个",
+   "parts": [
+    {
+     "text": "((",
+     "repeat": 20000
+    }
+   ]
+  },
+  {
+   "name": "未闭合的 { 64000 个",
+   "parts": [
+    {
+     "text": "cat "
+    },
+    {
+     "text": "{",
+     "repeat": 64000
+    }
+   ]
+  },
+  {
+   "name": "末尾才闭合的 { 64000 个",
+   "parts": [
+    {
+     "text": "cat "
+    },
+    {
+     "text": "{",
+     "repeat": 64000
+    },
+    {
+     "text": "}"
+    }
+   ]
+  },
+  {
+   "name": "输出选项 3000 条加 source 6000 条",
+   "parts": [
+    {
+     "text": "x -o a; ",
+     "repeat": 3000
+    },
+    {
+     "text": ". b; ",
+     "repeat": 6000
+    }
+   ]
+  },
+  {
+   "name": "sh -c 3000 条加 source 6000 条",
+   "parts": [
+    {
+     "text": "sh -c x; ",
+     "repeat": 3000
+    },
+    {
+     "text": ". b; ",
+     "repeat": 6000
+    }
+   ]
+  },
+  {
+   "name": "2000 个变量名各不相同的 for 循环",
+   "parts": [
+    {
+     "text": "for v%d in config; do :; done; ",
+     "repeat": 2000,
+     "indexed": true
+    }
+   ]
+  },
+  {
+   "name": "64 个操作数的 cp 488 条",
+   "parts": [
+    {
+     "text": "cp o0 o1 o2 o3 o4 o5 o6 o7 o8 o9 o10 o11 o12 o13 o14 o15 o16 o17 o18 o19 o20 o21 o22 o23 o24 o25 o26 o27 o28 o29 o30 o31 o32 o33 o34 o35 o36 o37 o38 o39 o40 o41 o42 o43 o44 o45 o46 o47 o48 o49 o50 o51 o52 o53 o54 o55 o56 o57 o58 o59 o60 o61 o62 o63; ",
+     "repeat": 488
+    }
+   ]
+  },
+  {
+   "name": "ssh 后跟 31000 个参数",
+   "parts": [
+    {
+     "text": "ssh host"
+    },
+    {
+     "text": " x",
+     "repeat": 31000
+    }
+   ]
+  },
+  {
+   "name": "kubectl exec -- 后跟 31000 个参数",
+   "parts": [
+    {
+     "text": "kubectl exec p --"
+    },
+    {
+     "text": " x",
+     "repeat": 31000
+    }
+   ]
+  },
+  {
+   "name": "3000 个不写 done 的 for 循环头",
+   "parts": [
+    {
+     "text": "for v%d in config; ",
+     "repeat": 3000,
+     "indexed": true
+    }
+   ]
+  },
+  {
+   "name": "3000 个带 do 不写 done 的 for 循环头",
+   "parts": [
+    {
+     "text": "for v%d in config; do ",
+     "repeat": 3000,
+     "indexed": true
+    }
+   ]
+  },
+  {
+   "name": "引号拆开的读取加引号里 100 个 $(（329 字节）",
+   "parts": [
+    {
+     "text": "cat ~/.ss''h/id_rsa; echo \""
+    },
+    {
+     "text": "$(\"",
+     "repeat": 100
+    },
+    {
+     "text": ")\""
+    }
+   ]
+  },
+  {
+   "name": "引号拆开的读取加 20000 个 ${ 末尾才闭合",
+   "parts": [
+    {
+     "text": "cat ~/.ss''h/id_rsa; echo "
+    },
+    {
+     "text": "${",
+     "repeat": 20000
+    },
+    {
+     "text": "}"
+    }
+   ]
+  },
+  {
+   "name": "32 个各 60 个值的 for 循环、循环体 128 条命令都引用 32 个变量",
+   "parts": [
+    {
+     "text": "for v0 in a0.pub a1.pub a2.pub a3.pub a4.pub a5.pub a6.pub a7.pub a8.pub a9.pub a10.pub a11.pub a12.pub a13.pub a14.pub a15.pub a16.pub a17.pub a18.pub a19.pub a20.pub a21.pub a22.pub a23.pub a24.pub a25.pub a26.pub a27.pub a28.pub a29.pub a30.pub a31.pub a32.pub a33.pub a34.pub a35.pub a36.pub a37.pub a38.pub a39.pub a40.pub a41.pub a42.pub a43.pub a44.pub a45.pub a46.pub a47.pub a48.pub a49.pub a50.pub a51.pub a52.pub a53.pub a54.pub a55.pub a56.pub a57.pub a58.pub a59.pub; do for v1 in a0.pub a1.pub a2.pub a3.pub a4.pub a5.pub a6.pub a7.pub a8.pub a9.pub a10.pub a11.pub a12.pub a13.pub a14.pub a15.pub a16.pub a17.pub a18.pub a19.pub a20.pub a21.pub a22.pub a23.pub a24.pub a25.pub a26.pub a27.pub a28.pub a29.pub a30.pub a31.pub a32.pub a33.pub a34.pub a35.pub a36.pub a37.pub a38.pub a39.pub a40.pub a41.pub a42.pub a43.pub a44.pub a45.pub a46.pub a47.pub a48.pub a49.pub a50.pub a51.pub a52.pub a53.pub a54.pub a55.pub a56.pub a57.pub a58.pub a59.pub; do for v2 in a0.pub a1.pub a2.pub a3.pub a4.pub a5.pub a6.pub a7.pub a8.pub a9.pub a10.pub a11.pub a12.pub a13.pub a14.pub a15.pub a16.pub a17.pub a18.pub a19.pub a20.pub a21.pub a22.pub a23.pub a24.pub a25.pub a26.pub a27.pub a28.pub a29.pub a30.pub a31.pub a32.pub a33.pub a34.pub a35.pub a36.pub a37.pub a38.pub a39.pub a40.pub a41.pub a42.pub a43.pub a44.pub a45.pub a46.pub a47.pub a48.pub a49.pub a50.pub a51.pub a52.pub a53.pub a54.pub a55.pub a56.pub a57.pub a58.pub a59.pub; do for v3 in a0.pub a1.pub a2.pub a3.pub a4.pub a5.pub a6.pub a7.pub a8.pub a9.pub a10.pub a11.pub a12.pub a13.pub a14.pub a15.pub a16.pub a17.pub a18.pub a19.pub a20.pub a21.pub a22.pub a23.pub a24.pub a25.pub a26.pub a27.pub a28.pub a29.pub a30.pub a31.pub a32.pub a33.pub a34.pub a35.pub a36.pub a37.pub a38.pub a39.pub a40.pub a41.pub a42.pub a43.pub a44.pub a45.pub a46.pub a47.pub a48.pub a49.pub a50.pub a51.pub a52.pub a53.pub a54.pub a55.pub a56.pub a57.pub a58.pub a59.pub; do for v4 in a0.pub a1.pub a2.pub a3.pub a4.pub a5.pub a6.pub a7.pub a8.pub a9.pub a10.pub a11.pub a12.pub a13.pub a14.pub a15.pub a16.pub a17.pub a18.pub a19.pub a20.pub a21.pub a22.pub a23.pub a24.pub a25.pub a26.pub a27.pub a28.pub a29.pub a30.pub a31.pub a32.pub a33.pub a34.pub a35.pub a36.pub a37.pub a38.pub a39.pub a40.pub a41.pub a42.pub a43.pub a44.pub a45.pub a46.pub a47.pub a48.pub a49.pub a50.pub a51.pub a52.pub a53.pub a54.pub a55.pub a56.pub a57.pub a58.pub a59.pub; do for v5 in a0.pub a1.pub a2.pub a3.pub a4.pub a5.pub a6.pub a7.pub a8.pub a9.pub a10.pub a11.pub a12.pub a13.pub a14.pub a15.pub a16.pub a17.pub a18.pub a19.pub a20.pub a21.pub a22.pub a23.pub a24.pub a25.pub a26.pub a27.pub a28.pub a29.pub a30.pub a31.pub a32.pub a33.pub a34.pub a35.pub a36.pub a37.pub a38.pub a39.pub a40.pub a41.pub a42.pub a43.pub a44.pub a45.pub a46.pub a47.pub a48.pub a49.pub a50.pub a51.pub a52.pub a53.pub a54.pub a55.pub a56.pub a57.pub a58.pub a59.pub; do for v6 in a0.pub a1.pub a2.pub a3.pub a4.pub a5.pub a6.pub a7.pub a8.pub a9.pub a10.pub a11.pub a12.pub a13.pub a14.pub a15.pub a16.pub a17.pub a18.pub a19.pub a20.pub a21.pub a22.pub a23.pub a24.pub a25.pub a26.pub a27.pub a28.pub a29.pub a30.pub a31.pub a32.pub a33.pub a34.pub a35.pub a36.pub a37.pub a38.pub a39.pub a40.pub a41.pub a42.pub a43.pub a44.pub a45.pub a46.pub a47.pub a48.pub a49.pub a50.pub a51.pub a52.pub a53.pub a54.pub a55.pub a56.pub a57.pub a58.pub a59.pub; do for v7 in a0.pub a1.pub a2.pub a3.pub a4.pub a5.pub a6.pub a7.pub a8.pub a9.pub a10.pub a11.pub a12.pub a13.pub a14.pub a15.pub a16.pub a17.pub a18.pub a19.pub a20.pub a21.pub a22.pub a23.pub a24.pub a25.pub a26.pub a27.pub a28.pub a29.pub a30.pub a31.pub a32.pub a33.pub a34.pub a35.pub a36.pub a37.pub a38.pub a39.pub a40.pub a41.pub a42.pub a43.pub a44.pub a45.pub a46.pub a47.pub a48.pub a49.pub a50.pub a51.pub a52.pub a53.pub a54.pub a55.pub a56.pub a57.pub a58.pub a59.pub; do for v8 in a0.pub a1.pub a2.pub a3.pub a4.pub a5.pub a6.pub a7.pub a8.pub a9.pub a10.pub a11.pub a12.pub a13.pub a14.pub a15.pub a16.pub a17.pub a18.pub a19.pub a20.pub a21.pub a22.pub a23.pub a24.pub a25.pub a26.pub a27.pub a28.pub a29.pub a30.pub a31.pub a32.pub a33.pub a34.pub a35.pub a36.pub a37.pub a38.pub a39.pub a40.pub a41.pub a42.pub a43.pub a44.pub a45.pub a46.pub a47.pub a48.pub a49.pub a50.pub a51.pub a52.pub a53.pub a54.pub a55.pub a56.pub a57.pub a58.pub a59.pub; do for v9 in a0.pub a1.pub a2.pub a3.pub a4.pub a5.pub a6.pub a7.pub a8.pub a9.pub a10.pub a11.pub a12.pub a13.pub a14.pub a15.pub a16.pub a17.pub a18.pub a19.pub a20.pub a21.pub a22.pub a23.pub a24.pub a25.pub a26.pub a27.pub a28.pub a29.pub a30.pub a31.pub a32.pub a33.pub a34.pub a35.pub a36.pub a37.pub a38.pub a39.pub a40.pub a41.pub a42.pub a43.pub a44.pub a45.pub a46.pub a47.pub a48.pub a49.pub a50.pub a51.pub a52.pub a53.pub a54.pub a55.pub a56.pub a57.pub a58.pub a59.pub; do for v10 in a0.pub a1.pub a2.pub a3.pub a4.pub a5.pub a6.pub a7.pub a8.pub a9.pub a10.pub a11.pub a12.pub a13.pub a14.pub a15.pub a16.pub a17.pub a18.pub a19.pub a20.pub a21.pub a22.pub a23.pub a24.pub a25.pub a26.pub a27.pub a28.pub a29.pub a30.pub a31.pub a32.pub a33.pub a34.pub a35.pub a36.pub a37.pub a38.pub a39.pub a40.pub a41.pub a42.pub a43.pub a44.pub a45.pub a46.pub a47.pub a48.pub a49.pub a50.pub a51.pub a52.pub a53.pub a54.pub a55.pub a56.pub a57.pub a58.pub a59.pub; do for v11 in a0.pub a1.pub a2.pub a3.pub a4.pub a5.pub a6.pub a7.pub a8.pub a9.pub a10.pub a11.pub a12.pub a13.pub a14.pub a15.pub a16.pub a17.pub a18.pub a19.pub a20.pub a21.pub a22.pub a23.pub a24.pub a25.pub a26.pub a27.pub a28.pub a29.pub a30.pub a31.pub a32.pub a33.pub a34.pub a35.pub a36.pub a37.pub a38.pub a39.pub a40.pub a41.pub a42.pub a43.pub a44.pub a45.pub a46.pub a47.pub a48.pub a49.pub a50.pub a51.pub a52.pub a53.pub a54.pub a55.pub a56.pub a57.pub a58.pub a59.pub; do for v12 in a0.pub a1.pub a2.pub a3.pub a4.pub a5.pub a6.pub a7.pub a8.pub a9.pub a10.pub a11.pub a12.pub a13.pub a14.pub a15.pub a16.pub a17.pub a18.pub a19.pub a20.pub a21.pub a22.pub a23.pub a24.pub a25.pub a26.pub a27.pub a28.pub a29.pub a30.pub a31.pub a32.pub a33.pub a34.pub a35.pub a36.pub a37.pub a38.pub a39.pub a40.pub a41.pub a42.pub a43.pub a44.pub a45.pub a46.pub a47.pub a48.pub a49.pub a50.pub a51.pub a52.pub a53.pub a54.pub a55.pub a56.pub a57.pub a58.pub a59.pub; do for v13 in a0.pub a1.pub a2.pub a3.pub a4.pub a5.pub a6.pub a7.pub a8.pub a9.pub a10.pub a11.pub a12.pub a13.pub a14.pub a15.pub a16.pub a17.pub a18.pub a19.pub a20.pub a21.pub a22.pub a23.pub a24.pub a25.pub a26.pub a27.pub a28.pub a29.pub a30.pub a31.pub a32.pub a33.pub a34.pub a35.pub a36.pub a37.pub a38.pub a39.pub a40.pub a41.pub a42.pub a43.pub a44.pub a45.pub a46.pub a47.pub a48.pub a49.pub a50.pub a51.pub a52.pub a53.pub a54.pub a55.pub a56.pub a57.pub a58.pub a59.pub; do for v14 in a0.pub a1.pub a2.pub a3.pub a4.pub a5.pub a6.pub a7.pub a8.pub a9.pub a10.pub a11.pub a12.pub a13.pub a14.pub a15.pub a16.pub a17.pub a18.pub a19.pub a20.pub a21.pub a22.pub a23.pub a24.pub a25.pub a26.pub a27.pub a28.pub a29.pub a30.pub a31.pub a32.pub a33.pub a34.pub a35.pub a36.pub a37.pub a38.pub a39.pub a40.pub a41.pub a42.pub a43.pub a44.pub a45.pub a46.pub a47.pub a48.pub a49.pub a50.pub a51.pub a52.pub a53.pub a54.pub a55.pub a56.pub a57.pub a58.pub a59.pub; do for v15 in a0.pub a1.pub a2.pub a3.pub a4.pub a5.pub a6.pub a7.pub a8.pub a9.pub a10.pub a11.pub a12.pub a13.pub a14.pub a15.pub a16.pub a17.pub a18.pub a19.pub a20.pub a21.pub a22.pub a23.pub a24.pub a25.pub a26.pub a27.pub a28.pub a29.pub a30.pub a31.pub a32.pub a33.pub a34.pub a35.pub a36.pub a37.pub a38.pub a39.pub a40.pub a41.pub a42.pub a43.pub a44.pub a45.pub a46.pub a47.pub a48.pub a49.pub a50.pub a51.pub a52.pub a53.pub a54.pub a55.pub a56.pub a57.pub a58.pub a59.pub; do for v16 in a0.pub a1.pub a2.pub a3.pub a4.pub a5.pub a6.pub a7.pub a8.pub a9.pub a10.pub a11.pub a12.pub a13.pub a14.pub a15.pub a16.pub a17.pub a18.pub a19.pub a20.pub a21.pub a22.pub a23.pub a24.pub a25.pub a26.pub a27.pub a28.pub a29.pub a30.pub a31.pub a32.pub a33.pub a34.pub a35.pub a36.pub a37.pub a38.pub a39.pub a40.pub a41.pub a42.pub a43.pub a44.pub a45.pub a46.pub a47.pub a48.pub a49.pub a50.pub a51.pub a52.pub a53.pub a54.pub a55.pub a56.pub a57.pub a58.pub a59.pub; do for v17 in a0.pub a1.pub a2.pub a3.pub a4.pub a5.pub a6.pub a7.pub a8.pub a9.pub a10.pub a11.pub a12.pub a13.pub a14.pub a15.pub a16.pub a17.pub a18.pub a19.pub a20.pub a21.pub a22.pub a23.pub a24.pub a25.pub a26.pub a27.pub a28.pub a29.pub a30.pub a31.pub a32.pub a33.pub a34.pub a35.pub a36.pub a37.pub a38.pub a39.pub a40.pub a41.pub a42.pub a43.pub a44.pub a45.pub a46.pub a47.pub a48.pub a49.pub a50.pub a51.pub a52.pub a53.pub a54.pub a55.pub a56.pub a57.pub a58.pub a59.pub; do for v18 in a0.pub a1.pub a2.pub a3.pub a4.pub a5.pub a6.pub a7.pub a8.pub a9.pub a10.pub a11.pub a12.pub a13.pub a14.pub a15.pub a16.pub a17.pub a18.pub a19.pub a20.pub a21.pub a22.pub a23.pub a24.pub a25.pub a26.pub a27.pub a28.pub a29.pub a30.pub a31.pub a32.pub a33.pub a34.pub a35.pub a36.pub a37.pub a38.pub a39.pub a40.pub a41.pub a42.pub a43.pub a44.pub a45.pub a46.pub a47.pub a48.pub a49.pub a50.pub a51.pub a52.pub a53.pub a54.pub a55.pub a56.pub a57.pub a58.pub a59.pub; do for v19 in a0.pub a1.pub a2.pub a3.pub a4.pub a5.pub a6.pub a7.pub a8.pub a9.pub a10.pub a11.pub a12.pub a13.pub a14.pub a15.pub a16.pub a17.pub a18.pub a19.pub a20.pub a21.pub a22.pub a23.pub a24.pub a25.pub a26.pub a27.pub a28.pub a29.pub a30.pub a31.pub a32.pub a33.pub a34.pub a35.pub a36.pub a37.pub a38.pub a39.pub a40.pub a41.pub a42.pub a43.pub a44.pub a45.pub a46.pub a47.pub a48.pub a49.pub a50.pub a51.pub a52.pub a53.pub a54.pub a55.pub a56.pub a57.pub a58.pub a59.pub; do for v20 in a0.pub a1.pub a2.pub a3.pub a4.pub a5.pub a6.pub a7.pub a8.pub a9.pub a10.pub a11.pub a12.pub a13.pub a14.pub a15.pub a16.pub a17.pub a18.pub a19.pub a20.pub a21.pub a22.pub a23.pub a24.pub a25.pub a26.pub a27.pub a28.pub a29.pub a30.pub a31.pub a32.pub a33.pub a34.pub a35.pub a36.pub a37.pub a38.pub a39.pub a40.pub a41.pub a42.pub a43.pub a44.pub a45.pub a46.pub a47.pub a48.pub a49.pub a50.pub a51.pub a52.pub a53.pub a54.pub a55.pub a56.pub a57.pub a58.pub a59.pub; do for v21 in a0.pub a1.pub a2.pub a3.pub a4.pub a5.pub a6.pub a7.pub a8.pub a9.pub a10.pub a11.pub a12.pub a13.pub a14.pub a15.pub a16.pub a17.pub a18.pub a19.pub a20.pub a21.pub a22.pub a23.pub a24.pub a25.pub a26.pub a27.pub a28.pub a29.pub a30.pub a31.pub a32.pub a33.pub a34.pub a35.pub a36.pub a37.pub a38.pub a39.pub a40.pub a41.pub a42.pub a43.pub a44.pub a45.pub a46.pub a47.pub a48.pub a49.pub a50.pub a51.pub a52.pub a53.pub a54.pub a55.pub a56.pub a57.pub a58.pub a59.pub; do for v22 in a0.pub a1.pub a2.pub a3.pub a4.pub a5.pub a6.pub a7.pub a8.pub a9.pub a10.pub a11.pub a12.pub a13.pub a14.pub a15.pub a16.pub a17.pub a18.pub a19.pub a20.pub a21.pub a22.pub a23.pub a24.pub a25.pub a26.pub a27.pub a28.pub a29.pub a30.pub a31.pub a32.pub a33.pub a34.pub a35.pub a36.pub a37.pub a38.pub a39.pub a40.pub a41.pub a42.pub a43.pub a44.pub a45.pub a46.pub a47.pub a48.pub a49.pub a50.pub a51.pub a52.pub a53.pub a54.pub a55.pub a56.pub a57.pub a58.pub a59.pub; do for v23 in a0.pub a1.pub a2.pub a3.pub a4.pub a5.pub a6.pub a7.pub a8.pub a9.pub a10.pub a11.pub a12.pub a13.pub a14.pub a15.pub a16.pub a17.pub a18.pub a19.pub a20.pub a21.pub a22.pub a23.pub a24.pub a25.pub a26.pub a27.pub a28.pub a29.pub a30.pub a31.pub a32.pub a33.pub a34.pub a35.pub a36.pub a37.pub a38.pub a39.pub a40.pub a41.pub a42.pub a43.pub a44.pub a45.pub a46.pub a47.pub a48.pub a49.pub a50.pub a51.pub a52.pub a53.pub a54.pub a55.pub a56.pub a57.pub a58.pub a59.pub; do for v24 in a0.pub a1.pub a2.pub a3.pub a4.pub a5.pub a6.pub a7.pub a8.pub a9.pub a10.pub a11.pub a12.pub a13.pub a14.pub a15.pub a16.pub a17.pub a18.pub a19.pub a20.pub a21.pub a22.pub a23.pub a24.pub a25.pub a26.pub a27.pub a28.pub a29.pub a30.pub a31.pub a32.pub a33.pub a34.pub a35.pub a36.pub a37.pub a38.pub a39.pub a40.pub a41.pub a42.pub a43.pub a44.pub a45.pub a46.pub a47.pub a48.pub a49.pub a50.pub a51.pub a52.pub a53.pub a54.pub a55.pub a56.pub a57.pub a58.pub a59.pub; do for v25 in a0.pub a1.pub a2.pub a3.pub a4.pub a5.pub a6.pub a7.pub a8.pub a9.pub a10.pub a11.pub a12.pub a13.pub a14.pub a15.pub a16.pub a17.pub a18.pub a19.pub a20.pub a21.pub a22.pub a23.pub a24.pub a25.pub a26.pub a27.pub a28.pub a29.pub a30.pub a31.pub a32.pub a33.pub a34.pub a35.pub a36.pub a37.pub a38.pub a39.pub a40.pub a41.pub a42.pub a43.pub a44.pub a45.pub a46.pub a47.pub a48.pub a49.pub a50.pub a51.pub a52.pub a53.pub a54.pub a55.pub a56.pub a57.pub a58.pub a59.pub; do for v26 in a0.pub a1.pub a2.pub a3.pub a4.pub a5.pub a6.pub a7.pub a8.pub a9.pub a10.pub a11.pub a12.pub a13.pub a14.pub a15.pub a16.pub a17.pub a18.pub a19.pub a20.pub a21.pub a22.pub a23.pub a24.pub a25.pub a26.pub a27.pub a28.pub a29.pub a30.pub a31.pub a32.pub a33.pub a34.pub a35.pub a36.pub a37.pub a38.pub a39.pub a40.pub a41.pub a42.pub a43.pub a44.pub a45.pub a46.pub a47.pub a48.pub a49.pub a50.pub a51.pub a52.pub a53.pub a54.pub a55.pub a56.pub a57.pub a58.pub a59.pub; do for v27 in a0.pub a1.pub a2.pub a3.pub a4.pub a5.pub a6.pub a7.pub a8.pub a9.pub a10.pub a11.pub a12.pub a13.pub a14.pub a15.pub a16.pub a17.pub a18.pub a19.pub a20.pub a21.pub a22.pub a23.pub a24.pub a25.pub a26.pub a27.pub a28.pub a29.pub a30.pub a31.pub a32.pub a33.pub a34.pub a35.pub a36.pub a37.pub a38.pub a39.pub a40.pub a41.pub a42.pub a43.pub a44.pub a45.pub a46.pub a47.pub a48.pub a49.pub a50.pub a51.pub a52.pub a53.pub a54.pub a55.pub a56.pub a57.pub a58.pub a59.pub; do for v28 in a0.pub a1.pub a2.pub a3.pub a4.pub a5.pub a6.pub a7.pub a8.pub a9.pub a10.pub a11.pub a12.pub a13.pub a14.pub a15.pub a16.pub a17.pub a18.pub a19.pub a20.pub a21.pub a22.pub a23.pub a24.pub a25.pub a26.pub a27.pub a28.pub a29.pub a30.pub a31.pub a32.pub a33.pub a34.pub a35.pub a36.pub a37.pub a38.pub a39.pub a40.pub a41.pub a42.pub a43.pub a44.pub a45.pub a46.pub a47.pub a48.pub a49.pub a50.pub a51.pub a52.pub a53.pub a54.pub a55.pub a56.pub a57.pub a58.pub a59.pub; do for v29 in a0.pub a1.pub a2.pub a3.pub a4.pub a5.pub a6.pub a7.pub a8.pub a9.pub a10.pub a11.pub a12.pub a13.pub a14.pub a15.pub a16.pub a17.pub a18.pub a19.pub a20.pub a21.pub a22.pub a23.pub a24.pub a25.pub a26.pub a27.pub a28.pub a29.pub a30.pub a31.pub a32.pub a33.pub a34.pub a35.pub a36.pub a37.pub a38.pub a39.pub a40.pub a41.pub a42.pub a43.pub a44.pub a45.pub a46.pub a47.pub a48.pub a49.pub a50.pub a51.pub a52.pub a53.pub a54.pub a55.pub a56.pub a57.pub a58.pub a59.pub; do for v30 in a0.pub a1.pub a2.pub a3.pub a4.pub a5.pub a6.pub a7.pub a8.pub a9.pub a10.pub a11.pub a12.pub a13.pub a14.pub a15.pub a16.pub a17.pub a18.pub a19.pub a20.pub a21.pub a22.pub a23.pub a24.pub a25.pub a26.pub a27.pub a28.pub a29.pub a30.pub a31.pub a32.pub a33.pub a34.pub a35.pub a36.pub a37.pub a38.pub a39.pub a40.pub a41.pub a42.pub a43.pub a44.pub a45.pub a46.pub a47.pub a48.pub a49.pub a50.pub a51.pub a52.pub a53.pub a54.pub a55.pub a56.pub a57.pub a58.pub a59.pub; do for v31 in a0.pub a1.pub a2.pub a3.pub a4.pub a5.pub a6.pub a7.pub a8.pub a9.pub a10.pub a11.pub a12.pub a13.pub a14.pub a15.pub a16.pub a17.pub a18.pub a19.pub a20.pub a21.pub a22.pub a23.pub a24.pub a25.pub a26.pub a27.pub a28.pub a29.pub a30.pub a31.pub a32.pub a33.pub a34.pub a35.pub a36.pub a37.pub a38.pub a39.pub a40.pub a41.pub a42.pub a43.pub a44.pub a45.pub a46.pub a47.pub a48.pub a49.pub a50.pub a51.pub a52.pub a53.pub a54.pub a55.pub a56.pub a57.pub a58.pub a59.pub; do "
+    },
+    {
+     "text": "cat ~/.ssh/$v0$v1$v2$v3$v4$v5$v6$v7$v8$v9$v10$v11$v12$v13$v14$v15$v16$v17$v18$v19$v20$v21$v22$v23$v24$v25$v26$v27$v28$v29$v30$v31; ",
+     "repeat": 128
+    },
+    {
+     "text": "done; ",
+     "repeat": 32
+    }
+   ]
+  },
+  {
+   "name": "4 层引号嵌套套 55KB 花括号词（垫 ${ 走兜底）",
+   "parts": [
+    {
+     "text": "echo \"'\\\"'\\\\''\\\"'"
+    },
+    {
+     "text": "{a,b}",
+     "repeat": 10500
+    },
+    {
+     "text": "'\\\"'\\\\''\\\"'\"; echo "
+    },
+    {
+     "text": "${",
+     "repeat": 1500
+    },
+    {
+     "text": "}"
+    }
+   ]
+  }
+ ]
+}

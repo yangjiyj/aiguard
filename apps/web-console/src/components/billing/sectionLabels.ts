@@ -1,0 +1,18 @@
+export const BILLING_SECTION_LABELS = {
+  wallet: '钱包',
+  accounts: '账户余额',
+  monthly: '每月充值',
+  redemptions: '兑换码',
+  groups: '客户组',
+  limits: '限流与模型范围',
+  budget: '组织预算',
+  defaults: '所有用户默认充值',
+  employees: '指定用户充值',
+  prices: '模型售价',
+  tariffs: '模型时段计费',
+  upstream: '模型按量成本',
+  fixed: '渠道固定费用',
+  modelSelect: '选择模型',
+  modelTrace: '审计标识',
+  modelIdentifier: '内部模型标识',
+} as const

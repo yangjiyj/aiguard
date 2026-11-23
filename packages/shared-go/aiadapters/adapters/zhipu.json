@@ -1,0 +1,63 @@
+{
+  "id": "provider-zhipu",
+  "name": "智谱",
+  "vendor": "智谱",
+  "catalog_entries": [
+    {
+      "id": "chatglm",
+      "provider": "zhipu",
+      "provider_cn": "智谱",
+      "product": "chatglm",
+      "product_cn": "智谱清言 / ChatGLM",
+      "category": "chat",
+      "region": "cn",
+      "domains": [
+        "chatglm.cn",
+        "*.chatglm.cn",
+        "zhipuai.cn",
+        "*.zhipuai.cn",
+        "chat.z.ai"
+      ],
+      "path_rules": [
+        "/",
+        "/chat",
+        "contains:/chat",
+        "contains:/message",
+        "contains:/conversation",
+        "contains:/completion"
+      ],
+      "request_decoder": "zhipu_web",
+      "response_decoder": "zhipu_web",
+      "retain_level": "content",
+      "risk_profile": "llm_web",
+      "enabled": true,
+      "priority": 100,
+      "source_url": "https://chatglm.cn/"
+    },
+    {
+      "id": "bigmodel_api",
+      "provider": "zhipu",
+      "provider_cn": "智谱",
+      "product": "bigmodel_api",
+      "product_cn": "BigModel API",
+      "category": "api",
+      "region": "cn",
+      "domains": [
+        "open.bigmodel.cn",
+        "*.bigmodel.cn"
+      ],
+      "path_rules": [
+        "/api/paas/",
+        "/v1/"
+      ],
+      "request_decoder": "bigmodel",
+      "response_decoder": "bigmodel",
+      "retain_level": "content",
+      "risk_profile": "llm_api",
+      "enabled": true,
+      "priority": 90,
+      "source_url": "https://open.bigmodel.cn/"
+    }
+  ],
+  "agent_definitions": []
+}

@@ -1,0 +1,32 @@
+services:
+  llm-judge-gpu:
+    image: jjdguard/llm-judge-gpu:1.2.0-7b-v4
+    gpus: all
+    restart: unless-stopped
+    env_file:
+      - runtime.env
+    environment:
+      JUDGE_MODEL_PATH: /models/judge-v4-Q4_K_M.gguf
+      JUDGE_ALIAS: qwen2.5-7b-judge-v4
+      JUDGE_TLS_CERT_PATH: /tls/server.crt
+      JUDGE_TLS_KEY_PATH: /tls/server.key
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,utility
+    ports:
+      - "${JUDGE_BIND_IP:-127.0.0.1}:${JUDGE_HOST_PORT:-8094}:8080"
+    volumes:
+      - ./models:/models:ro
+      - ./tls:/tls:ro
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=256m
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "/bin/bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/8080"]
+      interval: 10s
+      timeout: 3s
+      retries: 18
+      start_period: 90s

@@ -1,0 +1,290 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "highlight.js/styles/github.css";
+@import "katex/dist/katex.min.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ===== 设计系统 Token（浅色） =====
+ * 中性底（near-white）+ 一个品牌强调色（专业蓝）+ 语义色
+ * 参考 Linear / Vercel 气质：克制、高级、细边框微投影
+ */
+:root {
+  --radius: 0.625rem;
+
+  /* 品牌强调色（专业蓝）— 可由 theme 配置覆盖 */
+  --brand-50:  #eff5ff;
+  --brand-100: #dbe7fe;
+  --brand-200: #bfd3fe;
+  --brand-300: #93b4fd;
+  --brand-400: #608cfa;
+  --brand-500: #3b6af6;
+  --brand-600: #2451eb;
+  --brand-700: #1d40d8;
+  --brand-800: #1e35af;
+  --brand-900: #1e328a;
+  --brand-950: #172054;
+
+  /* shadcn 语义 token（oklch 风格转 hex 占位，用 rgb 通道便于透明度） */
+  --background: oklch(0.99 0.002 250);
+  --foreground: oklch(0.19 0.025 258);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.19 0.025 258);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.19 0.025 258);
+  --primary: oklch(0.6 0.14 160);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.958 0.01 255);
+  --secondary-foreground: oklch(0.25 0.025 258);
+  --muted: oklch(0.96 0.003 250);
+  --muted-foreground: oklch(0.52 0.012 250);
+  --accent: oklch(0.955 0.004 250);
+  --accent-foreground: oklch(0.235 0.03 258);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.91 0.004 250);
+  --input: oklch(0.91 0.004 250);
+  --ring: oklch(0.6 0.14 160);
+  --sidebar: oklch(0.975 0.003 250);
+  --sidebar-foreground: oklch(0.19 0.025 258);
+  --sidebar-primary: oklch(0.6 0.14 160);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.95 0.004 250);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.91 0.004 250);
+  --sidebar-ring: oklch(0.6 0.14 160);
+
+  /* 能力标签色（低饱和语义色，独立于品牌蓝） */
+  --cap-vision: #7c3aed;
+  --cap-reason: #d97706;
+  --cap-long: #0d9488;
+  --cap-web: #16a34a;
+  --cap-code: #64748b;
+}
+
+/* ===== 设计系统 Token（深色） ===== */
+.dark {
+  --background: oklch(0.16 0.004 250);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.19 0.004 250);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.19 0.004 250);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.76 0.15 160);
+  --primary-foreground: oklch(0.18 0.03 160);
+  --secondary: oklch(0.23 0.006 250);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.23 0.006 250);
+  --muted-foreground: oklch(0.66 0.01 250);
+  --accent: oklch(0.23 0.006 250);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.28 0.006 250);
+  --input: oklch(0.3 0.006 250);
+  --ring: oklch(0.76 0.15 160);
+  --sidebar: oklch(0.19 0.004 250);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.76 0.15 160);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.23 0.006 250);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(0.26 0.006 250);
+  --sidebar-ring: oklch(0.76 0.15 160);
+
+  --cap-vision: #a78bfa;
+  --cap-reason: #f0a53e;
+  --cap-long: #2dd4bf;
+  --cap-web: #4ade80;
+  --cap-code: #94a3b8;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-brand-50: var(--brand-50);
+  --color-brand-500: var(--brand-500);
+  --color-brand-600: var(--brand-600);
+  --color-brand-700: var(--brand-700);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --font-sans: ui-sans-serif, system-ui,
+    "PingFang SC", "Noto Sans SC", "Source Han Sans SC", "Microsoft YaHei",
+    sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo,
+    monospace;
+}
+
+* {
+  border-color: var(--color-border);
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--color-primary) 20%, transparent);
+}
+
+/* 主工作台：纯色背景，层级交给边框与留白 */
+.portal-canvas {
+  background: var(--color-background);
+}
+
+/* 可读宽度（对话主区 ~760px） */
+.readable-width {
+  max-width: 52rem;
+}
+
+/* 滚动条：克制、跟随主题 */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-muted-foreground);
+  background-clip: padding-box;
+}
+
+/* 流式光标 */
+.streaming-cursor::after {
+  content: "▍";
+  display: inline-block;
+  margin-left: 1px;
+  animation: cursor-blink 1s steps(2, start) infinite;
+  color: var(--color-primary);
+}
+@keyframes cursor-blink {
+  to {
+    visibility: hidden;
+  }
+}
+
+/* 对话区字号缩放（个人偏好，data-font-size 挂在 <html>） */
+[data-font-size="sm"] { --chat-font-scale: 0.9; }
+[data-font-size="base"] { --chat-font-scale: 1; }
+[data-font-size="lg"] { --chat-font-scale: 1.12; }
+
+/* Markdown 排版（对话消息） */
+.prose-chat {
+  line-height: 1.75;
+  font-size: calc(0.95rem * var(--chat-font-scale, 1));
+}
+.prose-chat p {
+  margin: 0.6em 0;
+}
+.prose-chat h1,
+.prose-chat h2,
+.prose-chat h3 {
+  font-weight: 600;
+  line-height: 1.3;
+  margin: 1.2em 0 0.5em;
+}
+.prose-chat h1 {
+  font-size: 1.4em;
+}
+.prose-chat h2 {
+  font-size: 1.2em;
+}
+.prose-chat h3 {
+  font-size: 1.05em;
+}
+.prose-chat ul,
+.prose-chat ol {
+  margin: 0.6em 0;
+  padding-left: 1.5em;
+}
+.prose-chat li {
+  margin: 0.25em 0;
+}
+.prose-chat a {
+  color: var(--color-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.prose-chat blockquote {
+  border-left: 3px solid var(--color-border);
+  padding-left: 1em;
+  color: var(--color-muted-foreground);
+  margin: 0.8em 0;
+}
+.prose-chat code:not(pre code) {
+  background: var(--color-muted);
+  padding: 0.15em 0.4em;
+  border-radius: 0.35em;
+  font-size: 0.875em;
+  font-family: var(--font-mono);
+}
+.prose-chat pre {
+  background: var(--color-muted);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 0.9em 1em;
+  overflow-x: auto;
+  margin: 0.8em 0;
+  font-size: 0.85rem;
+}
+.prose-chat pre code {
+  font-family: var(--font-mono);
+  background: transparent;
+  padding: 0;
+}
+.prose-chat table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.8em 0;
+  font-size: 0.875rem;
+}
+.prose-chat th,
+.prose-chat td {
+  border: 1px solid var(--color-border);
+  padding: 0.5em 0.75em;
+  text-align: left;
+}
+.prose-chat th {
+  background: var(--color-muted);
+  font-weight: 600;
+}
+.dark .prose-chat pre {
+  background: oklch(0.12 0 0);
+}

@@ -1,0 +1,56 @@
+{
+  "name": "license_readonly",
+  "description": "授权过期且超出宽限期，平台只读",
+  "fixture": {
+    "license": {
+      "state": "expired_beyond_grace"
+    }
+  },
+  "input": {
+    "kind": "health",
+    "scope": "admin"
+  },
+  "expect": {
+    "tier": "L2",
+    "must_check_ids_any": [
+      "license"
+    ],
+    "must_keywords": [
+      "授权"
+    ],
+    "must_severity": {
+      "license": "error"
+    },
+    "must_level": {
+      "license": "confirmed"
+    },
+    "forbid_keywords": [
+      "限流",
+      "欠费"
+    ],
+    "l3": {
+      "must_keywords": [
+        "授权"
+      ],
+      "level_by_kw": [
+        {
+          "kw": [
+            "授权"
+          ],
+          "level": "confirmed"
+        }
+      ],
+      "severity_by_kw": [
+        {
+          "kw": [
+            "授权"
+          ],
+          "severity": "error"
+        }
+      ],
+      "forbid_keywords": [
+        "欠费"
+      ]
+    }
+  }
+}

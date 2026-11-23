@@ -1,0 +1,35 @@
+{
+  "name": "agent_session_user_message_only",
+  "note": "coding agent session, but the matched text is what the human typed.",
+  "event": {
+    "event_type": "phone_cn",
+    "severity": "high",
+    "action_taken": "audit",
+    "principal_key": "192.168.56.1",
+    "matched_summary": {
+      "agent_type": "agent_claude_code",
+      "findings": [
+        {
+          "rule_type": "agent_detect",
+          "type": "agent_behavior",
+          "category": "agent_claude_code",
+          "severity": "low",
+          "confidence": 0.9,
+          "counts_as_security_finding": false
+        },
+        {
+          "category": "phone_cn",
+          "severity": "high",
+          "confidence": 0.9,
+          "counts_as_security_finding": true,
+          "type": "pii",
+          "content_source": "user",
+          "message_role": "user"
+        }
+      ]
+    }
+  },
+  "expect": {
+    "routed": false
+  }
+}

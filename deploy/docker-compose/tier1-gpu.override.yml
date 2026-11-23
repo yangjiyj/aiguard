@@ -1,0 +1,18 @@
+services:
+  tier1-classifier:
+    image: ${TIER1_GPU_IMAGE:?TIER1_GPU_IMAGE must reference the reviewed GPU Tier-1 image}
+    environment:
+      TIER1_EXECUTION_PROVIDER: cuda
+      TIER1_THREADS: ${TIER1_GPU_THREADS:-1}
+      # Same rule as the CPU overlay: never pin concurrency here, inherit the
+      # autotuned tier so the supply check and /health describe the real sidecar.
+      TIER1_WORKERS: ${TIER1_GPU_WORKERS:-${TIER1_WORKERS:-1}}
+      TIER1_INFERENCE_WORKERS: ${TIER1_GPU_INFERENCE_WORKERS:-${TIER1_INFERENCE_WORKERS:-1}}
+      TIER1_INFERENCE_CAPACITY: ${TIER1_GPU_INFERENCE_CAPACITY:-${TIER1_INFERENCE_CAPACITY:-8}}
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: ${TIER1_GPU_COUNT:-1}
+              capabilities: [gpu]

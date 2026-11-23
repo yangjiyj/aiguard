@@ -1,0 +1,16 @@
+{
+  "adapter_sha256": "276ed0c65060ac6961eef33eaf1bf0f74db24b935d86c0bd878a61f79ebf78ae",
+  "base": {
+    "license": "apache-2.0",
+    "repo": "Qwen/Qwen3-4B-Instruct-2507",
+    "revision": "cdbee75f17c01a7cc42f958dc650907174af0554"
+  },
+  "file": "jjdguard-bundled-judge-4b-v1-Q4_K_M.gguf",
+  "license": "apache-2.0",
+  "model_id": "bundled-judge",
+  "origin": "derived",
+  "schema": "jjdguard-owned-judge-model-lock/v3",
+  "sha256": "60638ee75d32a530108f08ce5dd50fd8bf69769ae4268add786dfbc3cbd5bc7b",
+  "size": 2497278752,
+  "training": "JJDGuard LoRA (r=16) on JJDGuard-owned judge data, merged into the base and quantized to Q4_K_M with llama.cpp"
+}

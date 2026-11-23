@@ -1,0 +1,85 @@
+// 企业 AI 对话门户 数据模型
+// 库：chatportal-postgres 的 enterprise_ai_portal db（与 lobehub 库隔离）
+// 所有查询强制带 user_id（按人隔离）
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model UserProfile {
+  // OIDC sub 作为主键（归因主键，与 portal-proxy 的 EmployeeKey.lobeUserId 一致）
+  id        String   @id
+  email     String
+  name      String?
+  department String?
+  role      String   @default("employee")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  conversations Conversation[]
+}
+
+model Conversation {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String   @default("新对话")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  // 软删（回收站）：非空即已删除，超过留存期后由列表接口清理（W6 · 6.17）
+  deletedAt DateTime?
+  user      UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages  Message[]
+
+  @@index([userId, updatedAt])
+  @@index([userId, deletedAt])
+}
+
+model Message {
+  id             String   @id @default(cuid())
+  conversationId String
+  role           String   // user | assistant | system
+  content        String
+  model          String?
+  // assistant 轮次结果：null=完整；interrupted=停止/断流；blocked=安全策略拦截；failed=上游错误（W6 · 6.1/6.5）
+  status         String?
+  errorCode      String?
+  // 输出计量（服务端口径，与前端 ChatTimer 一致）：上游回传 usage 时落库，历史消息据此回显「首字 · t/s」
+  outputTokens   Int?
+  ttftMs         Int?
+  tps            Float?
+  createdAt      DateTime @default(now())
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId, createdAt])
+}
+
+// 文件级轻留痕（Phase-1 stopgap，纯元数据无字节）；Phase-2 起迁网关审计
+model UploadEvent {
+  id        String   @id @default(cuid())
+  userId    String
+  filename  String
+  mime      String
+  size      Int
+  sha256    String
+  model     String?
+  kind      String   @default("image") // image | file
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+}
+
+// 员工导出对话留痕（W6 · 6.17）：谁、何时、导出了几段、多少条消息；不存导出内容
+model ExportEvent {
+  id                String   @id @default(cuid())
+  userId            String
+  scope             String   // all | conversation
+  conversationCount Int
+  messageCount      Int
+  createdAt         DateTime @default(now())
+
+  @@index([userId, createdAt])
+}

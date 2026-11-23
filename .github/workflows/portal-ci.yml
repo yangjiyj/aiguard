@@ -1,0 +1,47 @@
+name: Portal CI
+
+# enterprise-ai-portal（员工门户）的类型检查、lint、单测与构建闸。
+# W6 / 6.18：tsc --noEmit 必须 0 错。
+
+on:
+  pull_request:
+    paths:
+      - 'enterprise-ai-portal/**'
+      - '.github/workflows/portal-ci.yml'
+  push:
+    branches:
+      - main
+      - gitee/main
+    paths:
+      - 'enterprise-ai-portal/**'
+      - '.github/workflows/portal-ci.yml'
+
+jobs:
+  portal:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: enterprise-ai-portal
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: enterprise-ai-portal/package-lock.json
+      - name: Install
+        run: npm ci
+      - name: Prisma client
+        run: npx prisma generate
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Lint
+        run: npm run lint
+      - name: Unit tests
+        run: npm run test:unit
+      - name: Build
+        env:
+          # next build 只需占位值；真实值在部署时注入
+          DATABASE_URL: postgresql://build:build@127.0.0.1:5432/build
+          AUTH_SECRET: ci-build-placeholder
+        run: npm run build

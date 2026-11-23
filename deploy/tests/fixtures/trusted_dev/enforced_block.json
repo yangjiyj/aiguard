@@ -1,0 +1,35 @@
+{
+  "name": "enforced_block",
+  "note": "the gateway blocked the request, so something actually happened to the traffic.",
+  "event": {
+    "event_type": "prompt_leak_internal_rules",
+    "severity": "high",
+    "action_taken": "block",
+    "principal_key": "user_6",
+    "matched_summary": {
+      "agent_type": "agent_claude_code",
+      "findings": [
+        {
+          "rule_type": "agent_detect",
+          "type": "agent_behavior",
+          "category": "agent_claude_code",
+          "severity": "low",
+          "confidence": 0.9,
+          "counts_as_security_finding": false
+        },
+        {
+          "category": "prompt_leak_internal_rules",
+          "severity": "high",
+          "confidence": 0.9,
+          "counts_as_security_finding": true,
+          "type": "prompt_leak",
+          "content_source": "tool_result",
+          "message_role": "tool"
+        }
+      ]
+    }
+  },
+  "expect": {
+    "routed": false
+  }
+}

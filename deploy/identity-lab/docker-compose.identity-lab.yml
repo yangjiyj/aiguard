@@ -1,0 +1,494 @@
+# Identity Lab — 隔离测试环境（严禁用于生产）
+#
+# 三类身份源 + 本地身份运行服务：
+#   1. OpenLDAP    → 外部企业 LDAP 目录（用户/组/嵌套 OU/禁用 OU）
+#   2. Samba AD    → 外部企业 Active Directory（用户/禁用用户/组迁移）
+#   3. enterprise Keycloak → 外部企业 OIDC IdP（broker 上游）
+#   4. jjdguard Keycloak   → 本地身份运行服务（含本地账号 + LDAP/AD federation + enterprise broker）
+#
+# 任务 13 规格要求：本 compose 默认即静态/config 验证通过；端到端实跑需调用方主动 up。
+# 所有口令/密钥来自同目录 .env.example（占位）或调用方提供 .env，绝不硬编码真实值。
+name: jjdguard-identity-lab
+
+# 不沿用生产 network 名，避免误连生产 compose。
+networks:
+  identity-lab:
+    internal: true
+    name: jjdguard-identity-lab
+
+volumes:
+  lab-ca-public:
+  lab-openldap-tls:
+  lab-samba-tls:
+  lab-enterprise-keycloak-tls:
+  lab-jjdguard-keycloak-tls:
+  lab-ldap-data:
+  lab-ldap-config:
+  lab-ad-data:
+  lab-ad-config:
+  lab-keycloak-enterprise-data:
+  lab-keycloak-jjdguard-data:
+  lab-control-plane-pg:
+  lab-control-plane-redis:
+  portal-session-state:
+
+services:
+
+  # The signer is the only service that can access every private TLS volume.
+  # Runtime services mount the public CA plus only their own leaf and key.
+  cert-init:
+    image: alpine:3.20
+    restart: "no"
+    entrypoint: ["/bin/sh", "-ec"]
+    command:
+      - |
+        apk add --no-cache openssl
+        umask 077
+        openssl req -x509 -newkey rsa:2048 -nodes -days 30 \
+          -subj "/CN=jjdguard-identity-lab-CA" \
+          -keyout /tmp/lab-ca.key -out /public/lab-ca.crt
+        for service in openldap samba-ad enterprise-keycloak jjdguard-keycloak; do
+          case "$$service" in
+            openldap) target=/openldap ;;
+            samba-ad) target=/samba ;;
+            enterprise-keycloak) target=/enterprise ;;
+            jjdguard-keycloak) target=/jjdguard ;;
+          esac
+          openssl req -newkey rsa:2048 -nodes \
+            -subj "/CN=$$service" -keyout "$$target/$$service.key" \
+            -out "/tmp/$$service.csr" -addext "subjectAltName=DNS:$$service,DNS:localhost"
+          printf 'subjectAltName=DNS:%s,DNS:localhost\n' "$$service" > /tmp/lab-san.cnf
+          openssl x509 -req -in "/tmp/$$service.csr" -CA /public/lab-ca.crt \
+            -CAkey /tmp/lab-ca.key -CAcreateserial -out "$$target/$$service.crt" \
+            -days 30 -extfile /tmp/lab-san.cnf
+          cp /public/lab-ca.crt "$$target/lab-ca.crt"
+        done
+        cp /samba/samba-ad.crt /samba/cert.pem
+        cp /samba/samba-ad.key /samba/key.pem
+        cp /public/lab-ca.crt /samba/ca.pem
+        rm -f /tmp/lab-ca.key /public/lab-ca.srl /tmp/*.csr /tmp/lab-san.cnf
+        chmod 644 /public/lab-ca.crt /openldap/*.crt /samba/*.crt /samba/*.pem /enterprise/*.crt /jjdguard/*.crt
+        chmod 600 /openldap/*.key /samba/*.key /samba/key.pem /enterprise/*.key /jjdguard/*.key
+        chown -R 1000:0 /enterprise /jjdguard
+    volumes:
+      - lab-ca-public:/public
+      - lab-openldap-tls:/openldap
+      - lab-samba-tls:/samba
+      - lab-enterprise-keycloak-tls:/enterprise
+      - lab-jjdguard-keycloak-tls:/jjdguard
+  # ===== Isolated control-plane runtime =====
+  control-plane-postgres:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: identity_lab
+      POSTGRES_PASSWORD: ${IDENTITY_LAB_DB_PASSWORD}
+      POSTGRES_DB: jjdguard
+    volumes:
+      - lab-control-plane-pg:/var/lib/postgresql/data
+      - ./postgres/000_create_portal.sql:/docker-entrypoint-initdb.d/000_create_portal.sql:ro
+      - ../migrations:/migrations:ro
+      - ../docker-compose/initdb/001_init_enterprise.sql:/docker-entrypoint-initdb.d/001_init_enterprise.sql:ro
+    networks: [identity-lab]
+    healthcheck:
+      test: ["CMD-SHELL", "test \"$$(head -n 1 \"$${PGDATA}/postmaster.pid\" 2>/dev/null)\" = \"1\" && pg_isready -U identity_lab -d jjdguard"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 10s
+
+  control-plane-redis:
+    image: valkey/valkey:8.1.10-alpine
+    restart: unless-stopped
+    command: ["valkey-server", "--save", "", "--appendonly", "no"]
+    volumes:
+      - lab-control-plane-redis:/data
+    networks: [identity-lab]
+    healthcheck:
+      test: ["CMD", "valkey-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  control-plane-migrate:
+    image: postgres:16
+    restart: "no"
+    depends_on:
+      control-plane-postgres:
+        condition: service_healthy
+    environment:
+      PGHOST: control-plane-postgres
+      PGPORT: "5432"
+      PGUSER: identity_lab
+      PGPASSWORD: ${IDENTITY_LAB_DB_PASSWORD}
+      PGDATABASE: jjdguard
+      MIGRATION_PSQL: /usr/bin/psql
+    entrypoint: ["/bin/bash", "/migration-runner.sh", "--migrations-dir", "/migrations"]
+    volumes:
+      - ../migrations:/migrations:ro
+      - ../lib/migration-runner.sh:/migration-runner.sh:ro
+    networks: [identity-lab]
+
+  control-plane-seed:
+    image: postgres:16
+    restart: "no"
+    depends_on:
+      control-plane-migrate:
+        condition: service_completed_successfully
+    environment:
+      PGHOST: control-plane-postgres
+      PGPORT: "5432"
+      PGUSER: identity_lab
+      PGPASSWORD: ${IDENTITY_LAB_DB_PASSWORD}
+      PGDATABASE: jjdguard
+    entrypoint: ["/usr/bin/psql", "-v", "ON_ERROR_STOP=1", "-f", "/seed.sql"]
+    volumes:
+      - ./postgres/010_seed_identity_acceptance.sql:/seed.sql:ro
+    networks: [identity-lab]
+
+  control-plane:
+    image: alpine:3.20
+    restart: unless-stopped
+    depends_on:
+      control-plane-postgres:
+        condition: service_healthy
+      control-plane-redis:
+        condition: service_healthy
+      control-plane-migrate:
+        condition: service_completed_successfully
+      control-plane-seed:
+        condition: service_completed_successfully
+    environment:
+      DATABASE_URL: postgres://identity_lab:${IDENTITY_LAB_DB_PASSWORD}@control-plane-postgres:5432/jjdguard?sslmode=disable
+      REDIS_URL: redis://control-plane-redis:6379/0
+      LISTEN_ADDR: :8081
+      JJD_PORTAL_API_SECRET: ${JJD_PORTAL_API_SECRET}
+      JJD_PROVIDER_SECRET_KEY: ${JJD_PROVIDER_SECRET_KEY}
+      DIRECTORY_LDAP_TARGET_ALLOWLIST: openldap,samba-ad
+      DIRECTORY_LDAP_ALLOWED_CIDRS: 0.0.0.0/0
+      JJD_IDP_ALLOW_CIDRS: 172.16.0.0/12
+      LOG_LEVEL: warn
+      BOOTSTRAP_ADMIN_USERNAME: ${CONTROL_PLANE_ADMIN_USERNAME}
+      BOOTSTRAP_ADMIN_EMAIL: admin@identity-lab.test
+      BOOTSTRAP_ADMIN_PASSWORD: ${CONTROL_PLANE_ADMIN_PASSWORD}
+      CONTROL_PLANE_ADMIN_NEW_PASSWORD: ${CONTROL_PLANE_ADMIN_NEW_PASSWORD}
+      JJD_SSO_PUBLIC_URL: https://jjdguard-keycloak:8443
+      JJD_SSO_ALLOW_INSECURE_PUBLIC_URL: "true"
+      JJD_IDENTITY_RUNTIME_URL: https://jjdguard-keycloak:8443/sso
+      JJD_IDENTITY_RUNTIME_ALLOWED_URLS: ${JJD_IDENTITY_RUNTIME_ALLOWED_URLS}
+      JJD_IDENTITY_RUNTIME_CLIENT_ID: jjdguard-control-plane
+      JJD_IDENTITY_RUNTIME_CLIENT_SECRET: ${IDENTITY_RUNTIME_CLIENT_SECRET}
+      DIRECTORY_RUNTIME_URL: https://jjdguard-keycloak:8443/sso
+      DIRECTORY_RUNTIME_ALLOWED_URLS: ${DIRECTORY_RUNTIME_ALLOWED_URLS}
+      DIRECTORY_RUNTIME_CLIENT_ID: jjdguard-directory-orchestrator
+      DIRECTORY_RUNTIME_CLIENT_SECRET: ${DIRECTORY_RUNTIME_CLIENT_SECRET}
+      SSL_CERT_FILE: /ca/lab-ca.crt
+
+    entrypoint: ["/bin/control-plane"]
+    volumes:
+      - /tmp/jjdguard-identity-lab-control-plane:/bin/control-plane:ro
+      - lab-ca-public:/ca:ro
+    networks: [identity-lab]
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:8081/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 15s
+
+  portal-proxy:
+    image: python:3.12-slim
+    restart: unless-stopped
+    environment:
+      PORTAL_INTERNAL_TOKEN: ${PORTAL_INTERNAL_TOKEN}
+    command: ["python", "/portal-proxy.py"]
+    volumes:
+      - ../../scripts/identity-lab-portal-proxy.py:/portal-proxy.py:ro
+    networks: [identity-lab]
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8788/health', timeout=2)"
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  portal-prisma:
+    image: node:22-bookworm
+    restart: "no"
+    working_dir: /app
+    depends_on:
+      control-plane-postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://identity_lab:${IDENTITY_LAB_DB_PASSWORD}@control-plane-postgres:5432/enterprise_ai_portal?schema=public
+      PRISMA_ENGINES_CHECKSUM_IGNORE_MISSING: "1"
+      PRISMA_SCHEMA_ENGINE_BINARY: /app/node_modules/@prisma/engines/schema-engine-debian-openssl-3.0.x
+      PRISMA_QUERY_ENGINE_LIBRARY: /app/node_modules/@prisma/engines/libquery_engine-debian-openssl-3.0.x.so.node
+    command: ["./node_modules/.bin/prisma", "db", "push", "--skip-generate"]
+    volumes:
+      - ../../enterprise-ai-portal:/app
+      - portal-session-state:/state
+    networks: [identity-lab]
+
+  identity-portal:
+    image: node:22-bookworm
+    restart: unless-stopped
+    working_dir: /app
+    depends_on:
+      portal-prisma:
+        condition: service_completed_successfully
+      control-plane:
+        condition: service_healthy
+      portal-proxy:
+        condition: service_healthy
+      jjdguard-keycloak:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://identity_lab:${IDENTITY_LAB_DB_PASSWORD}@control-plane-postgres:5432/enterprise_ai_portal?schema=public
+      AUTH_URL: http://identity-portal:3100/chat/api/auth
+      NEXTAUTH_URL: http://identity-portal:3100/chat/api/auth
+      PORTAL_PUBLIC_URL: http://identity-portal:3100/chat
+      AUTH_SECRET: ${PORTAL_AUTH_SECRET}
+      AUTH_TRUST_HOST: "true"
+      OIDC_ISSUER: https://jjdguard-keycloak:8443/sso/realms/jjdguard
+      OIDC_CLIENT_ID: enterprise-ai-portal
+      OIDC_CLIENT_SECRET: ${PORTAL_OIDC_CLIENT_SECRET}
+      OIDC_ENTERPRISE_IDP_HINT: enterprise
+      NODE_EXTRA_CA_CERTS: /ca/lab-ca.crt
+      JJD_CP_URL: http://control-plane:8081
+      JJD_PORTAL_API_SECRET: ${JJD_PORTAL_API_SECRET}
+      PORTAL_PROXY_URL: http://portal-proxy:8788
+      PORTAL_INTERNAL_TOKEN: ${PORTAL_INTERNAL_TOKEN}
+      JJD_PROVIDER_SECRET_KEY: ${JJD_PROVIDER_SECRET_KEY}
+      BRAND_NAME: JJDGuard Identity Lab
+    command: ["./node_modules/.bin/next", "dev", "-H", "0.0.0.0", "-p", "3100"]
+    volumes:
+      - ../../enterprise-ai-portal:/app
+      - lab-ca-public:/ca:ro
+    networks: [identity-lab]
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          node -e "require('http').get('http://127.0.0.1:3100/chat/login',r=>process.exit(r.statusCode===200?0:1)).on('error',()=>process.exit(1))"
+      interval: 5s
+      timeout: 5s
+      retries: 40
+      start_period: 20s
+
+
+  # ===== 1. OpenLDAP（外部企业 LDAP） =====
+  openldap:
+    image: osixia/openldap:1.5.0
+    hostname: openldap
+    restart: unless-stopped
+    environment:
+      LDAP_ORGANISATION: JJDGuard-Identity-Lab
+      LDAP_DOMAIN: jjdguard-lab.test
+      LDAP_ADMIN_PASSWORD: ${LDAP_ADMIN_PASSWORD}
+      LDAP_TLS: "true"
+      LDAP_TLS_CRT_FILENAME: openldap.crt
+      LDAP_TLS_KEY_FILENAME: openldap.key
+      LDAP_TLS_CA_CRT_FILENAME: lab-ca.crt
+      LDAP_TLS_VERIFY_CLIENT: never
+    depends_on:
+      cert-init:
+        condition: service_completed_successfully
+    volumes:
+      - lab-ldap-data:/var/lib/ldap
+      - lab-ldap-config:/etc/ldap/slapd.d
+      - lab-openldap-tls:/container/service/slapd/assets/certs
+    networks: [identity-lab]
+    healthcheck:
+      test: ["CMD-SHELL", "ldapsearch -x -H ldaps://localhost:636 -D cn=admin,dc=jjdguard-lab,dc=test -w \"$LDAP_ADMIN_PASSWORD\" -b dc=jjdguard-lab,dc=test -s base >/dev/null"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 15s
+
+  ldap-seed:
+    image: osixia/openldap:1.5.0
+    restart: "no"
+    depends_on:
+      openldap:
+        condition: service_healthy
+    environment:
+      LDAPTLS_CACERT: /ca/lab-ca.crt
+      LDAPTLS_CERT: /tls/openldap.crt
+      LDAPTLS_KEY: /tls/openldap.key
+      LDAP_ADMIN_PASSWORD: ${LDAP_ADMIN_PASSWORD}
+      LDAP_ALICE_PASSWORD: ${LDAP_ALICE_PASSWORD}
+      LDAP_BOB_PASSWORD: ${LDAP_BOB_PASSWORD}
+      LDAP_CAROL_PASSWORD: ${LDAP_CAROL_PASSWORD}
+      LDAP_DAVE_PASSWORD: ${LDAP_DAVE_PASSWORD}
+
+    volumes:
+      - lab-ca-public:/ca:ro
+      - lab-openldap-tls:/tls:ro
+      - ./openldap/bootstrap.ldif:/bootstrap.ldif:ro
+    entrypoint: ["/bin/sh", "-ec"]
+    command:
+      - |
+        printf 'TLS_CACERT /ca/lab-ca.crt\n' >/etc/ldap/ldap.conf
+        rendered=/tmp/bootstrap.ldif
+        trap 'rm -f "$$rendered"' EXIT INT TERM
+        umask 077
+        : >"$$rendered"
+        while IFS= read -r line; do
+          case "$$line" in
+            'userPassword:: __LDAP_ALICE_PASSWORD_B64__') value="$$LDAP_ALICE_PASSWORD" ;;
+            'userPassword:: __LDAP_BOB_PASSWORD_B64__') value="$$LDAP_BOB_PASSWORD" ;;
+            'userPassword:: __LDAP_CAROL_PASSWORD_B64__') value="$$LDAP_CAROL_PASSWORD" ;;
+            'userPassword:: __LDAP_DAVE_PASSWORD_B64__') value="$$LDAP_DAVE_PASSWORD" ;;
+            *) printf '%s\n' "$$line" >>"$$rendered"; continue ;;
+          esac
+          printf 'userPassword:: ' >>"$$rendered"
+          printf '%s' "$$value" | base64 | tr -d '\n' >>"$$rendered"
+          printf '\n' >>"$$rendered"
+        done </bootstrap.ldif
+        chmod 600 "$$rendered"
+        unset value line
+        grep -q '__LDAP_.*_PASSWORD_B64__' "$$rendered" && exit 1
+        # Idempotent: skip when the seeded group already exists.
+        ldapsearch -x -H ldaps://openldap:636 -D cn=admin,dc=jjdguard-lab,dc=test -w "$$LDAP_ADMIN_PASSWORD" -b cn=dept-research,ou=Groups,dc=jjdguard-lab,dc=test -s base >/dev/null 2>&1 && exit 0
+        ldapadd -x -H ldaps://openldap:636 -D cn=admin,dc=jjdguard-lab,dc=test -w "$$LDAP_ADMIN_PASSWORD" -f "$$rendered"
+
+    networks: [identity-lab]
+
+  # ===== 2. Samba AD（外部企业 Active Directory） =====
+  samba-ad:
+    image: docker.1ms.run/nowsci/samba-domain:20260701025204
+    hostname: dc
+    cap_add: [SYS_ADMIN]
+    restart: unless-stopped
+    entrypoint: ["/bin/bash", "/entrypoint.sh"]
+    depends_on:
+      cert-init:
+        condition: service_completed_successfully
+    environment:
+      DOMAIN: ad.jjdguard-lab.test
+      DOMAINPASS: ${SMB_DOMAIN_PASS}
+      SMB_DOMAIN_PASS: ${SMB_DOMAIN_PASS}
+      AD_BOB_PASSWORD: ${AD_BOB_PASSWORD}
+      AD_DISABLED_PASSWORD: ${AD_DISABLED_PASSWORD}
+
+      INSECURELDAP: "false"
+      NOCOMPLEXITY: "true"
+    volumes:
+      - lab-ad-data:/var/lib/samba
+      - lab-ad-config:/etc/samba/external
+      - ./samba/entrypoint.sh:/entrypoint.sh:ro
+      - ./samba/provision.sh:/provision.sh:ro
+      - lab-samba-tls:/var/lib/samba/private/tls
+    networks: [identity-lab]
+    healthcheck:
+      # Samba AD readiness 用 samba-tool domain level 探测。
+      test: ["CMD-SHELL", "samba-tool user list 2>/dev/null | grep -qx ad-bob"]
+      interval: 15s
+      timeout: 10s
+      retries: 20
+      start_period: 60s
+
+  # ===== 3. enterprise Keycloak（外部企业 OIDC IdP） =====
+  enterprise-keycloak:
+    image: quay.io/keycloak/keycloak:25.0
+    hostname: enterprise-keycloak
+    restart: unless-stopped
+    command:
+      - start
+      - --import-realm
+      - --hostname=enterprise-keycloak
+      - --https-certificate-file=/etc/keycloak-tls/enterprise-keycloak.crt
+      - --https-certificate-key-file=/etc/keycloak-tls/enterprise-keycloak.key
+    environment:
+      KC_DB: dev-file
+      KC_CACHE: local
+      KC_TRUSTSTORE_PATHS: /etc/keycloak-certs/lab-ca.crt
+      KC_HTTP_ENABLED: "true"
+      KC_HEALTH_ENABLED: "true"
+      KC_HOSTNAME_STRICT: "false"
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN_USER}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      ENTERPRISE_BROKER_CLIENT_SECRET: ${ENTERPRISE_BROKER_CLIENT_SECRET}
+      ENTERPRISE_ERIN_PASSWORD: ${ENTERPRISE_ERIN_PASSWORD}
+      ENTERPRISE_FRANK_PASSWORD: ${ENTERPRISE_FRANK_PASSWORD}
+      ENTERPRISE_CAROL_PASSWORD: ${ENTERPRISE_CAROL_PASSWORD}
+      # 25.0 起需要 admin/management password 才能 start，复用 admin password。
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_ADMIN_USER}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+    depends_on:
+      cert-init:
+        condition: service_completed_successfully
+    volumes:
+      - lab-keycloak-enterprise-data:/opt/keycloak/data
+      - lab-ca-public:/etc/keycloak-certs:ro
+      - lab-enterprise-keycloak-tls:/etc/keycloak-tls:ro
+      - ./keycloak/enterprise-realm.json:/opt/keycloak/data/import/enterprise-realm.json:ro
+    networks: [identity-lab]
+    healthcheck:
+      test: ["CMD-SHELL", "exec 3<>/dev/tcp/localhost/9000"]
+      interval: 15s
+      timeout: 10s
+      retries: 20
+      start_period: 60s
+
+  # ===== 4. jjdguard Keycloak（本地身份运行服务） =====
+  # 同时持有：本地账号（local-alice）+ LDAP federation + AD federation + enterprise broker。
+  # 任务 10 account-login/enterprise-sso 两个 OIDC provider 都对接此 realm 的 enterprise-ai-portal client。
+  jjdguard-keycloak:
+    image: quay.io/keycloak/keycloak:25.0
+    hostname: jjdguard-keycloak
+    restart: unless-stopped
+    command:
+      - start
+      - --import-realm
+      - --hostname=jjdguard-keycloak
+      - --https-certificate-file=/etc/keycloak-tls/jjdguard-keycloak.crt
+      - --https-certificate-key-file=/etc/keycloak-tls/jjdguard-keycloak.key
+    environment:
+      KC_DB: dev-file
+      KC_CACHE: local
+      KC_TRUSTSTORE_PATHS: /etc/keycloak-certs/lab-ca.crt
+      KC_HTTP_ENABLED: "true"
+      KC_HTTP_RELATIVE_PATH: /sso
+      KC_HOSTNAME_STRICT: "false"
+      KC_HEALTH_ENABLED: "true"
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN_USER}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_ADMIN_USER}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      # realm.json 里的 ${VAR} 占位靠环境变量解析（Keycloak import 支持 ${ENV} 替换）。
+      PORTAL_OIDC_CLIENT_SECRET: ${PORTAL_OIDC_CLIENT_SECRET}
+      LOCAL_ADMIN_PASSWORD: ${LOCAL_ADMIN_PASSWORD}
+      LOCAL_ALICE_PASSWORD: ${LOCAL_ALICE_PASSWORD}
+      LDAP_BIND_CREDENTIAL: ${LDAP_BIND_CREDENTIAL}
+      AD_BIND_CREDENTIAL: ${AD_BIND_CREDENTIAL}
+      ENTERPRISE_BROKER_CLIENT_SECRET: ${ENTERPRISE_BROKER_CLIENT_SECRET}
+      IDENTITY_RUNTIME_CLIENT_SECRET: ${IDENTITY_RUNTIME_CLIENT_SECRET}
+      DIRECTORY_RUNTIME_CLIENT_SECRET: ${DIRECTORY_RUNTIME_CLIENT_SECRET}
+    depends_on:
+      cert-init:
+        condition: service_completed_successfully
+      openldap:
+        condition: service_healthy
+      ldap-seed:
+        condition: service_completed_successfully
+      samba-ad:
+        condition: service_healthy
+      enterprise-keycloak:
+        condition: service_healthy
+    volumes:
+      - lab-keycloak-jjdguard-data:/opt/keycloak/data
+      - lab-ca-public:/etc/keycloak-certs:ro
+      - lab-jjdguard-keycloak-tls:/etc/keycloak-tls:ro
+      - ./keycloak/jjdguard-realm.json:/opt/keycloak/data/import/jjdguard-realm.json:ro
+    networks: [identity-lab]
+    healthcheck:
+      test: ["CMD-SHELL", "exec 3<>/dev/tcp/localhost/9000"]
+      interval: 15s
+      timeout: 10s
+      retries: 20
+      start_period: 60s

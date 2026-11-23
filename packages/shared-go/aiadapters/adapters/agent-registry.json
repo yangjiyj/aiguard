@@ -1,0 +1,724 @@
+{
+  "id": "agent-registry",
+  "name": "AI Agent Registry",
+  "vendor": "Gateway",
+  "catalog_entries": [],
+  "agent_definitions": [
+    {
+      "type": "claude-code",
+      "label": "Claude Code",
+      "vendor": "Anthropic",
+      "color": "#1677ff",
+      "aliases": [
+        "claude-code",
+        "claude code",
+        "anthropic claude code"
+      ],
+      "patterns": [
+        "claude-code",
+        "claude code",
+        "claude-cli/",
+        "claude-cli",
+        "cc_version=",
+        "anthropic's official cli for claude"
+      ]
+    },
+    {
+      "type": "openai-codex",
+      "label": "OpenAI Codex",
+      "vendor": "OpenAI",
+      "color": "#111827",
+      "aliases": [
+        "openai-codex",
+        "codex",
+        "codex-cli",
+        "openai codex"
+      ],
+      "patterns": [
+        "openai codex",
+        "codex desktop",
+        "codex cli",
+        "@openai/codex",
+        "openai-codex",
+        "codex-cli",
+        "codex_exec/",
+        "codex_cli/",
+        "codex_cli_rs/",
+        "codex-tui/",
+        "codex_vscode/",
+        "codex_sdk_ts/",
+        "codex_atlas/",
+        "codex_chatgpt_desktop/",
+        "codex_work_"
+      ]
+    },
+    {
+      "type": "cursor",
+      "label": "Cursor",
+      "vendor": "Anysphere",
+      "color": "#722ed1",
+      "aliases": [
+        "cursor",
+        "cursor-agent"
+      ],
+      "patterns": [
+        "cursor",
+        "cursor-agent",
+        "cursor agent",
+        ".cursorrules"
+      ]
+    },
+    {
+      "type": "windsurf",
+      "label": "Windsurf / Cascade",
+      "vendor": "Cognition",
+      "color": "#13c2c2",
+      "aliases": [
+        "windsurf",
+        "cascade",
+        "codeium"
+      ],
+      "patterns": [
+        "windsurf",
+        "cascade",
+        "codeium",
+        "exafunction"
+      ]
+    },
+    {
+      "type": "github-copilot",
+      "label": "GitHub Copilot",
+      "vendor": "GitHub",
+      "color": "#52c41a",
+      "aliases": [
+        "github-copilot",
+        "copilot",
+        "github copilot"
+      ],
+      "patterns": [
+        "github copilot",
+        "copilot coding agent",
+        "copilot-chat",
+        "copilotchat",
+        "copilot/",
+        "github-copilot",
+        "githubcopilot"
+      ]
+    },
+    {
+      "type": "cline",
+      "label": "Cline",
+      "vendor": "Cline",
+      "color": "#eb2f96",
+      "aliases": [
+        "cline"
+      ],
+      "patterns": [
+        "cline",
+        "saoudrizwan.claude-dev"
+      ]
+    },
+    {
+      "type": "roo-code",
+      "label": "Roo Code",
+      "vendor": "Roo Code",
+      "color": "#2f54eb",
+      "aliases": [
+        "roo-code",
+        "roo code",
+        "roocode"
+      ],
+      "patterns": [
+        "roo code",
+        "roo-code",
+        "roocode"
+      ]
+    },
+    {
+      "type": "kilo-code",
+      "label": "Kilo Code",
+      "vendor": "Kilo Code",
+      "color": "#fa541c",
+      "aliases": [
+        "kilo-code",
+        "kilo code",
+        "kilocode"
+      ],
+      "patterns": [
+        "kilo code",
+        "kilo-code",
+        "kilocode"
+      ]
+    },
+    {
+      "type": "continue",
+      "label": "Continue.dev",
+      "vendor": "Continue",
+      "color": "#597ef7",
+      "aliases": [
+        "continue",
+        "continue-dev",
+        "continue.dev"
+      ],
+      "patterns": [
+        "continue.dev",
+        "continue-vscode",
+        "continuedev",
+        "continue extension"
+      ]
+    },
+    {
+      "type": "aider",
+      "label": "Aider",
+      "vendor": "Aider",
+      "color": "#faad14",
+      "aliases": [
+        "aider",
+        "aider-chat"
+      ],
+      "patterns": [
+        "aider",
+        "aider-chat"
+      ]
+    },
+    {
+      "type": "amazon-q-developer",
+      "label": "Amazon Q Developer",
+      "vendor": "Amazon",
+      "color": "#ff9900",
+      "aliases": ["amazon-q-developer", "amazon q developer", "aws q developer"],
+      "patterns": ["amazon q developer", "aws q developer", "amazon-q-developer"]
+    },
+    {
+      "type": "gemini-code-assist",
+      "label": "Gemini Code Assist",
+      "vendor": "Google",
+      "color": "#4285f4",
+      "aliases": ["gemini-code-assist", "gemini code assist"],
+      "patterns": ["gemini code assist", "gemini-code-assist"]
+    },
+    {
+      "type": "coderabbit",
+      "label": "CodeRabbit",
+      "vendor": "CodeRabbit",
+      "color": "#6d28d9",
+      "aliases": ["coderabbit", "coderabbit-ai"],
+      "patterns": ["coderabbit", "coderabbit.ai"]
+    },
+    {
+      "type": "autogpt-babyagi",
+      "label": "AutoGPT / BabyAGI",
+      "vendor": "Community",
+      "color": "#0f766e",
+      "aliases": ["autogpt-babyagi", "autogpt", "auto-gpt", "babyagi"],
+      "patterns": ["autogpt", "auto-gpt", "auto gpt", "babyagi", "baby agi"]
+    },
+    {
+      "type": "langchain-llamaindex",
+      "label": "LangChain / LlamaIndex",
+      "vendor": "Community",
+      "color": "#166534",
+      "aliases": ["langchain-llamaindex", "langchain", "llamaindex", "llama-index"],
+      "patterns": ["langchain", "llamaindex", "llama-index", "llama index"]
+    },
+    {
+      "type": "crewai-autogen",
+      "label": "CrewAI / AutoGen",
+      "vendor": "Community",
+      "color": "#9f1239",
+      "aliases": ["crewai-autogen", "crewai", "autogen", "microsoft autogen"],
+      "patterns": ["crewai", "microsoft autogen", "autogen agent"]
+    },
+    {
+      "type": "dify-coze",
+      "label": "Dify / Coze",
+      "vendor": "Community",
+      "color": "#1d4ed8",
+      "aliases": ["dify-coze", "dify", "coze"],
+      "patterns": ["dify", "dify.ai", "coze", "coze.cn"]
+    },
+    {
+      "type": "opencode",
+      "label": "OpenCode",
+      "vendor": "OpenCode",
+      "color": "#13c2c2",
+      "aliases": [
+        "opencode",
+        "open code"
+      ],
+      "patterns": [
+        "opencode",
+        "open code"
+      ]
+    },
+    {
+      "type": "devin",
+      "label": "Devin",
+      "vendor": "Cognition",
+      "color": "#08979c",
+      "aliases": [
+        "devin",
+        "devin-ai",
+        "cognition devin"
+      ],
+      "patterns": [
+        "devin",
+        "cognition devin"
+      ]
+    },
+    {
+      "type": "amp",
+      "label": "Amp",
+      "vendor": "Sourcegraph",
+      "color": "#531dab",
+      "aliases": [
+        "amp",
+        "sourcegraph-amp",
+        "amp-code"
+      ],
+      "patterns": [
+        "sourcegraph amp",
+        "amp-code",
+        "ampcode",
+        "amp/"
+      ]
+    },
+    {
+      "type": "goose",
+      "label": "Goose",
+      "vendor": "Block",
+      "color": "#237804",
+      "aliases": [
+        "goose",
+        "block-goose"
+      ],
+      "patterns": [
+        "block goose",
+        "goose ai",
+        "goose-cli",
+        "goose/"
+      ]
+    },
+    {
+      "type": "gemini-cli",
+      "label": "Gemini CLI",
+      "vendor": "Google",
+      "color": "#1a73e8",
+      "aliases": [
+        "gemini-cli",
+        "gemini cli",
+        "google-gemini-cli"
+      ],
+      "patterns": [
+        "gemini cli",
+        "gemini-cli",
+        "google-gemini-cli"
+      ]
+    },
+    {
+      "type": "qwen-code",
+      "label": "Qwen Code",
+      "vendor": "Alibaba",
+      "color": "#1677ff",
+      "aliases": [
+        "qwen-code",
+        "qwen code",
+        "qwen-coder"
+      ],
+      "patterns": [
+        "qwen code",
+        "qwen-code",
+        "qwen coder",
+        "qwen3-coder",
+        "qwen3 coder"
+      ]
+    },
+    {
+      "type": "jetbrains-junie",
+      "label": "JetBrains Junie",
+      "vendor": "JetBrains",
+      "color": "#9254de",
+      "aliases": [
+        "jetbrains-junie",
+        "junie"
+      ],
+      "patterns": [
+        "jetbrains junie",
+        "junie"
+      ]
+    },
+    {
+      "type": "tabnine",
+      "label": "Tabnine",
+      "vendor": "Tabnine",
+      "color": "#fa541c",
+      "aliases": [
+        "tabnine"
+      ],
+      "patterns": [
+        "tabnine"
+      ]
+    },
+    {
+      "type": "qodo",
+      "label": "Qodo",
+      "vendor": "Qodo",
+      "color": "#389e0d",
+      "aliases": [
+        "qodo",
+        "qodo-gen",
+        "qodo merge"
+      ],
+      "patterns": [
+        "qodo",
+        "qodo merge",
+        "qodo gen"
+      ]
+    },
+    {
+      "type": "sourcegraph-cody",
+      "label": "Sourcegraph Cody",
+      "vendor": "Sourcegraph",
+      "color": "#fa8c16",
+      "aliases": [
+        "sourcegraph-cody",
+        "cody"
+      ],
+      "patterns": [
+        "sourcegraph cody",
+        "sourcegraph-cody",
+        "cody ai"
+      ]
+    },
+    {
+      "type": "amazon-kiro",
+      "label": "Amazon Kiro",
+      "vendor": "Amazon",
+      "color": "#ff9900",
+      "aliases": [
+        "amazon-kiro",
+        "kiro"
+      ],
+      "patterns": [
+        "amazon kiro",
+        "kiro ide",
+        "kiro/"
+      ]
+    },
+    {
+      "type": "google-antigravity",
+      "label": "Google Antigravity",
+      "vendor": "Google",
+      "color": "#4285f4",
+      "aliases": [
+        "google-antigravity",
+        "antigravity"
+      ],
+      "patterns": [
+        "google antigravity",
+        "antigravity"
+      ]
+    },
+    {
+      "type": "replit-agent",
+      "label": "Replit Agent",
+      "vendor": "Replit",
+      "color": "#f26207",
+      "aliases": [
+        "replit-agent",
+        "replit agent"
+      ],
+      "patterns": [
+        "replit agent",
+        "replit-agent"
+      ]
+    },
+    {
+      "type": "bolt",
+      "label": "Bolt.new",
+      "vendor": "StackBlitz",
+      "color": "#fadb14",
+      "aliases": [
+        "bolt",
+        "bolt.new"
+      ],
+      "patterns": [
+        "bolt.new",
+        "stackblitz bolt"
+      ]
+    },
+    {
+      "type": "lovable",
+      "label": "Lovable",
+      "vendor": "Lovable",
+      "color": "#f759ab",
+      "aliases": [
+        "lovable"
+      ],
+      "patterns": [
+        "lovable"
+      ]
+    },
+    {
+      "type": "v0",
+      "label": "Vercel v0",
+      "vendor": "Vercel",
+      "color": "#000000",
+      "aliases": [
+        "v0",
+        "vercel-v0"
+      ],
+      "patterns": [
+        "v0.dev",
+        "vercel v0",
+        "vercel-v0"
+      ]
+    },
+    {
+      "type": "codebuddy",
+      "label": "腾讯 CodeBuddy",
+      "vendor": "Tencent",
+      "color": "#0052d9",
+      "aliases": [
+        "codebuddy",
+        "tencent-codebuddy",
+        "tencent cloud codebuddy",
+        "腾讯云代码助手"
+      ],
+      "patterns": [
+        "codebuddy",
+        "@tencent-ai/codebuddy",
+        "tencent cloud codebuddy",
+        "tencent cloud code assistant",
+        "腾讯云代码助手",
+        "代码助手 codebuddy"
+      ]
+    },
+    {
+      "type": "tongyi-lingma",
+      "label": "通义灵码",
+      "vendor": "Alibaba",
+      "color": "#ff6a00",
+      "aliases": [
+        "tongyi-lingma",
+        "lingma",
+        "通义灵码",
+        "aliyun lingma"
+      ],
+      "patterns": [
+        "通义灵码",
+        "tongyi lingma",
+        "aliyun lingma",
+        "lingma"
+      ]
+    },
+    {
+      "type": "qoder",
+      "label": "Qoder",
+      "vendor": "Alibaba",
+      "color": "#722ed1",
+      "aliases": [
+        "qoder"
+      ],
+      "patterns": [
+        "qoder"
+      ]
+    },
+    {
+      "type": "codearts-snap",
+      "label": "华为 CodeArts Snap",
+      "vendor": "Huawei",
+      "color": "#cf1322",
+      "aliases": [
+        "codearts-snap",
+        "codearts snap",
+        "huawei codearts snap"
+      ],
+      "patterns": [
+        "codearts snap",
+        "codearts-snap",
+        "huawei codearts",
+        "华为云 codearts snap",
+        "codearts snap 用户指南"
+      ]
+    },
+    {
+      "type": "deveco-codegenie",
+      "label": "华为 DevEco CodeGenie",
+      "vendor": "Huawei",
+      "color": "#f5222d",
+      "aliases": [
+        "deveco-codegenie",
+        "codegenie",
+        "huawei codegenie"
+      ],
+      "patterns": [
+        "deveco codegenie",
+        "codegenie",
+        "huawei codegenie"
+      ]
+    },
+    {
+      "type": "trae",
+      "label": "Trae",
+      "vendor": "ByteDance",
+      "color": "#2f54eb",
+      "aliases": [
+        "trae",
+        "trae-ai",
+        "trae ide"
+      ],
+      "patterns": [
+        "trae",
+        "trae ide",
+        "trae ai",
+        "the real ai engineer"
+      ]
+    },
+    {
+      "type": "marscode",
+      "label": "豆包 MarsCode",
+      "vendor": "ByteDance",
+      "color": "#1677ff",
+      "aliases": [
+        "marscode",
+        "doubao-marscode",
+        "豆包 marscode"
+      ],
+      "patterns": [
+        "marscode",
+        "doubao marscode",
+        "豆包 marscode",
+        "豆包marscode"
+      ]
+    },
+    {
+      "type": "baidu-comate",
+      "label": "百度 Comate",
+      "vendor": "Baidu",
+      "color": "#2f54eb",
+      "aliases": [
+        "baidu-comate",
+        "comate",
+        "百度 comate"
+      ],
+      "patterns": [
+        "baidu comate",
+        "comate",
+        "百度comate",
+        "百度 comate",
+        "百度研发编码助手"
+      ]
+    },
+    {
+      "type": "iflycode",
+      "label": "讯飞 iFlyCode / 星火飞码",
+      "vendor": "iFlytek",
+      "color": "#d4380d",
+      "aliases": [
+        "iflycode",
+        "星火飞码",
+        "讯飞 iflycode"
+      ],
+      "patterns": [
+        "iflycode",
+        "星火飞码",
+        "讯飞星火代码",
+        "科大讯飞 ai 编程"
+      ]
+    },
+    {
+      "type": "codegeex",
+      "label": "CodeGeeX",
+      "vendor": "Zhipu AI",
+      "color": "#531dab",
+      "aliases": [
+        "codegeex",
+        "zhipu-codegeex"
+      ],
+      "patterns": [
+        "codegeex",
+        "智谱 codegeex",
+        "zhipu codegeex"
+      ]
+    },
+    {
+      "type": "codefuse",
+      "label": "CodeFuse",
+      "vendor": "Ant Group",
+      "color": "#096dd9",
+      "aliases": [
+        "codefuse",
+        "蚂蚁 codefuse"
+      ],
+      "patterns": [
+        "codefuse",
+        "蚂蚁 codefuse",
+        "ant codefuse"
+      ]
+    },
+    {
+      "type": "workbuddy",
+      "label": "WorkBuddy",
+      "vendor": "WorkBuddy",
+      "color": "#6366f1",
+      "aliases": [
+        "workbuddy",
+        "work buddy",
+        "work-buddy"
+      ],
+      "patterns": [
+        "workbuddy",
+        "work buddy",
+        "work-buddy"
+      ]
+    },
+    {
+      "type": "deepseek-harness",
+      "label": "DeepSeek Harness",
+      "vendor": "DeepSeek",
+      "color": "#4d6bfe",
+      "aliases": [
+        "deepseek-harness",
+        "deepseek harness"
+      ],
+      "patterns": [
+        "deepseek-harness/"
+      ]
+    },
+    {
+      "type": "vscode",
+      "label": "VS Code",
+      "vendor": "Microsoft",
+      "color": "#0066b8",
+      "aliases": [
+        "vscode",
+        "vs code",
+        "visual studio code"
+      ],
+      "patterns": [
+        "visual studio code",
+        "vscode",
+        "vs code",
+        "code/"
+      ]
+    },
+    {
+      "type": "agent-tool-call",
+      "label": "待识别智能体请求",
+      "vendor": "Gateway",
+      "color": "#fa8c16",
+      "aliases": [
+        "agent-tool-call",
+        "tool-call-agent"
+      ],
+      "patterns": [
+        "mcp tool",
+        "tool_call",
+        "tool call",
+        "function_call",
+        "function call"
+      ]
+    }
+  ]
+}

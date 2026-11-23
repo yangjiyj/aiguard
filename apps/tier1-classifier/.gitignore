@@ -1,0 +1,4 @@
+# 暂存的模型 artifact（构建期由 fetch-model.sh 落地；镜像才是交付物，模型不进 git）
+models/
+__pycache__/
+.pytest_cache/

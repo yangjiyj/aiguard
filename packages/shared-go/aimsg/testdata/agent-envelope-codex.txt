@@ -1,0 +1,10 @@
+# AGENTS.md instructions
+<INSTRUCTIONS>
+tool schema
+</INSTRUCTIONS>
+<environment_context>
+checkpoint
+</environment_context>
+
+## My request for Codex:
+Implement retained artifact evidence.

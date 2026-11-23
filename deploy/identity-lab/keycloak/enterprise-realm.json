@@ -1,0 +1,235 @@
+{
+  "realm": "enterprise",
+  "displayName": "Enterprise External IdP (lab)",
+  "enabled": true,
+  "sslRequired": "external",
+  "registrationAllowed": false,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": false,
+  "editUsernameAllowed": false,
+  "bruteForceProtected": true,
+  "failureFactor": 30,
+  "waitIncrementSeconds": 60,
+  "quickLoginCheckMilliSeconds": 1000,
+  "minimumQuickLoginWaitSeconds": 60,
+  "accessTokenLifespan": 300,
+  "accessTokenLifespanForImplicitFlow": 900,
+  "ssoSessionIdleTimeout": 1800,
+  "ssoSessionMaxLifespan": 36000,
+  "users": [
+    {
+      "username": "enterprise-erin",
+      "enabled": true,
+      "email": "enterprise-erin@enterprise-lab.test",
+      "emailVerified": true,
+      "firstName": "Enterprise",
+      "lastName": "Erin",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "${ENTERPRISE_ERIN_PASSWORD}",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "enterprise-user"
+      ],
+      "attributes": {
+        "department": [
+          "research"
+        ]
+      },
+      "groups": [
+        "/dept-research"
+      ]
+    },
+    {
+      "username": "enterprise-frank",
+      "enabled": false,
+      "email": "enterprise-frank@enterprise-lab.test",
+      "emailVerified": true,
+      "firstName": "Enterprise",
+      "lastName": "Frank (Disabled)",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "${ENTERPRISE_FRANK_PASSWORD}",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "enterprise-user"
+      ]
+    },
+    {
+      "username": "oidc-carol",
+      "enabled": true,
+      "email": "oidc-carol@jjdguard-lab.test",
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "${ENTERPRISE_CAROL_PASSWORD}",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "enterprise-user"
+      ],
+      "firstName": "OIDC",
+      "lastName": "Carol",
+      "attributes": {
+        "department": [
+          "marketing"
+        ]
+      },
+      "groups": [
+        "/dept-marketing"
+      ]
+    }
+  ],
+  "roles": {
+    "realm": [
+      {
+        "name": "enterprise-user",
+        "description": "企业 IdP 普通用户（lab）",
+        "composite": false
+      }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "jjdguard-broker",
+      "name": "JJDGuard broker client (lab)",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "secret": "${ENTERPRISE_BROKER_CLIENT_SECRET}",
+      "redirectUris": [
+        "https://jjdguard-keycloak:8443/sso/realms/jjdguard/broker/enterprise/endpoint"
+      ],
+      "webOrigins": [
+        "https://jjdguard-keycloak:8443/sso"
+      ],
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "attributes": {
+        "post.logout.redirect.uris": "https://jjdguard-keycloak:8443/sso/*"
+      },
+      "protocolMappers": [
+        {
+          "name": "groups",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-group-membership-mapper",
+          "consentRequired": false,
+          "config": {
+            "full.path": "false",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "userinfo.token.claim": "true",
+            "claim.name": "groups"
+          }
+        },
+        {
+          "name": "department",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.attribute": "department",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "userinfo.token.claim": "true",
+            "jsonType.label": "String",
+            "claim.name": "department"
+          }
+        }
+      ],
+      "defaultClientScopes": [
+        "profile",
+        "email",
+        "groups"
+      ]
+    }
+  ],
+  "clientScopes": [
+    {
+      "name": "email",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": [
+        {
+          "name": "email",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-property-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.attribute": "email",
+            "claim.name": "email",
+            "jsonType.label": "String",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "userinfo.token.claim": "true"
+          }
+        }
+      ]
+    },
+    {
+      "name": "profile",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": [
+        {
+          "name": "username",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-property-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.attribute": "username",
+            "claim.name": "preferred_username",
+            "jsonType.label": "String",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "userinfo.token.claim": "true"
+          }
+        },
+        {
+          "name": "full name",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-full-name-mapper",
+          "consentRequired": false,
+          "config": {
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "userinfo.token.claim": "true"
+          }
+        }
+      ]
+    },
+    {
+      "name": "groups",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": []
+    }
+  ],
+  "groups": [
+    {
+      "name": "dept-research"
+    },
+    {
+      "name": "dept-marketing"
+    }
+  ]
+}

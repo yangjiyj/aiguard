@@ -1,0 +1,37 @@
+{
+  "schema": "jjdguard-owned-tier1-model-lock/v1",
+  "model_id": "jjdguard-tier1-e5small-lr",
+  "origin": "user-trained",
+  "license": "MIT",
+  "upstream": {
+    "repo": "intfloat/multilingual-e5-small",
+    "revision": "614241f622f53c4eeff9890bdc4f31cfecc418b3"
+  },
+  "manifest": [
+    {
+      "path": "config.json",
+      "size": 114,
+      "sha256": "bc2fc8e9b213e766696a4a0176887e112172fb469b792055cc613854360360aa"
+    },
+    {
+      "path": "model.onnx",
+      "size": 470420743,
+      "sha256": "5abf5273fc4cee689d63650ddbd9cf0a6c2645a1a5400a0d548a517226cc6141"
+    },
+    {
+      "path": "special_tokens_map.json",
+      "size": 965,
+      "sha256": "38d989b0fdad0fec0c67c14b1f3c8b68184022cf6d4adc5444526ced8653f738"
+    },
+    {
+      "path": "tokenizer.json",
+      "size": 17082800,
+      "sha256": "cd98e5698b201ba914efb8c18b6709fa8735ab71dcad8d2b431e52e8bf68d932"
+    },
+    {
+      "path": "tokenizer_config.json",
+      "size": 1203,
+      "sha256": "dbdcd9767f0481fd8fd8cd6bce3e73dae7f5c44ce22ae1fde00a66498e71b454"
+    }
+  ]
+}

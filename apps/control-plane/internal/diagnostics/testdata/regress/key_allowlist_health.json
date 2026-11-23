@@ -1,0 +1,130 @@
+{
+  "name": "key_allowlist_health",
+  "description": "全局体检：近 1 小时有请求因密钥模型白名单被网关拒绝，体检应点名密钥并给确定结论，且不能被算成上游鉴权失败",
+  "fixture": {
+    "teams": [
+      {
+        "key": "dev",
+        "mode": "allowlist",
+        "models": [
+          "sol",
+          "luna"
+        ]
+      }
+    ],
+    "providers": [
+      {
+        "key": "p1",
+        "name": "主渠道",
+        "type": "openai",
+        "base_url": "https://api.example.com"
+      }
+    ],
+    "models": [
+      {
+        "key": "sol",
+        "provider": "p1",
+        "name": "gpt-6.1-sol"
+      },
+      {
+        "key": "luna",
+        "provider": "p1",
+        "name": "gpt-6-luna"
+      }
+    ],
+    "users": [
+      {
+        "key": "zs",
+        "username": "zhangsan",
+        "team": "dev"
+      }
+    ],
+    "internal_keys": [
+      {
+        "key": "k_open",
+        "user": "zs",
+        "name": "张三的网页助手"
+      },
+      {
+        "key": "k_narrow",
+        "user": "zs",
+        "name": "张三的编程助手",
+        "model_allowlist": [
+          "gpt-6-luna"
+        ]
+      }
+    ],
+    "request_logs": [
+      {
+        "label": "denied",
+        "count": 3,
+        "user": "zs",
+        "key": "k_narrow",
+        "status": "key_model_not_allowed",
+        "upstream_status": 403,
+        "from": "-20m",
+        "to": "-2m",
+        "routing_decision_json": {
+          "client_model": "gpt-6.1-sol",
+          "reject_reason": "key_allowlist"
+        }
+      },
+      {
+        "label": "ok",
+        "count": 5,
+        "user": "zs",
+        "key": "k_open",
+        "provider": "p1",
+        "model": "luna",
+        "status": "success",
+        "upstream_status": 200,
+        "from": "-30m",
+        "to": "-1m"
+      }
+    ]
+  },
+  "input": {
+    "kind": "health",
+    "scope": "admin"
+  },
+  "expect": {
+    "tier": "L2",
+    "must_check_ids_any": [
+      "key_model_allowlist"
+    ],
+    "must_keywords": [
+      "白名单",
+      "gpt-6.1-sol"
+    ],
+    "must_level": {
+      "key_model_allowlist": "confirmed"
+    },
+    "forbid_confirmed": [
+      "auth_failed"
+    ],
+    "l3": {
+      "level_by_kw": [
+        {
+          "kw": [
+            "白名单"
+          ],
+          "level": "confirmed"
+        }
+      ],
+      "forbid_keywords": [
+        "凭据"
+      ],
+      "must_keywords": [
+        "gpt-6.1-sol"
+      ],
+      "must_keywords_any": [
+        "白名单"
+      ],
+      "must_keywords_any2": [
+        "密钥",
+        "Key",
+        "key"
+      ]
+    }
+  }
+}

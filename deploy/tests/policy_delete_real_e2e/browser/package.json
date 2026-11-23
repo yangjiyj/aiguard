@@ -1,0 +1,12 @@
+{
+  "name": "policy-delete-browser-e2e",
+  "private": true,
+  "type": "module",
+  "description": "Real-browser (Playwright + Chrome) check of deleting custom security policies in the console",
+  "scripts": {
+    "test": "node delete-policy.mjs"
+  },
+  "dependencies": {
+    "playwright-core": "^1.65.0"
+  }
+}

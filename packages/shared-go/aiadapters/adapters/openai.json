@@ -1,0 +1,152 @@
+{
+  "id": "provider-openai",
+  "name": "OpenAI",
+  "vendor": "OpenAI",
+  "catalog_entries": [
+    {
+      "id": "openai_chatgpt_telemetry",
+      "provider": "openai",
+      "provider_cn": "OpenAI",
+      "product": "chatgpt",
+      "product_cn": "ChatGPT",
+      "category": "chat",
+      "region": "global",
+      "domains": [
+        "chatgpt.com",
+        "chat.openai.com",
+        "ab.chatgpt.com"
+      ],
+      "path_rules": [
+        "glob:/ces/v1/rgstr",
+        "glob:/v1/rgstr",
+        "glob:/v1/initialize",
+        "glob:/v1/sdk_exception",
+        "glob:/otlp/v1/metrics",
+        "glob:/otlp/v1/traces",
+        "glob:/otlp/v1/logs"
+      ],
+      "request_decoder": "telemetry",
+      "response_decoder": "telemetry",
+      "retain_level": "summary",
+      "risk_profile": "telemetry",
+      "enabled": true,
+      "priority": 110,
+      "source_url": "https://help.openai.com/en/articles/9125172-the-chatgpt-home-page"
+    },
+    {
+      "id": "openai_chatgpt_upload",
+      "provider": "openai",
+      "provider_cn": "OpenAI",
+      "product": "chatgpt",
+      "product_cn": "ChatGPT",
+      "category": "chat",
+      "region": "global",
+      "domains": [
+        "chatgpt.com",
+        "chat.openai.com",
+        "*.chatgpt.com"
+      ],
+      "path_rules": [
+        "contains:/file",
+        "contains:/upload",
+        "contains:/attachment",
+        "contains:/document",
+        "contains:/estuary/content"
+      ],
+      "request_decoder": "chatgpt_web",
+      "response_decoder": "chatgpt_web",
+      "retain_level": "content",
+      "risk_profile": "llm_web",
+      "enabled": true,
+      "priority": 102,
+      "source_url": "https://help.openai.com/en/articles/9125172-the-chatgpt-home-page"
+    },
+    {
+      "id": "openai_chatgpt",
+      "provider": "openai",
+      "provider_cn": "OpenAI",
+      "product": "chatgpt",
+      "product_cn": "ChatGPT",
+      "category": "chat",
+      "region": "global",
+      "domains": [
+        "chatgpt.com",
+        "chat.openai.com",
+        "*.chatgpt.com"
+      ],
+      "path_rules": [
+        "suffix:/conversation",
+        "contains:/conversation/",
+        "contains:/textdocs",
+        "suffix:/upsert",
+        "contains:/gizmo_creator",
+        "contains:/memories",
+        "contains:/edit_message"
+      ],
+      "request_decoder": "chatgpt_web",
+      "response_decoder": "chatgpt_web",
+      "retain_level": "content",
+      "risk_profile": "llm_web",
+      "enabled": true,
+      "priority": 100,
+      "source_url": "https://help.openai.com/en/articles/9125172-the-chatgpt-home-page"
+    },
+    {
+      "id": "openai_api",
+      "provider": "openai",
+      "provider_cn": "OpenAI",
+      "product": "openai_api",
+      "product_cn": "OpenAI API",
+      "category": "api",
+      "region": "global",
+      "domains": [
+        "api.openai.com",
+        "platform.openai.com",
+        "*.openai.com"
+      ],
+      "path_rules": [
+        "/v1/chat/completions",
+        "/v1/responses",
+        "/v1/completions",
+        "/v1/embeddings",
+        "/v1/files",
+        "/v1/images",
+        "/v1/uploads"
+      ],
+      "request_decoder": "openai_compatible",
+      "response_decoder": "openai_compatible",
+      "retain_level": "content",
+      "risk_profile": "llm_api",
+      "enabled": true,
+      "priority": 90,
+      "source_url": "https://platform.openai.com/docs"
+    },
+    {
+      "id": "openai_chatgpt_support",
+      "provider": "openai",
+      "provider_cn": "OpenAI",
+      "product": "chatgpt",
+      "product_cn": "ChatGPT",
+      "category": "chat",
+      "region": "global",
+      "domains": [
+        "chatgpt.com",
+        "*.chatgpt.com",
+        "chat.openai.com",
+        "ws.chatgpt.com",
+        "persistent.oaistatic.com",
+        "cdn.oaistatic.com",
+        "*.oaistatic.com"
+      ],
+      "path_rules": null,
+      "request_decoder": "web_support",
+      "response_decoder": "web_support",
+      "retain_level": "summary",
+      "risk_profile": "llm_web",
+      "enabled": true,
+      "priority": 80,
+      "source_url": "https://help.openai.com/en/articles/9125172-the-chatgpt-home-page"
+    }
+  ],
+  "agent_definitions": []
+}

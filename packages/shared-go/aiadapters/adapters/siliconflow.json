@@ -1,0 +1,52 @@
+{
+  "id": "provider-siliconflow",
+  "name": "硅基流动",
+  "vendor": "硅基流动",
+  "catalog_entries": [
+    {
+      "id": "siliconflow_api",
+      "provider": "siliconflow",
+      "provider_cn": "硅基流动",
+      "product": "siliconflow_api",
+      "product_cn": "硅基流动 API",
+      "category": "api",
+      "region": "cn",
+      "domains": [
+        "api.siliconflow.cn"
+      ],
+      "path_rules": [
+        "/v1/"
+      ],
+      "request_decoder": "openai_compatible",
+      "response_decoder": "openai_compatible",
+      "retain_level": "content",
+      "risk_profile": "llm_api",
+      "enabled": true,
+      "priority": 90,
+      "source_url": "https://siliconflow.cn/"
+    },
+    {
+      "id": "siliconflow",
+      "provider": "siliconflow",
+      "provider_cn": "硅基流动",
+      "product": "siliconflow",
+      "product_cn": "硅基流动",
+      "category": "model-platform",
+      "region": "cn",
+      "domains": [
+        "siliconflow.cn"
+      ],
+      "path_rules": [
+        "/"
+      ],
+      "request_decoder": "model_platform",
+      "response_decoder": "model_platform",
+      "retain_level": "summary",
+      "risk_profile": "model_platform",
+      "enabled": true,
+      "priority": 70,
+      "source_url": "https://siliconflow.cn/"
+    }
+  ],
+  "agent_definitions": []
+}

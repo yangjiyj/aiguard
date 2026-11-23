@@ -1,0 +1,206 @@
+:root {
+  color-scheme: light;
+  --jjd-background: oklch(0.982 0.006 255);
+  --jjd-foreground: oklch(0.19 0.025 258);
+  --jjd-muted: oklch(0.51 0.025 258);
+  --jjd-input: oklch(0.902 0.014 255);
+  --jjd-primary: #2451eb;
+  --jjd-primary-hover: #1d40d8;
+}
+
+html, body, #keycloak-bg, .pf-v5-c-login,
+.pf-v5-c-background-image, .pf-v5-c-login__container {
+  color-scheme: light !important;
+  background: var(--jjd-background) !important;
+  background-image: none !important;
+}
+
+body, .pf-v5-c-login {
+  color: var(--jjd-foreground);
+  font-family: ui-sans-serif, system-ui, "PingFang SC", "Noto Sans SC", "Source Han Sans SC", "Microsoft YaHei", sans-serif;
+  letter-spacing: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+.pf-v5-c-login {
+  display: flex !important;
+  min-height: 100vh;
+  min-height: 100dvh;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 24px;
+}
+
+.pf-v5-c-login__container {
+  width: min(100%, 24rem);
+  max-width: 24rem;
+  grid-template-columns: minmax(0, 1fr) !important;
+  grid-template-areas: "header" "main" !important;
+  padding: 0 !important;
+  gap: 24px !important;
+  margin-inline: auto;
+}
+
+.pf-v5-c-login__header {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+#kc-header-wrapper {
+  background: url("../img/jjdguard-logo-portal-20261005.svg?v=portal-20261005") no-repeat center top !important;
+  background-size: 56px 56px !important;
+  padding: 80px 0 0 !important;
+  min-height: 0 !important;
+  color: var(--jjd-foreground) !important;
+  font-size: 24px !important;
+  font-weight: 600;
+  line-height: 32px !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  text-align: center;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.pf-v5-c-login__main {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  min-width: 0;
+  width: 100%;
+}
+
+.pf-v5-c-login__main-header {
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 0 !important;
+  margin-bottom: 24px;
+  border-top: 0 !important;
+  background-image: none !important;
+}
+
+#kc-page-title {
+  color: var(--jjd-foreground) !important;
+  font-size: 18px !important;
+  font-weight: 500;
+  line-height: 26px;
+  letter-spacing: 0;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.pf-v5-c-login__main-header-utilities {
+  align-self: center;
+  margin: 0 !important;
+}
+
+.pf-v5-c-login__main-body {
+  padding: 0 !important;
+}
+
+.pf-v5-c-form__label, .pf-v5-c-form__label-text, label {
+  color: var(--jjd-foreground);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.pf-v5-c-form-control {
+  background: white !important;
+  color: var(--jjd-foreground) !important;
+  border: 1px solid var(--jjd-input) !important;
+  border-radius: 8px;
+}
+
+.pf-v5-c-form-control::before, .pf-v5-c-form-control::after {
+  border: 0 !important;
+}
+
+.pf-v5-c-form-control.pf-m-error {
+  border-color: #d32f2f !important;
+}
+
+.pf-v5-c-form-control input {
+  min-width: 0;
+  min-height: 44px;
+  color: var(--jjd-foreground) !important;
+  background: transparent !important;
+  border: 0 !important;
+  font-size: 14px;
+  padding: 10px 12px;
+}
+
+.pf-v5-c-form-control:focus-within {
+  outline: 2px solid var(--jjd-primary);
+  outline-offset: 2px;
+}
+
+.pf-v5-c-form-control input:focus {
+  outline: none;
+}
+
+.pf-v5-c-input-group .pf-v5-c-form-control {
+  border-radius: 8px 0 0 8px;
+}
+
+.pf-v5-c-input-group .pf-v5-c-button.pf-m-control {
+  min-height: 44px;
+  background: white;
+  color: var(--jjd-foreground);
+  border: 1px solid var(--jjd-input);
+  border-left: 0;
+  border-radius: 0 8px 8px 0;
+}
+
+.pf-v5-c-button.pf-m-primary {
+  width: 100%;
+  min-height: 44px;
+  background: var(--jjd-primary) !important;
+  border-color: var(--jjd-primary) !important;
+  border-radius: 8px;
+  color: white !important;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 10px 16px;
+}
+
+.pf-v5-c-button.pf-m-primary:hover {
+  background: var(--jjd-primary-hover) !important;
+  border-color: var(--jjd-primary-hover) !important;
+}
+
+.pf-v5-c-button.pf-m-secondary {
+  min-height: 44px;
+  color: var(--jjd-foreground) !important;
+  background: transparent !important;
+  border: 1px solid var(--jjd-input) !important;
+  border-radius: 8px;
+}
+
+.pf-v5-c-button:focus-visible, a:focus-visible {
+  outline: 2px solid var(--jjd-primary);
+  outline-offset: 2px;
+}
+
+.pf-v5-c-login__main-footer, .pf-v5-c-login__main-footer-band {
+  background: transparent !important;
+  padding-inline: 0 !important;
+}
+
+.instruction, #kc-info, .pf-v5-c-login__main-footer {
+  color: var(--jjd-muted);
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+a {
+  color: var(--jjd-primary);
+}
+
+@media (max-width: 480px) {
+  .pf-v5-c-login {
+    padding: 24px 16px;
+  }
+}

@@ -1,0 +1,147 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      - POSTGRES_USER=jjdguard
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=jjdguard
+    volumes:
+      - ${WT}/deploy/migrations:/migrations:ro
+      - ${WT}/deploy/docker-compose/initdb/001_init_enterprise.sql:/docker-entrypoint-initdb.d/001_init_enterprise.sql:ro
+      - ${WT}/deploy/lib:/mlib:ro
+    healthcheck:
+      test: ["CMD-SHELL", "psql -U jjdguard -d jjdguard -Atc \"SELECT to_regclass('public.audit_dispositions') IS NOT NULL\" | grep -qx t"]
+      interval: 3s
+      timeout: 5s
+      retries: 60
+  redis:
+    image: valkey/valkey:8.1.10-alpine
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    command: ["sh", "-c", "exec valkey-server --save '' --appendonly no --requirepass \"$${REDIS_PASSWORD}\""]
+    healthcheck:
+      test: ["CMD-SHELL", "valkey-cli -a \"$${REDIS_PASSWORD}\" ping | grep PONG"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+  upstream:
+    image: python:3.12-slim
+    command: ["python", "/m/mock_upstream.py"]
+    volumes: ["./mock_upstream.py:/m/mock_upstream.py:ro"]
+  control-plane:
+    image: alpine:latest
+    command: ["/app/control-plane"]
+    working_dir: /app
+    ports: ["127.0.0.1:${E2E_CP_PORT}:8081"]
+    environment:
+      - LISTEN_ADDR=:8081
+      - GATEWAY_ENVIRONMENT_SCOPE=customer
+      - PRODUCT_PROFILE=gateway
+      - JJD_VERSION=delbtn-e2e
+      - UAG_AUDIT_HMAC_KEY=${UAG_AUDIT_HMAC_KEY}
+      - DATABASE_URL=postgres://jjdguard:${POSTGRES_PASSWORD}@postgres:5432/jjdguard?sslmode=disable
+      - REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379/0
+      - SECURITY_ENGINE_URL=http://security-engine:8000
+      - GATEWAY_CORE_URL=http://gateway-core:8080
+      - SECURITY_AUDIT_ONLY=false
+      - SESSION_COOKIE_SECURE=false
+      - JJD_PROVIDER_SECRET_KEY=${JJD_PROVIDER_SECRET_KEY}
+      - JJD_INTERNAL_API_SECRET=${JJD_INTERNAL_API_SECRET}
+      - JJD_SEMANTIC_GATEWAY_ATTESTATION_KEY=${JJD_SEMANTIC_GATEWAY_ATTESTATION_KEY}
+      - JJD_RULE_PACK_ATTESTATION_TENANT=tenant_default
+      - JJD_RULE_PACK_ATTESTATION_TOKEN=${JJD_RULE_PACK_ATTESTATION_TOKEN}
+      - BOOTSTRAP_ADMIN_USERNAME=admin
+      - BOOTSTRAP_ADMIN_EMAIL=admin@local
+      - BOOTSTRAP_ADMIN_PASSWORD=${BOOTSTRAP_ADMIN_PASSWORD}
+      - JJD_LICENSE_ENFORCE=false
+      - RETENTION_STORE_PATH=/var/lib/jjdguard/retention
+    volumes:
+      - ./bin/control-plane:/app/control-plane:ro
+      - /usr/share/zoneinfo:/usr/share/zoneinfo:ro
+      - ${WT}/VERSION:/app/VERSION:ro
+      - ${WT}/deploy/seeds:/etc/uag/seeds:ro
+    tmpfs: ["/var/lib/jjdguard/retention", "/tmp"]
+    depends_on:
+      postgres: {condition: service_healthy}
+      redis: {condition: service_healthy}
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8081/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 40
+  security-engine:
+    image: ${E2E_ENGINE_IMAGE}
+    environment:
+      - LISTEN_ADDR=:8000
+      - SECURITY_AUDIT_ONLY=false
+      - CONTROL_PLANE_URL=http://control-plane:8081
+      - SECURITY_NODE_ID=security-engine:delbtn
+      - SECURITY_SHARED_STATE_URL=redis://:${REDIS_PASSWORD}@redis:6379/3
+      - JJD_INTERNAL_API_SECRET=${JJD_INTERNAL_API_SECRET}
+      - SECURITY_TENANT_ID=tenant_default
+      - SECURITY_RULE_PACK_ATTESTATION_TOKEN=${JJD_RULE_PACK_ATTESTATION_TOKEN}
+      - SECURITY_SEMANTIC_ENABLED=false
+      - SECURITY_SEMANTIC_INPUT_ENABLED=false
+      - SECURITY_SEMANTIC_OUTPUT_ENABLED=false
+      - SECURITY_TIER1_ENABLED=false
+      - SECURITY_FP_SUPPRESSION_ENABLED=false
+      - PYTHONDONTWRITEBYTECODE=1
+    volumes:
+      - ${WT}/apps/security-engine/app:/app/app:ro
+    depends_on:
+      redis: {condition: service_healthy}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
+      interval: 5s
+      timeout: 5s
+      retries: 60
+  gateway-core:
+    image: alpine:latest
+    command: ["/app/gateway-core"]
+    working_dir: /app
+    ports: ["127.0.0.1:${E2E_GW_PORT}:8080"]
+    environment:
+      - LISTEN_ADDR=:8080
+      - GATEWAY_ENVIRONMENT_SCOPE=customer
+      - PRODUCT_PROFILE=gateway
+      - JJD_VERSION=delbtn-e2e
+      - RETENTION_STORE_PATH=/var/lib/jjdguard/retention
+      - DATABASE_URL=postgres://jjdguard:${POSTGRES_PASSWORD}@postgres:5432/jjdguard?sslmode=disable
+      - REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379/0
+      - SECURITY_ENGINE_URL=http://security-engine:8000
+      - SECURITY_AUDIT_ONLY=false
+      - CONTROL_PLANE_URL=http://control-plane:8081
+      - JJD_PROVIDER_SECRET_KEY=${JJD_PROVIDER_SECRET_KEY}
+      - JJD_INTERNAL_API_SECRET=${JJD_INTERNAL_API_SECRET}
+      - JJD_SEMANTIC_GATEWAY_ATTESTATION_KEY=${JJD_SEMANTIC_GATEWAY_ATTESTATION_KEY}
+      - PROXY_ENABLED=false
+      - SECURITY_SEMANTIC_AGENT_ENABLED=false
+    volumes:
+      - ./bin/gateway-core:/app/gateway-core:ro
+      - /usr/share/zoneinfo:/usr/share/zoneinfo:ro
+    tmpfs: ["/var/lib/jjdguard/retention", "/tmp"]
+    depends_on:
+      postgres: {condition: service_healthy}
+      redis: {condition: service_healthy}
+      control-plane: {condition: service_healthy}
+      security-engine: {condition: service_healthy}
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8080/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 40
+  web-console:
+    image: node:22-bookworm-slim
+    command: ["node", "server.js"]
+    working_dir: /app
+    ports: ["127.0.0.1:${E2E_WEB_PORT}:3000"]
+    environment:
+      - PORT=3000
+      - TLS_ENABLED=false
+      - CONTROL_PLANE_URL=http://control-plane:8081
+      - GATEWAY_CORE_URL=http://gateway-core:8080
+    volumes:
+      - ${WT}/apps/web-console/server.js:/app/server.js:ro
+      - ${WT}/apps/web-console/dist:/app/dist:ro
+    depends_on:
+      control-plane: {condition: service_healthy}

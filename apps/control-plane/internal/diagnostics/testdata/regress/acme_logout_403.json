@@ -1,0 +1,124 @@
+{
+  "name": "acme_logout_403",
+  "description": "客户现场：门户域名变 IP 导致登出 403，根因是运行配置与开机链 PORTAL_PUBLIC_URL 漂移",
+  "fixture": {
+    "host_snapshot": {
+      "at": "@0m",
+      "agent_version": "1.0.0",
+      "containers": [
+        {
+          "name": "jjd-chat-portal-ui-1",
+          "service": "chat-portal-ui",
+          "state": "running",
+          "health": "healthy",
+          "restart_count": 0,
+          "image": "chat-portal-ui:2.9.7",
+          "image_id": "sha256:aaa",
+          "started_at": "@-30h"
+        },
+        {
+          "name": "jjd-chat-portal-proxy-1",
+          "service": "chat-portal-proxy",
+          "state": "running",
+          "health": "healthy",
+          "restart_count": 0,
+          "image": "chat-portal-proxy:2.9.7",
+          "image_id": "sha256:bbb",
+          "started_at": "@-30h"
+        }
+      ],
+      "drift": [
+        {
+          "service": "chat-portal-ui",
+          "image_match": true,
+          "env_diff": [
+            {
+              "key": "PORTAL_PUBLIC_URL",
+              "sensitive": false,
+              "chain": "https://testapi2.example.cn",
+              "running": "https://192.168.20.246"
+            }
+          ]
+        },
+        {
+          "service": "chat-portal-proxy",
+          "image_match": true,
+          "env_diff": [
+            {
+              "key": "PORTAL_PUBLIC_URL",
+              "sensitive": false,
+              "chain": "https://testapi2.example.cn",
+              "running": "https://192.168.20.246"
+            }
+          ]
+        },
+        {
+          "service": "gateway-core",
+          "image_match": true,
+          "env_diff": []
+        }
+      ],
+      "disk": [
+        {
+          "mount": "/",
+          "used_pct": 41,
+          "avail_bytes": 107374182400
+        }
+      ],
+      "certs": [],
+      "errors": []
+    },
+    "license": {
+      "state": "valid"
+    }
+  },
+  "input": {
+    "kind": "health",
+    "scope": "admin"
+  },
+  "expect": {
+    "tier": "L2",
+    "must_check_ids_any": [
+      "host_drift"
+    ],
+    "must_keywords": [
+      "不一致",
+      "chat-portal-ui",
+      "chat-portal-proxy"
+    ],
+    "must_level": {
+      "host_drift": "confirmed"
+    },
+    "forbid_keywords": [
+      "限流",
+      "欠费"
+    ],
+    "l3": {
+      "must_keywords_any": [
+        "不一致",
+        "漂移",
+        "差异"
+      ],
+      "must_keywords_any2": [
+        "chat-portal",
+        "门户",
+        "PORTAL_PUBLIC_URL"
+      ],
+      "level_by_kw": [
+        {
+          "kw": [
+            "漂移",
+            "不一致",
+            "差异",
+            "开机链",
+            "地址"
+          ],
+          "level": "confirmed"
+        }
+      ],
+      "forbid_keywords": [
+        "欠费"
+      ]
+    }
+  }
+}

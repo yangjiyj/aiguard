@@ -1,0 +1,80 @@
+# chat-edge 只在 Compose 内网承载门户与 SSO；公共入口由 web-console 统一发布。
+# :3100 / :8280 承载门户；:8180 只开放品牌化 OIDC 协议路径。
+{
+	admin off
+	auto_https off
+	persist_config off
+}
+
+:3100 {
+	encode gzip zstd
+	route {
+		forward_auth chat-portal-proxy:8788 {
+			uri /gate
+		}
+		@portal path /admin /admin/* /portal /portal/*
+		reverse_proxy @portal chat-portal-proxy:8788
+		reverse_proxy chat-portal-ui:3100
+	}
+}
+
+:8280 {
+	encode gzip zstd
+	@portal path /admin /admin/* /portal/*
+	handle @portal {
+		forward_auth chat-portal-proxy:8788 {
+			uri /gate
+		}
+		reverse_proxy chat-portal-proxy:8788
+	}
+	handle {
+		respond "Not Found" 404
+	}
+}
+
+# 身份引擎不直接发布宿主端口；该站点只由 chat-edge 暴露。
+:8180 {
+	header -Server
+
+	@edge_health path /healthz
+	handle @edge_health {
+		respond "ok" 200
+	}
+
+	encode gzip zstd
+
+	# 先拒绝所有原始实现路径、管理 API 和 master realm。
+	@raw_identity_paths path /admin /admin/* /realms /realms/* /resources /resources/*
+	handle @raw_identity_paths {
+		respond "Not Found" 404
+	}
+
+	@private_identity_paths path /sso/admin /sso/admin/* /sso/realms/master /sso/realms/master/*
+	handle @private_identity_paths {
+		respond "Not Found" 404
+	}
+
+	# 登录页静态资源；版本化路径允许长期缓存。
+	@sso_resources path /sso/resources/*
+	handle @sso_resources {
+		reverse_proxy chat-idp:8180 {
+			header_down -Server
+			header_down -X-Powered-By
+			header_down Cache-Control "public, max-age=2592000, immutable"
+			header_down -Pragma
+		}
+	}
+
+	# 唯一公开的身份协议边界：JJDGuard 业务 realm。
+	@sso_realm path /sso/realms/jjdguard /sso/realms/jjdguard/*
+	handle @sso_realm {
+		reverse_proxy chat-idp:8180 {
+			header_down -Server
+			header_down -X-Powered-By
+		}
+	}
+
+	handle {
+		respond "Not Found" 404
+	}
+}

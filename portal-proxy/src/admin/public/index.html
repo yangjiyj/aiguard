@@ -1,0 +1,975 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>门户管理后台</title>
+  <style>
+    :root {
+      --bg: #f4f6fb; --card: #ffffff; --line: #e3e8f0; --ink: #1f2733; --sub: #67707e;
+      --brand: #2f5bea; --brand-weak: #eaf0ff; --ok: #167c4a; --ok-bg: #e6f6ec;
+      --warn: #9a6a00; --warn-bg: #fdf3d9; --danger: #c0392b; --danger-bg: #fdecea;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: -apple-system, "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+      background: var(--bg); color: var(--ink); font-size: 14px; line-height: 1.5; }
+    header { background: #fff; border-bottom: 1px solid var(--line); padding: 14px 24px;
+      display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 5; }
+    header h1 { font-size: 18px; margin: 0; }
+    header .right { display: flex; align-items: center; gap: 12px; color: var(--sub); font-size: 13px; }
+    main { max-width: 1120px; margin: 0 auto; padding: 22px 24px 60px; }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 20px 22px;
+      margin-bottom: 22px; box-shadow: 0 1px 2px rgba(20,30,50,.03); }
+    .card h2 { font-size: 15px; margin: 0 0 14px; display: flex; align-items: center; gap: 8px; }
+    .card h2 .desc { font-weight: 400; color: var(--sub); font-size: 12px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+    th { color: var(--sub); font-weight: 600; background: #fafbfe; white-space: nowrap; }
+    td.mono, .mono { font-family: ui-monospace, "SFMono-Regular", Menlo, monospace; font-size: 12px; color: #334; }
+    .pill { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 12px; line-height: 1.6; }
+    .pill.ok { background: var(--ok-bg); color: var(--ok); }
+    .pill.off { background: #eef1f5; color: #6b7280; }
+    .pill.warn { background: var(--warn-bg); color: var(--warn); }
+    .pill.brand { background: var(--brand-weak); color: var(--brand); }
+    button { font: inherit; cursor: pointer; border-radius: 8px; border: 1px solid var(--line);
+      background: #fff; padding: 7px 14px; color: var(--ink); transition: .15s; }
+    button:hover { border-color: #c4cddd; }
+    button.primary { background: var(--brand); border-color: var(--brand); color: #fff; }
+    button.primary:hover { background: #244fd0; }
+    button.ghost { background: transparent; border: none; color: var(--brand); padding: 4px 8px; }
+    button.danger { color: var(--danger); border: none; background: transparent; padding: 4px 8px; }
+    input, textarea { font: inherit; width: 100%; padding: 8px 11px; border: 1px solid var(--line);
+      border-radius: 8px; background: #fff; color: var(--ink); }
+    input:focus, textarea:focus { outline: none; border-color: var(--brand); }
+    label { display: block; font-size: 12px; color: var(--sub); margin: 0 0 5px; }
+    .field { margin-bottom: 13px; }
+    .row { display: flex; gap: 14px; flex-wrap: wrap; }
+    .row .field { flex: 1; min-width: 160px; }
+    .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 10px; }
+    .muted { color: var(--sub); }
+    .empty { color: var(--sub); padding: 18px 4px; text-align: center; }
+    .result { border-radius: 10px; padding: 14px 16px; margin-top: 12px; border: 1px solid var(--line); background: #fbfcfe; }
+    .result.ok { border-color: #bfe3cd; background: var(--ok-bg); }
+    .result.err { border-color: #f3c6c1; background: var(--danger-bg); color: #8a271c; }
+    .result h4 { margin: 0 0 8px; font-size: 14px; }
+    .kv { display: grid; grid-template-columns: 120px 1fr; gap: 4px 12px; font-size: 13px; }
+    .kv .k { color: var(--sub); }
+    .tag-list { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tag { background: #eef2fb; border: 1px solid #dde5f5; border-radius: 6px; padding: 1px 8px; font-size: 12px; font-family: ui-monospace, monospace; }
+    .login-wrap { max-width: 420px; margin: 8vh auto; }
+    .hidden { display: none !important; }
+    .hint { font-size: 12px; color: var(--sub); margin-top: 6px; }
+    .flash { padding: 10px 14px; border-radius: 8px; margin-bottom: 14px; font-size: 13px; }
+    .flash.ok { background: var(--ok-bg); color: var(--ok); }
+    .flash.err { background: var(--danger-bg); color: var(--danger); }
+    .actions-cell { white-space: nowrap; }
+    /* Phase 3 Track B：用量看板 / 安全告警 */
+    .pill.info { background: #eaf0ff; color: #2f5bea; }
+    .pill.danger { background: var(--danger-bg); color: var(--danger); }
+    .pill.crit { background: #7a1c12; color: #fff; }
+    .toolbar-l { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    select.mini { padding: 6px 10px; border: 1px solid var(--line); border-radius: 8px; background: #fff; color: var(--ink); font: inherit; }
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+    .stat { border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; background: #fbfcfe; }
+    .stat .lbl { font-size: 12px; color: var(--sub); margin-bottom: 6px; }
+    .stat .num { font-size: 24px; font-weight: 600; line-height: 1.1; letter-spacing: .3px; font-variant-numeric: tabular-nums; }
+    .stat .sub { font-size: 12px; color: var(--sub); margin-top: 5px; }
+    .sub-h { font-size: 13px; font-weight: 600; color: var(--ink); margin: 20px 0 12px; }
+    .chart { width: 100%; overflow-x: auto; }
+    .chart svg { display: block; width: 100%; height: auto; }
+    .hbars { display: flex; flex-direction: column; gap: 9px; }
+    .hbar { display: grid; grid-template-columns: 168px 1fr auto; align-items: center; gap: 12px; }
+    .hbar .name { font-size: 13px; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .hbar .track { background: #eef2fb; border-radius: 6px; height: 14px; overflow: hidden; }
+    .hbar .fill { height: 100%; background: linear-gradient(90deg, #4f78ff, #2f5bea); border-radius: 6px; min-width: 2px; }
+    .hbar .val { font-size: 12px; color: var(--sub); white-space: nowrap; font-variant-numeric: tabular-nums; }
+    .counts { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 10px; }
+    .counts .lead { font-size: 12px; color: var(--sub); }
+    .win-note { font-size: 12px; color: var(--sub); margin: 0 0 14px; }
+    @media (max-width: 640px) { .hbar { grid-template-columns: 110px 1fr; } .hbar .val { grid-column: 1 / -1; } }
+    /* Phase 3 Track D：OIDC 登录 / 角色化视图 / 角色指派 */
+    .role-badge { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; }
+    .role-badge.admin { background: #efe6ff; color: #6b2fea; }
+    .role-badge.manager { background: var(--brand-weak); color: var(--brand); }
+    .role-badge.employee { background: #eef1f5; color: #6b7280; }
+    .scope-banner { background: var(--brand-weak); border: 1px solid #d3ddff; border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; font-size: 13px; color: #33407a; }
+    .scope-banner b { color: var(--brand); }
+    details.breakglass { margin-top: 16px; border-top: 1px dashed var(--line); padding-top: 14px; }
+    details.breakglass summary { cursor: pointer; font-size: 13px; color: var(--sub); user-select: none; }
+    details.breakglass summary:hover { color: var(--ink); }
+    .btn-oidc { width: 100%; font-size: 15px; padding: 11px 14px; }
+    .login-sub { color: var(--sub); font-size: 13px; margin: 2px 0 18px; }
+  </style>
+</head>
+<body>
+  <!-- 登录门 -->
+  <section id="loginView" class="login-wrap">
+    <div class="card">
+      <h2>门户管理后台 · 登录</h2>
+      <p class="login-sub">使用企业账号登录（与聊天门户同一套企业身份）。管理员可见全局看板与角色指派，部门主管仅见本部门用量与告警。</p>
+      <div id="loginFlash"></div>
+      <button class="primary btn-oidc" id="oidcLoginBtn">使用企业账号登录</button>
+      <details class="breakglass">
+        <summary>超管令牌应急入口</summary>
+        <p class="muted" style="margin:10px 0 8px">仅在企业登录不可用时使用。以 <span class="mono">X-Portal-Admin-Token</span> 校验，令牌仅保存在本页会话中，关闭标签页即清除。</p>
+        <div class="field">
+          <label>应急管理令牌</label>
+          <input id="tokenInput" type="password" placeholder="粘贴 PORTAL_ADMIN_TOKEN" autocomplete="off" />
+        </div>
+        <button id="loginBtn" style="width:100%">以应急令牌登录</button>
+      </details>
+    </div>
+  </section>
+
+  <!-- 主界面 -->
+  <div id="appView" class="hidden">
+    <header>
+      <h1>门户管理后台</h1>
+      <div class="right">
+        <span id="whoami" class="muted"></span>
+        <span id="roleBadge"></span>
+        <button id="logoutBtn">退出登录</button>
+      </div>
+    </header>
+    <main>
+      <div id="globalFlash"></div>
+
+      <!-- 普通员工提示（role=employee） -->
+      <div class="card role-employee hidden" id="card-employee">
+        <h2>你是普通员工</h2>
+        <p class="muted" style="margin:0">本管理后台仅供管理员与部门主管使用。请直接使用企业聊天门户（LobeHub），你的用量与合规审计由系统自动归因，无需在此操作。</p>
+      </div>
+
+      <!-- 部门主管 · 本部门用量（role=manager，scope 服务端强制） -->
+      <div class="card role-manager hidden" id="card-dept-usage">
+        <div class="toolbar">
+          <h2>本部门用量 <span class="desc">仅本部门聚合，不含任何个人对话内容</span></h2>
+          <div class="toolbar-l">
+            <select id="deptUsageRange" class="mini">
+              <option value="7d">近 7 天</option>
+              <option value="14d">近 14 天</option>
+              <option value="30d" selected>近 30 天</option>
+              <option value="90d">近 90 天</option>
+            </select>
+            <button id="refreshDeptUsage">刷新</button>
+          </div>
+        </div>
+        <div id="deptScopeBox"></div>
+        <div id="deptUsageBox"><div class="empty">加载中…</div></div>
+      </div>
+
+      <!-- 部门主管 · 本部门安全告警（role=manager） -->
+      <div class="card role-manager hidden" id="card-dept-alerts">
+        <div class="toolbar">
+          <h2>本部门安全告警 <span class="desc">仅本部门项目命中的审计事件（已脱敏），近 24 小时</span></h2>
+          <div class="toolbar-l">
+            <select id="deptAlertSeverity" class="mini">
+              <option value="">全部严重度</option>
+              <option value="low">低危</option>
+              <option value="medium">中危</option>
+              <option value="high">高危</option>
+              <option value="critical">严重</option>
+            </select>
+            <button id="refreshDeptAlerts">刷新</button>
+          </div>
+        </div>
+        <div id="deptAlertsBox"><div class="empty">加载中…</div></div>
+      </div>
+
+      <!-- 用量看板（Phase 3 Track B，role=admin 全局） -->
+      <div class="card role-admin hidden" id="card-usage">
+        <div class="toolbar">
+          <h2>用量看板 <span class="desc">逐日请求 / Tokens / 成本，数据源为网关只读用量端点</span></h2>
+          <div class="toolbar-l">
+            <select id="usageRange" class="mini">
+              <option value="7d">近 7 天</option>
+              <option value="14d">近 14 天</option>
+              <option value="30d" selected>近 30 天</option>
+              <option value="90d">近 90 天</option>
+            </select>
+            <button id="refreshUsage">刷新</button>
+          </div>
+        </div>
+        <div id="usageBox"><div class="empty">加载中…</div></div>
+      </div>
+
+      <!-- 安全告警（Phase 3 Track B，role=admin 全局） -->
+      <div class="card role-admin hidden" id="card-alerts">
+        <div class="toolbar">
+          <h2>安全告警 <span class="desc">网关审计事件（已脱敏），近 24 小时窗口</span></h2>
+          <div class="toolbar-l">
+            <select id="alertSeverity" class="mini">
+              <option value="">全部严重度</option>
+              <option value="low">低危</option>
+              <option value="medium">中危</option>
+              <option value="high">高危</option>
+              <option value="critical">严重</option>
+            </select>
+            <select id="alertLimit" class="mini">
+              <option value="50">显示 50 条</option>
+              <option value="100" selected>显示 100 条</option>
+              <option value="200">显示 200 条</option>
+            </select>
+            <button id="refreshAlerts">刷新</button>
+          </div>
+        </div>
+        <div id="alertsBox"><div class="empty">加载中…</div></div>
+      </div>
+
+      <!-- 角色指派（Phase 3 Track D，role=admin） -->
+      <div class="card role-admin hidden" id="card-roles">
+        <div class="toolbar">
+          <h2>角色指派 <span class="desc">三级角色：员工 / 部门主管 / 管理员；主管须指定管辖部门</span></h2>
+          <button id="refreshRoles">刷新</button>
+        </div>
+        <div id="rolesBox"><div class="empty">加载中…</div></div>
+
+        <div style="margin-top:16px;border-top:1px dashed var(--line);padding-top:16px">
+          <h2 style="font-size:14px" id="roleFormTitle">指派 / 更新角色</h2>
+          <p class="hint" style="margin-top:0">角色以 OIDC 主体（sub）为键。角色来源＝OIDC role claim 优先，其次此表，缺省为员工。</p>
+          <div class="row">
+            <div class="field"><label>OIDC 主体 sub</label><input id="ro_subject" class="mono" placeholder="登录后可在下方列表或 /portal/auth/me 查看" /></div>
+            <div class="field"><label>邮箱</label><input id="ro_email" placeholder="如 alice@corp.test" /></div>
+          </div>
+          <div class="row">
+            <div class="field" style="max-width:200px"><label>角色</label>
+              <select id="ro_role" style="width:100%;padding:8px 11px;border:1px solid var(--line);border-radius:8px">
+                <option value="employee">员工</option>
+                <option value="manager">部门主管</option>
+                <option value="admin">管理员</option>
+              </select>
+            </div>
+            <div class="field" id="ro_dept_field"><label>管辖部门（逗号分隔，仅部门主管需要）</label><input id="ro_depts" placeholder="如 engineering,sales" /></div>
+          </div>
+          <div style="display:flex;gap:10px">
+            <button class="primary" id="roleSubmit">保存角色</button>
+            <button id="roleReset" class="hidden">取消编辑</button>
+          </div>
+          <div id="roleFlash"></div>
+        </div>
+      </div>
+
+      <!-- 系统配置（Phase4 阶段C，role=admin）：网关用户打通开关（双层门：部署 env 放行 + 后台开关） -->
+      <div class="card role-admin hidden" id="card-system-config">
+        <div class="toolbar">
+          <h2>系统配置 <span class="desc">网关用户打通开关（占用网关授权用户配额，默认关闭）</span></h2>
+          <button id="refreshSystemConfig">刷新</button>
+        </div>
+        <div id="systemConfigBox"><div class="empty">加载中…</div></div>
+      </div>
+
+      <!-- 用户列表 -->
+      <div class="card role-admin hidden" id="card-users">
+        <div class="toolbar">
+          <h2>员工与分组归属 <span class="desc">已签发网关密钥的员工及其当前分组</span></h2>
+          <button id="refreshUsers">刷新</button>
+        </div>
+        <div id="usersBox"><div class="empty">加载中…</div></div>
+      </div>
+
+      <!-- 分组映射规则 -->
+      <div class="card role-admin hidden" id="card-rules">
+        <div class="toolbar">
+          <h2>分组映射规则 <span class="desc">按部门命中，优先级越小越先匹配</span></h2>
+          <button id="refreshRules">刷新</button>
+        </div>
+        <div id="rulesBox"><div class="empty">加载中…</div></div>
+
+        <div style="margin-top:16px;border-top:1px dashed var(--line);padding-top:16px">
+          <h2 style="font-size:14px" id="ruleFormTitle">新增映射规则</h2>
+          <div class="row">
+            <div class="field"><label>匹配部门（department）</label><input id="rf_matchValue" placeholder="如 engineering" /></div>
+            <div class="field"><label>本地分组名</label><input id="rf_mappedGroup" placeholder="如 engineering" /></div>
+          </div>
+          <div class="row">
+            <div class="field"><label>网关项目 ID</label><input id="rf_projectId" class="mono" placeholder="proj_xxxxxxxx" /></div>
+            <div class="field" style="max-width:140px"><label>优先级</label><input id="rf_priority" type="number" value="100" /></div>
+            <div class="field" style="max-width:150px"><label>状态</label>
+              <select id="rf_enabled" style="width:100%;padding:8px 11px;border:1px solid var(--line);border-radius:8px">
+                <option value="true">启用</option><option value="false">停用</option>
+              </select>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px">
+            <button class="primary" id="ruleSubmit">保存规则</button>
+            <button id="ruleReset" class="hidden">取消编辑</button>
+          </div>
+          <div id="ruleFlash"></div>
+        </div>
+      </div>
+
+      <!-- 新建分组（全托管） -->
+      <div class="card role-admin hidden" id="card-group">
+        <h2>新建分组（全托管） <span class="desc">一步建齐：网关项目 + 模型策略 + 映射规则</span></h2>
+        <div class="row">
+          <div class="field"><label>分组名（英数/下划线/连字符）</label><input id="gf_name" placeholder="如 finance" /></div>
+          <div class="field"><label>匹配部门（department）</label><input id="gf_department" placeholder="如 finance" /></div>
+        </div>
+        <div class="field">
+          <label>允许的模型（每行一个，或逗号分隔）</label>
+          <textarea id="gf_models" rows="3" placeholder="如&#10;deepseek-v3&#10;claude-opus-4-7"></textarea>
+          <div class="hint">这些模型会写入网关项目的「允许清单」，是真正的强制点（未授权模型将被网关硬拒）。</div>
+        </div>
+        <button class="primary" id="groupSubmit">创建分组</button>
+        <div id="groupResult"></div>
+      </div>
+
+      <!-- 测试映射 -->
+      <div class="card role-admin hidden" id="card-testmapping">
+        <h2>测试映射 <span class="desc">输入一个部门值，预览它会落到哪个分组与网关项目</span></h2>
+        <div class="row">
+          <div class="field" style="flex:2"><label>部门值（department）</label><input id="tm_department" placeholder="如 engineering / finance / 留空=无部门" /></div>
+          <div class="field" style="max-width:140px;display:flex;align-items:flex-end">
+            <button class="primary" id="testMappingBtn" style="width:100%">测试</button>
+          </div>
+        </div>
+        <div id="testResult"></div>
+      </div>
+    </main>
+  </div>
+
+<script>
+(() => {
+  'use strict';
+  const TKEY = 'portalAdminToken';
+  const $ = (id) => document.getElementById(id);
+  const el = (tag, attrs = {}, ...kids) => {
+    const n = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (k === 'class') n.className = v; else if (k === 'html') n.innerHTML = v; else n.setAttribute(k, v);
+    }
+    for (const kid of kids) n.append(kid instanceof Node ? kid : document.createTextNode(kid));
+    return n;
+  };
+  const esc = (s) => String(s == null ? '' : s);
+
+  // ---- 中文枚举映射（绝不露原始英文）----
+  const groupCn = (g) => g == null ? '—' : (g === 'default' ? '默认组' : g);
+  const statusCn = (s) => ({ active: '生效', revoked: '已吊销', disabled: '已停用' })[s] || (s ? '未知（' + s + '）' : '—');
+  const matchTypeCn = (t) => ({ department: '按部门' })[t] || (t || '—');
+  const enabledCn = (b) => b ? '启用' : '停用';
+  const fmtTime = (iso) => {
+    if (!iso) return '—';
+    const d = new Date(iso);
+    if (isNaN(d.getTime())) return '—';
+    const p = (n) => String(n).padStart(2, '0');
+    return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
+  };
+
+  // ---- Phase 3 Track D：角色中文枚举（绝不露 employee/manager/admin 原始英文）----
+  const roleCn = (r) => ({ employee: '员工', manager: '部门主管', admin: '管理员' })[r] || (r || '—');
+
+  // ---- Phase 3 Track B：看板/告警 中文枚举 + 格式化 + 图形几何（纯函数，已 node --test 覆盖）----
+  const severityCn = (s) => ({ low: '低危', medium: '中危', high: '高危', critical: '严重' })[s] || '未知';
+  const severityCls = (s) => ({ low: 'info', medium: 'warn', high: 'danger', critical: 'crit' })[s] || 'off';
+  const actionCn = (a) => ({
+    block: '已拦截', blocked: '已拦截',
+    audit: '仅审计', audit_only: '仅审计', security_audit_only: '仅审计',
+    mask: '已脱敏', masked: '已脱敏',
+    reply: '已改写', rewrite: '已改写', rewritten: '已改写',
+    agentguard_tool_decision: '工具调用管控',
+    allow: '已放行', allowed: '已放行', pass: '已放行', passed: '已放行',
+  }[a] || '其他处置');
+  const eventTypeCn = (t) => ({
+    security_check: '安全检测', prompt_injection: '提示注入', jailbreak: '越狱尝试',
+    prompt_stego: '提示隐写', pii: '数据泄漏', pii_leak: '数据泄漏', data_leak: '数据泄漏',
+    secret: '密钥泄漏', secret_leak: '密钥泄漏', tool_call: '工具调用', agentguard: '工具调用',
+  }[t] || '其他事件');
+  const categoryCn = (c) => ({
+    email: '邮箱', phone: '手机号', mobile: '手机号', id_card: '身份证', idcard: '身份证',
+    bank_card: '银行卡', bankcard: '银行卡', secret: '密钥', api_key: '密钥', apikey: '密钥',
+    prompt_injection: '提示注入', jailbreak: '越狱',
+  }[c] || null);
+  const fmtInt = (n) => String(Math.round(Number(n) || 0)).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  const fmtCompact = (n) => { const v = Number(n) || 0; if (v >= 1e8) return (v / 1e8).toFixed(2) + '亿'; if (v >= 1e4) return (v / 1e4).toFixed(1) + '万'; return String(v); };
+  const fmtCost = (n) => { const v = Number(n) || 0; if (v <= 0) return '$0'; return '$' + (v >= 1 ? v.toFixed(2) : v.toFixed(4)); };
+  const ruleDisplay = (ev) => { if (ev && ev.ruleName) return ev.ruleName; const cat = ev && ev.matchedSummary && ev.matchedSummary.category; const cn = cat ? categoryCn(cat) : null; return cn ? '命中：' + cn : '—'; };
+  const barGeom = (values, padL, padT, plotW, plotH) => {
+    const n = values.length; const max = Math.max(1, ...values.map((v) => Number(v) || 0));
+    const slot = plotW / Math.max(1, n); const bw = slot * 0.62;
+    return values.map((raw, i) => { const v = Number(raw) || 0; const h = plotH * (v / max); return { x: padL + i * slot + (slot - bw) / 2, y: padT + plotH - h, w: bw, h, v }; });
+  };
+  const shareWidth = (v, max) => { const m = Number(max) || 0; if (m <= 0) return 0; return ((Number(v) || 0) / m) * 100; };
+  const xmlEsc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+  // ---- token 状态 ----
+  const getToken = () => sessionStorage.getItem(TKEY) || '';
+  const setToken = (t) => sessionStorage.setItem(TKEY, t);
+  const clearToken = () => sessionStorage.removeItem(TKEY);
+
+  async function api(path, opts = {}) {
+    const res = await fetch(path, {
+      ...opts,
+      headers: { 'content-type': 'application/json', 'X-Portal-Admin-Token': getToken(), ...(opts.headers || {}) },
+    });
+    let data = null;
+    try { data = await res.json(); } catch { /* 无体 */ }
+    if (res.status === 401) { showApp(false); flash($('loginFlash'), 'err', '管理令牌无效或已失效，请重新登录'); clearToken(); throw new Error('unauthorized'); }
+    if (!res.ok) {
+      const msg = (data && data.error && data.error.message) || ('请求失败（HTTP ' + res.status + '）');
+      const e = new Error(msg); e.code = data && data.error && data.error.code; throw e;
+    }
+    return data;
+  }
+
+  function flash(box, kind, msg) {
+    if (!box) return;
+    box.innerHTML = '';
+    if (!msg) return;
+    box.append(el('div', { class: 'flash ' + kind }, msg));
+    if (kind === 'ok') setTimeout(() => { box.innerHTML = ''; }, 4000);
+  }
+
+  // ---- 视图切换 ----
+  function showApp(on) {
+    $('appView').classList.toggle('hidden', !on);
+    $('loginView').classList.toggle('hidden', on);
+  }
+
+  // ---- 用户列表 ----
+  async function loadUsers() {
+    const box = $('usersBox');
+    box.innerHTML = '<div class="empty">加载中…</div>';
+    try {
+      const { data } = await api('/admin/api/users');
+      if (!data || data.length === 0) { box.innerHTML = '<div class="empty">暂无已签发的员工密钥</div>'; return; }
+      const t = el('table');
+      t.append(el('tr', {},
+        el('th', {}, '邮箱'), el('th', {}, '所属分组'), el('th', {}, '网关项目'),
+        el('th', {}, '密钥前缀'), el('th', {}, '状态'), el('th', {}, '上次部门'), el('th', {}, '上次评估')));
+      for (const u of data) {
+        t.append(el('tr', {},
+          el('td', {}, esc(u.email)),
+          el('td', {}, el('span', { class: 'pill brand' }, groupCn(u.mappedGroup))),
+          el('td', { class: 'mono' }, esc(u.gatewayProjectId) || '—'),
+          el('td', { class: 'mono' }, esc(u.keyPrefix)),
+          el('td', {}, el('span', { class: 'pill ' + (u.status === 'active' ? 'ok' : 'off') }, statusCn(u.status))),
+          el('td', {}, u.lastDepartment ? esc(u.lastDepartment) : '—'),
+          el('td', { class: 'muted' }, fmtTime(u.lastEvaluatedAt))));
+      }
+      box.innerHTML = ''; box.append(t);
+    } catch (e) { if (e.message !== 'unauthorized') box.innerHTML = '<div class="empty">加载失败：' + esc(e.message) + '</div>'; }
+  }
+
+  // ---- 规则表 ----
+  let editingRuleId = null;
+  async function loadRules() {
+    const box = $('rulesBox');
+    box.innerHTML = '<div class="empty">加载中…</div>';
+    try {
+      const { data } = await api('/admin/api/rules');
+      if (!data || data.length === 0) { box.innerHTML = '<div class="empty">暂无映射规则（未命中任何规则的员工走默认组）</div>'; return; }
+      const t = el('table');
+      t.append(el('tr', {},
+        el('th', {}, '匹配类型'), el('th', {}, '匹配部门'), el('th', {}, '本地分组'),
+        el('th', {}, '网关项目'), el('th', {}, '优先级'), el('th', {}, '状态'), el('th', {}, '操作')));
+      for (const r of data) {
+        const del = el('button', { class: 'danger' }, '删除');
+        del.onclick = () => removeRule(r);
+        const edit = el('button', { class: 'ghost' }, '编辑');
+        edit.onclick = () => beginEdit(r);
+        t.append(el('tr', {},
+          el('td', {}, matchTypeCn(r.matchType)),
+          el('td', {}, esc(r.matchValue)),
+          el('td', {}, el('span', { class: 'pill brand' }, groupCn(r.mappedGroup))),
+          el('td', { class: 'mono' }, esc(r.gatewayProjectId)),
+          el('td', {}, String(r.priority)),
+          el('td', {}, el('span', { class: 'pill ' + (r.enabled ? 'ok' : 'off') }, enabledCn(r.enabled))),
+          el('td', { class: 'actions-cell' }, edit, del)));
+      }
+      box.innerHTML = ''; box.append(t);
+    } catch (e) { if (e.message !== 'unauthorized') box.innerHTML = '<div class="empty">加载失败：' + esc(e.message) + '</div>'; }
+  }
+
+  function beginEdit(r) {
+    editingRuleId = r.id;
+    $('rf_matchValue').value = r.matchValue;
+    $('rf_mappedGroup').value = r.mappedGroup;
+    $('rf_projectId').value = r.gatewayProjectId;
+    $('rf_priority').value = r.priority;
+    $('rf_enabled').value = String(r.enabled);
+    $('ruleFormTitle').textContent = '编辑映射规则（' + r.matchValue + '）';
+    $('ruleReset').classList.remove('hidden');
+    window.scrollTo({ top: $('ruleFormTitle').offsetTop - 80, behavior: 'smooth' });
+  }
+  function resetRuleForm() {
+    editingRuleId = null;
+    ['rf_matchValue','rf_mappedGroup','rf_projectId'].forEach((id) => $(id).value = '');
+    $('rf_priority').value = '100'; $('rf_enabled').value = 'true';
+    $('ruleFormTitle').textContent = '新增映射规则';
+    $('ruleReset').classList.add('hidden');
+    flash($('ruleFlash'), '', '');
+  }
+  async function submitRule() {
+    const payload = {
+      matchType: 'department',
+      matchValue: $('rf_matchValue').value.trim(),
+      mappedGroup: $('rf_mappedGroup').value.trim(),
+      gatewayProjectId: $('rf_projectId').value.trim(),
+      priority: Number($('rf_priority').value),
+      enabled: $('rf_enabled').value === 'true',
+    };
+    try {
+      if (editingRuleId) await api('/admin/api/rules/' + encodeURIComponent(editingRuleId), { method: 'PUT', body: JSON.stringify(payload) });
+      else await api('/admin/api/rules', { method: 'POST', body: JSON.stringify(payload) });
+      flash($('ruleFlash'), 'ok', editingRuleId ? '规则已更新' : '规则已新增');
+      resetRuleForm(); loadRules();
+    } catch (e) { if (e.message !== 'unauthorized') flash($('ruleFlash'), 'err', '保存失败：' + esc(e.message)); }
+  }
+  async function removeRule(r) {
+    if (!confirm('确认删除规则「部门 ' + r.matchValue + ' → ' + r.mappedGroup + '」？')) return;
+    try { await api('/admin/api/rules/' + encodeURIComponent(r.id), { method: 'DELETE' }); loadRules(); }
+    catch (e) { if (e.message !== 'unauthorized') flash($('globalFlash'), 'err', '删除失败：' + esc(e.message)); }
+  }
+
+  // ---- 新建分组 ----
+  async function submitGroup() {
+    const models = $('gf_models').value.split(/[\n,]/).map((s) => s.trim()).filter(Boolean);
+    const payload = { name: $('gf_name').value.trim(), department: $('gf_department').value.trim(), allowModels: models };
+    const box = $('groupResult');
+    box.innerHTML = '';
+    try {
+      const r = await api('/admin/api/groups', { method: 'POST', body: JSON.stringify(payload) });
+      const kv = el('div', { class: 'kv' });
+      const put = (k, v) => { kv.append(el('span', { class: 'k' }, k), el('span', {}, v)); };
+      put('本地分组', groupCn(r.mappedGroup));
+      put('网关项目名', r.gatewayProjectName);
+      const pid = el('span', { class: 'mono' }, r.gatewayProjectId); kv.append(el('span', { class: 'k' }, '网关项目 ID'), el('span', {}, pid));
+      const tags = el('div', { class: 'tag-list' }); (r.allowModels || []).forEach((m) => tags.append(el('span', { class: 'tag' }, m)));
+      kv.append(el('span', { class: 'k' }, '允许模型'), tags);
+      const res = el('div', { class: 'result ok' }, el('h4', {}, '分组已创建（项目 + 模型策略 + 映射规则均已就绪）'));
+      res.append(kv); box.append(res);
+      $('gf_name').value = ''; $('gf_department').value = ''; $('gf_models').value = '';
+      loadRules(); loadUsers();
+    } catch (e) {
+      if (e.message !== 'unauthorized') box.append(el('div', { class: 'result err' }, el('h4', {}, '创建失败'), el('div', {}, esc(e.message))));
+    }
+  }
+
+  // ---- 测试映射 ----
+  async function testMapping() {
+    const box = $('testResult');
+    box.innerHTML = '';
+    const dept = $('tm_department').value.trim();
+    try {
+      const r = await api('/admin/api/test-mapping', { method: 'POST', body: JSON.stringify({ department: dept }) });
+      const kv = el('div', { class: 'kv' });
+      const put = (k, node) => { kv.append(el('span', { class: 'k' }, k), node instanceof Node ? node : el('span', {}, String(node))); };
+      put('输入部门', r.department == null ? el('span', { class: 'muted' }, '（无部门）') : el('span', {}, r.department));
+      put('命中结果', el('span', { class: 'pill ' + (r.matched ? 'ok' : 'warn') }, r.matched ? '命中规则' : '未命中 · 走默认组'));
+      put('本地分组', el('span', { class: 'pill brand' }, groupCn(r.mappedGroup)));
+      put('网关项目', el('span', { class: 'mono' }, r.gatewayProjectId));
+      if (r.matched && r.matchedRule) put('命中优先级', String(r.matchedRule.priority));
+      let modelsNode;
+      if (!r.policyAvailable) modelsNode = el('span', { class: 'pill warn' }, '网关模型策略暂不可查（已降级，不影响映射）');
+      else if (r.openPolicy) modelsNode = el('span', { class: 'pill off' }, '不限制（开放策略）');
+      else {
+        modelsNode = el('div', { class: 'tag-list' });
+        (r.allowModels || []).forEach((m) => modelsNode.append(el('span', { class: 'tag' }, m)));
+        if (!r.allowModels || r.allowModels.length === 0) modelsNode = el('span', { class: 'muted' }, '（空）');
+      }
+      put('允许模型', modelsNode);
+      const res = el('div', { class: 'result ' + (r.matched ? 'ok' : '') }, el('h4', {}, '映射预览'));
+      res.append(kv); box.append(res);
+    } catch (e) {
+      if (e.message !== 'unauthorized') box.append(el('div', { class: 'result err' }, el('h4', {}, '测试失败'), el('div', {}, esc(e.message))));
+    }
+  }
+
+  // ---- 用量看板 ----
+  // 内联 SVG 逐日请求柱状图（零前端库；几何用已测 barGeom）。
+  function trendSvg(points) {
+    const W = 720, H = 200, padL = 46, padT = 14, padR = 12, padB = 30;
+    const plotW = W - padL - padR, plotH = H - padT - padB;
+    const vals = points.map((p) => Number(p.requests) || 0);
+    const max = Math.max(1, ...vals);
+    const bars = barGeom(vals, padL, padT, plotW, plotH);
+    const rects = bars.map((b, i) => {
+      const p = points[i];
+      const tip = `${p.date} · 请求 ${fmtInt(p.requests)} · 成本 ${fmtCost(p.totalCost)}`;
+      return `<rect x="${b.x.toFixed(1)}" y="${b.y.toFixed(1)}" width="${b.w.toFixed(1)}" height="${Math.max(0, b.h).toFixed(1)}" rx="2" fill="#2f5bea"><title>${xmlEsc(tip)}</title></rect>`;
+    }).join('');
+    const yTop = padT, yBot = padT + plotH;
+    const grid = `<line x1="${padL}" y1="${yTop}" x2="${W - padR}" y2="${yTop}" stroke="#eef1f5"/>`
+      + `<line x1="${padL}" y1="${yBot}" x2="${W - padR}" y2="${yBot}" stroke="#e3e8f0"/>`
+      + `<text x="${padL - 8}" y="${yTop + 4}" text-anchor="end" font-size="11" fill="#67707e">${xmlEsc(fmtCompact(max))}</text>`
+      + `<text x="${padL - 8}" y="${yBot + 4}" text-anchor="end" font-size="11" fill="#67707e">0</text>`;
+    const n = points.length, step = Math.max(1, Math.ceil(n / 6));
+    let xlabels = '';
+    for (let i = 0; i < n; i += step) {
+      const b = bars[i], md = String(points[i].date).slice(5);
+      xlabels += `<text x="${(b.x + b.w / 2).toFixed(1)}" y="${yBot + 16}" text-anchor="middle" font-size="10" fill="#67707e">${xmlEsc(md)}</text>`;
+    }
+    return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="逐日请求趋势">${grid}${rects}${xlabels}</svg>`;
+  }
+
+  // 用量总览渲染（admin 全局 / manager 本部门共用同一渲染，仅数据源不同）
+  function renderUsage(box, o) {
+    const t = o.topline || {};
+    box.innerHTML = '';
+    // topline 数字卡
+    const grid = el('div', { class: 'stat-grid' });
+    const stat = (lbl, num, sub, title) => {
+      const s = el('div', { class: 'stat' });
+      s.append(el('div', { class: 'lbl' }, lbl));
+      const numEl = el('div', { class: 'num' }, num); if (title) numEl.setAttribute('title', title);
+      s.append(numEl);
+      if (sub) s.append(el('div', { class: 'sub' }, sub));
+      return s;
+    };
+    grid.append(
+      stat('总请求数', fmtCompact(t.requests), null, fmtInt(t.requests) + ' 次'),
+      stat('输入 Tokens', fmtCompact(t.inputTokens), null, fmtInt(t.inputTokens)),
+      stat('输出 Tokens', fmtCompact(t.outputTokens), null, fmtInt(t.outputTokens)),
+      stat('总成本', fmtCost(t.totalCost), '按网关计费口径', null));
+    box.append(grid);
+    // 逐日趋势
+    const trend = Array.isArray(o.trend) ? o.trend : [];
+    box.append(el('div', { class: 'sub-h' }, '逐日请求趋势'));
+    if (trend.length === 0) box.append(el('div', { class: 'empty' }, '所选区间暂无用量数据'));
+    else box.append(el('div', { class: 'chart', html: trendSvg(trend) }));
+    // 模型分布（水平条）
+    const models = (Array.isArray(o.byModel) ? o.byModel : []).slice().sort((a, b) => (b.totalCost || 0) - (a.totalCost || 0));
+    box.append(el('div', { class: 'sub-h' }, '模型分布（按成本）'));
+    if (models.length === 0) box.append(el('div', { class: 'empty' }, '暂无模型用量'));
+    else {
+      const maxCost = Math.max(0, ...models.map((m) => Number(m.totalCost) || 0));
+      const bars = el('div', { class: 'hbars' });
+      for (const m of models) {
+        const row = el('div', { class: 'hbar' });
+        row.append(el('div', { class: 'name', title: esc(m.name) }, esc(m.name) || '—'));
+        const track = el('div', { class: 'track' });
+        const fill = el('div', { class: 'fill' }); fill.style.width = shareWidth(m.totalCost, maxCost).toFixed(1) + '%';
+        track.append(fill); row.append(track);
+        row.append(el('div', { class: 'val' }, '请求 ' + fmtInt(m.requests) + ' · Tokens ' + fmtCompact(m.totalTokens) + ' · ' + fmtCost(m.totalCost)));
+        bars.append(row);
+      }
+      box.append(bars);
+    }
+    // 按部门聚合
+    const depts = Array.isArray(o.byDepartment) ? o.byDepartment : [];
+    box.append(el('div', { class: 'sub-h' }, '按部门用量'));
+    if (depts.length === 0) box.append(el('div', { class: 'empty' }, '暂无可归属部门的用量'));
+    else {
+      const tbl = el('table');
+      tbl.append(el('tr', {}, el('th', {}, '部门'), el('th', {}, '请求数'), el('th', {}, 'Tokens'), el('th', {}, '成本'), el('th', {}, '涉及项目')));
+      for (const d of depts) {
+        const pids = Array.isArray(d.projectIds) ? d.projectIds : [];
+        tbl.append(el('tr', {},
+          el('td', {}, esc(d.department)),
+          el('td', {}, fmtInt(d.requests)),
+          el('td', {}, fmtInt(d.totalTokens)),
+          el('td', {}, fmtCost(d.totalCost)),
+          el('td', { class: 'muted', title: pids.join(', ') }, pids.length + ' 个')));
+      }
+      box.append(tbl);
+    }
+  }
+
+  async function loadUsage() {
+    const box = $('usageBox');
+    box.innerHTML = '<div class="empty">加载中…</div>';
+    try {
+      const range = $('usageRange').value;
+      const o = await api('/admin/api/usage?range=' + encodeURIComponent(range));
+      renderUsage(box, o);
+    } catch (e) { if (e.message !== 'unauthorized') box.innerHTML = '<div class="empty">加载失败：' + esc(e.message) + '</div>'; }
+  }
+
+  // 主管 scope 提示条：说明当前视图被服务端强制收窄到本部门（安全模型对用户可见）
+  function renderScopeBanner(scope) {
+    const b = $('deptScopeBox'); if (!b) return; b.innerHTML = '';
+    const depts = (scope && Array.isArray(scope.departments)) ? scope.departments : [];
+    const pids = (scope && Array.isArray(scope.projectIds)) ? scope.projectIds : [];
+    const node = el('div', { class: 'scope-banner' });
+    node.append(document.createTextNode('当前视图范围：部门 '));
+    node.append(el('b', {}, depts.length ? depts.join('、') : '（未指定）'));
+    node.append(document.createTextNode('，覆盖 ' + pids.length + ' 个网关项目。数据由服务端按部门强制收窄，你无法查看其他部门或个人对话。'));
+    b.append(node);
+    if (pids.length === 0) b.append(el('div', { class: 'win-note' }, '你尚未被指定管辖部门（或该部门未建映射），因此暂无可见数据；请联系管理员在「角色指派」中设置。'));
+  }
+
+  async function loadDeptUsage() {
+    const box = $('deptUsageBox');
+    box.innerHTML = '<div class="empty">加载中…</div>';
+    try {
+      const range = $('deptUsageRange').value;
+      const o = await api('/portal/dept/usage?range=' + encodeURIComponent(range));
+      renderScopeBanner(o.scope);
+      renderUsage(box, o);
+    } catch (e) { if (e.message !== 'unauthorized') box.innerHTML = '<div class="empty">加载失败：' + esc(e.message) + '</div>'; }
+  }
+
+  // ---- 安全告警 ----
+  // 告警渲染（admin 全局 / manager 本部门共用；note 说明窗口与范围）
+  function renderAlerts(box, r, note) {
+    const data = Array.isArray(r.data) ? r.data : [];
+    box.innerHTML = '';
+    const counts = r.severityCounts || {};
+    const summary = el('div', { class: 'counts' });
+    summary.append(el('span', { class: 'lead' }, '严重度分布：'));
+    const order = ['critical', 'high', 'medium', 'low'];
+    const seen = new Set(); let any = false;
+    for (const s of order) { if (counts[s]) { summary.append(el('span', { class: 'pill ' + severityCls(s) }, severityCn(s) + ' ' + counts[s])); seen.add(s); any = true; } }
+    for (const [s, c] of Object.entries(counts)) { if (!seen.has(s) && c) { summary.append(el('span', { class: 'pill off' }, severityCn(s) + ' ' + c)); any = true; } }
+    if (!any) summary.append(el('span', { class: 'muted' }, '无'));
+    summary.append(el('span', { class: 'lead' }, '合计 ' + (Number(r.total) || data.length) + ' 条'));
+    box.append(summary);
+    box.append(el('div', { class: 'win-note' }, note));
+    if (data.length === 0) { box.append(el('div', { class: 'empty' }, '近 24 小时无匹配的安全告警事件')); return; }
+    const tb = el('table');
+    tb.append(el('tr', {}, el('th', {}, '时间'), el('th', {}, '部门'), el('th', {}, '严重度'), el('th', {}, '事件类型'), el('th', {}, '命中规则'), el('th', {}, '处置动作')));
+    for (const ev of data) {
+      tb.append(el('tr', {},
+        el('td', { class: 'muted' }, fmtTime(ev.createdAt)),
+        el('td', { class: 'muted' }, '—'),
+        el('td', {}, el('span', { class: 'pill ' + severityCls(ev.severity) }, severityCn(ev.severity))),
+        el('td', {}, eventTypeCn(ev.eventType)),
+        el('td', {}, ruleDisplay(ev)),
+        el('td', {}, el('span', { class: 'pill off' }, actionCn(ev.actionTaken)))));
+    }
+    box.append(tb);
+  }
+
+  async function loadAlerts() {
+    const box = $('alertsBox');
+    box.innerHTML = '<div class="empty">加载中…</div>';
+    try {
+      const sev = $('alertSeverity').value, lim = $('alertLimit').value;
+      const qs = new URLSearchParams();
+      if (sev) qs.set('severity', sev);
+      if (lim) qs.set('limit', lim);
+      const r = await api('/admin/api/alerts' + (qs.toString() ? '?' + qs.toString() : ''));
+      renderAlerts(box, r, '统计窗口：近 24 小时；此为全局审计事件流，管理员可见全部部门。');
+    } catch (e) { if (e.message !== 'unauthorized') box.innerHTML = '<div class="empty">加载失败：' + esc(e.message) + '</div>'; }
+  }
+
+  async function loadDeptAlerts() {
+    const box = $('deptAlertsBox');
+    box.innerHTML = '<div class="empty">加载中…</div>';
+    try {
+      const sev = $('deptAlertSeverity').value;
+      const qs = new URLSearchParams();
+      if (sev) qs.set('severity', sev);
+      const r = await api('/portal/dept/alerts' + (qs.toString() ? '?' + qs.toString() : ''));
+      renderAlerts(box, r, '统计窗口：近 24 小时；仅本部门项目命中的审计事件（服务端强制收窄）。');
+    } catch (e) { if (e.message !== 'unauthorized') box.innerHTML = '<div class="empty">加载失败：' + esc(e.message) + '</div>'; }
+  }
+
+  // ---- 角色指派（Track D，admin 专属）----
+  let editingRoleSubject = null;
+  function toggleRoleDeptField() { $('ro_dept_field').style.display = ($('ro_role').value === 'manager') ? '' : 'none'; }
+  async function loadRoles() {
+    const box = $('rolesBox');
+    box.innerHTML = '<div class="empty">加载中…</div>';
+    try {
+      const { data } = await api('/admin/api/roles');
+      if (!data || data.length === 0) { box.innerHTML = '<div class="empty">暂无角色指派（未指派者默认为员工）</div>'; return; }
+      const t = el('table');
+      t.append(el('tr', {}, el('th', {}, '邮箱'), el('th', {}, '角色'), el('th', {}, '管辖部门'), el('th', {}, 'OIDC 主体'), el('th', {}, '操作')));
+      for (const r of data) {
+        const cls = r.role === 'admin' ? 'admin' : (r.role === 'manager' ? 'manager' : 'employee');
+        const depts = Array.isArray(r.managedDepartments) ? r.managedDepartments : [];
+        const del = el('button', { class: 'danger' }, '删除'); del.onclick = () => removeRole(r);
+        const edit = el('button', { class: 'ghost' }, '编辑'); edit.onclick = () => beginEditRole(r);
+        const deptCell = r.role === 'manager'
+          ? (depts.length ? el('span', {}, depts.join('、')) : el('span', { class: 'muted' }, '（未指定，看不到数据）'))
+          : el('span', { class: 'muted' }, '—');
+        const sub = String(r.subject || '');
+        t.append(el('tr', {},
+          el('td', {}, esc(r.email)),
+          el('td', {}, el('span', { class: 'role-badge ' + cls }, roleCn(r.role))),
+          el('td', {}, deptCell),
+          el('td', { class: 'mono', title: sub }, sub.length > 18 ? sub.slice(0, 18) + '…' : sub),
+          el('td', { class: 'actions-cell' }, edit, del)));
+      }
+      box.innerHTML = ''; box.append(t);
+    } catch (e) { if (e.message !== 'unauthorized') box.innerHTML = '<div class="empty">加载失败：' + esc(e.message) + '</div>'; }
+  }
+  function beginEditRole(r) {
+    editingRoleSubject = r.subject;
+    $('ro_subject').value = r.subject; $('ro_email').value = r.email; $('ro_role').value = r.role;
+    $('ro_depts').value = (Array.isArray(r.managedDepartments) ? r.managedDepartments : []).join(',');
+    toggleRoleDeptField();
+    $('roleFormTitle').textContent = '编辑角色（' + r.email + '）';
+    $('roleReset').classList.remove('hidden');
+    window.scrollTo({ top: $('roleFormTitle').offsetTop - 80, behavior: 'smooth' });
+  }
+  function resetRoleForm() {
+    editingRoleSubject = null;
+    ['ro_subject', 'ro_email', 'ro_depts'].forEach((id) => $(id).value = '');
+    $('ro_role').value = 'employee'; toggleRoleDeptField();
+    $('roleFormTitle').textContent = '指派 / 更新角色';
+    $('roleReset').classList.add('hidden');
+    flash($('roleFlash'), '', '');
+  }
+  async function submitRole() {
+    const role = $('ro_role').value;
+    const payload = { subject: $('ro_subject').value.trim(), email: $('ro_email').value.trim(), role };
+    payload.managedDepartments = role === 'manager'
+      ? $('ro_depts').value.split(/[,，\s]+/).map((s) => s.trim()).filter(Boolean)
+      : [];
+    if (!payload.subject || !payload.email) { flash($('roleFlash'), 'err', 'OIDC 主体 sub 与邮箱必填'); return; }
+    try {
+      await api('/admin/api/roles', { method: 'PUT', body: JSON.stringify(payload) });
+      flash($('roleFlash'), 'ok', '角色已保存');
+      resetRoleForm(); loadRoles();
+    } catch (e) { if (e.message !== 'unauthorized') flash($('roleFlash'), 'err', '保存失败：' + esc(e.message)); }
+  }
+  async function removeRole(r) {
+    if (!confirm('确认删除「' + r.email + '」的角色指派（将回落为默认员工）？')) return;
+    try { await api('/admin/api/roles/' + encodeURIComponent(r.subject), { method: 'DELETE' }); loadRoles(); }
+    catch (e) { if (e.message !== 'unauthorized') flash($('globalFlash'), 'err', '删除失败：' + esc(e.message)); }
+  }
+
+  // ---- 系统配置：网关用户打通开关（Phase4 阶段C，admin 专属）----
+  // 双层门：部署 env 放行(envAllowed) AND 后台开关(dbEnabled) → 生效(effective)。
+  // env 未放行时开关置灰 + 红字说明；开启会占用网关授权用户配额。
+  function renderSystemConfig(box, v) {
+    box.innerHTML = '';
+    const g = (v && v.gatewayUserSync) || {};
+    const envAllowed = !!g.envAllowed;
+    const effective = !!g.effective;
+    // 标题行 + 生效状态徽标
+    box.append(el('div', { style: 'display:flex;align-items:center;gap:10px;margin-bottom:6px' },
+      el('span', { style: 'font-weight:600;font-size:14px' }, '网关用户打通'),
+      el('span', { class: 'pill ' + (effective ? 'ok' : 'off') }, effective ? '已启用' : '已关闭')));
+    // 开关（原生 checkbox，env 未放行时禁用置灰）
+    const cb = el('input', { type: 'checkbox', id: 'sysGwUserSync', style: 'width:16px;height:16px;cursor:pointer' });
+    cb.checked = effective;
+    if (!envAllowed) { cb.disabled = true; }
+    cb.onchange = () => toggleSystemConfig(cb);
+    box.append(el('label', {
+      style: 'display:flex;align-items:flex-start;gap:10px;margin:8px 0;' + (envAllowed ? 'cursor:pointer' : 'opacity:.55;cursor:not-allowed'),
+    }, cb, el('span', {}, '开启后，员工登录即在网关侧新建 user 并挂到对应部门 team，网关后台「用户管理 / 团队管理」可原生看到这些员工与部门。关闭则保持现状（仅签发密钥 + 归属项目）。')));
+    // 配额与不可逆提示
+    box.append(el('div', { class: 'win-note' }, '注意：开启会占用网关「授权用户」配额（受 License 限制）。若建 user 撞到配额上限，会静默降级为仅签发密钥、绝不中断聊天。关闭后此前已建的 user 仍保留（不自动删除，仍计入配额）。'));
+    // env 未放行说明
+    if (!envAllowed) {
+      box.append(el('div', { class: 'flash err' }, '当前部署未放行网关用户打通（部署环境变量 PORTAL_GATEWAY_USER_SYNC_ALLOWED 未开）；开关已置灰，需先在部署侧放行后方可开启。'));
+    }
+    // 已打通员工数
+    box.append(el('div', { style: 'margin-top:6px' },
+      el('span', { class: 'muted' }, '当前已打通员工数：'),
+      el('b', {}, String(g.syncedEmployeeCount != null ? g.syncedEmployeeCount : 0)),
+      el('span', { class: 'muted' }, ' 人（网关侧已建 user 的员工）')));
+    box.append(el('div', { id: 'systemConfigFlash', style: 'margin-top:10px' }));
+  }
+  async function loadSystemConfig() {
+    const box = $('systemConfigBox');
+    box.innerHTML = '<div class="empty">加载中…</div>';
+    try {
+      const v = await api('/admin/api/system-config');
+      renderSystemConfig(box, v);
+    } catch (e) { if (e.message !== 'unauthorized') box.innerHTML = '<div class="empty">加载失败：' + esc(e.message) + '</div>'; }
+  }
+  async function toggleSystemConfig(cb) {
+    const want = cb.checked;
+    cb.disabled = true;
+    try {
+      const v = await api('/admin/api/system-config', { method: 'PUT', body: JSON.stringify({ gatewayUserSyncEnabled: want }) });
+      renderSystemConfig($('systemConfigBox'), v);
+      flash($('systemConfigFlash'), 'ok', want ? '已开启网关用户打通' : '已关闭网关用户打通');
+    } catch (e) {
+      if (e.message !== 'unauthorized') {
+        // 失败回滚 UI 到真实状态，并给出错误（尤其 env 未放行的 409）
+        await loadSystemConfig();
+        flash($('systemConfigFlash'), 'err', '切换失败：' + esc(e.message));
+      }
+    }
+  }
+
+  // ---- 角色化视图 + 引导 ----
+  function showCardsForRole(role) {
+    document.querySelectorAll('.role-admin, .role-manager, .role-employee').forEach((c) => c.classList.add('hidden'));
+    const sel = role === 'admin' ? '.role-admin' : (role === 'manager' ? '.role-manager' : '.role-employee');
+    document.querySelectorAll(sel).forEach((c) => c.classList.remove('hidden'));
+  }
+  function setWhoami(me) {
+    const badge = $('roleBadge'); badge.innerHTML = '';
+    badge.append(el('span', { class: 'role-badge ' + (me.role || 'employee') }, roleCn(me.role)));
+    const parts = [];
+    if (me.email) parts.push(me.email);
+    if (me.role === 'manager' && me.scope && Array.isArray(me.scope.departments) && me.scope.departments.length) parts.push('部门：' + me.scope.departments.join('、'));
+    else if (me.department) parts.push('部门：' + me.department);
+    if (me.kind === 'breakglass') parts.push('应急令牌');
+    $('whoami').textContent = parts.join(' · ');
+  }
+  async function enterAs(me) {
+    showApp(true);
+    setWhoami(me);
+    showCardsForRole(me.role);
+    if (me.role === 'admin') {
+      await Promise.all([loadUsage(), loadAlerts(), loadRoles(), loadSystemConfig(), loadUsers(), loadRules()]);
+    } else if (me.role === 'manager') {
+      await Promise.all([loadDeptUsage(), loadDeptAlerts()]);
+    }
+    // employee：仅显示提示卡，无需加载任何数据
+  }
+
+  // /portal/auth/me：决定登录态与角色（OIDC cookie 自动带上；break-glass 走 token 头）
+  async function fetchMe() {
+    try {
+      const res = await fetch('/portal/auth/me', { headers: { 'X-Portal-Admin-Token': getToken() } });
+      if (!res.ok) return null;
+      return await res.json();
+    } catch { return null; }
+  }
+  async function boot() {
+    const me = await fetchMe();
+    if (me && me.authenticated) enterAs(me);
+    else showApp(false);
+  }
+
+  // 应急令牌登录（break-glass）：设 token → 拉 me → 按角色进入
+  async function doLogin() {
+    const t = $('tokenInput').value.trim();
+    if (!t) { flash($('loginFlash'), 'err', '请输入应急管理令牌'); return; }
+    setToken(t);
+    const me = await fetchMe();
+    if (me && me.authenticated) { flash($('loginFlash'), '', ''); $('tokenInput').value = ''; enterAs(me); }
+    else { clearToken(); flash($('loginFlash'), 'err', '应急令牌无效或后台未启用'); }
+  }
+  async function doLogout() {
+    try { await fetch('/portal/auth/logout', { method: 'POST' }); } catch { /* 清 cookie 尽力而为 */ }
+    clearToken();
+    $('roleBadge').innerHTML = ''; $('whoami').textContent = '';
+    showApp(false);
+  }
+
+  $('oidcLoginBtn').onclick = () => { window.location.href = '/portal/auth/login'; };
+  $('loginBtn').onclick = doLogin;
+  $('tokenInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') doLogin(); });
+  $('logoutBtn').onclick = doLogout;
+  $('refreshUsers').onclick = loadUsers;
+  $('refreshRules').onclick = loadRules;
+  $('refreshUsage').onclick = loadUsage;
+  $('usageRange').onchange = loadUsage;
+  $('refreshAlerts').onclick = loadAlerts;
+  $('alertSeverity').onchange = loadAlerts;
+  $('alertLimit').onchange = loadAlerts;
+  $('refreshDeptUsage').onclick = loadDeptUsage;
+  $('deptUsageRange').onchange = loadDeptUsage;
+  $('refreshDeptAlerts').onclick = loadDeptAlerts;
+  $('deptAlertSeverity').onchange = loadDeptAlerts;
+  $('refreshRoles').onclick = loadRoles;
+  $('refreshSystemConfig').onclick = loadSystemConfig;
+  $('roleSubmit').onclick = submitRole;
+  $('roleReset').onclick = resetRoleForm;
+  $('ro_role').onchange = toggleRoleDeptField;
+  $('ruleSubmit').onclick = submitRule;
+  $('ruleReset').onclick = resetRuleForm;
+  $('groupSubmit').onclick = submitGroup;
+  $('testMappingBtn').onclick = testMapping;
+  $('tm_department').addEventListener('keydown', (e) => { if (e.key === 'Enter') testMapping(); });
+  toggleRoleDeptField();
+
+  // OIDC 回调失败会 302 回 /admin?auth_error=...，在登录门给出中文提示
+  const authErr = new URLSearchParams(location.search).get('auth_error');
+  if (authErr) { flash($('loginFlash'), 'err', '企业登录失败：' + esc(authErr) + '，可重试或用应急令牌'); history.replaceState(null, '', location.pathname); }
+
+  boot();
+})();
+</script>
+</body>
+</html>

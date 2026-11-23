@@ -1,0 +1,61 @@
+{
+  "id": "provider-minimax",
+  "name": "MiniMax",
+  "vendor": "MiniMax",
+  "catalog_entries": [
+    {
+      "id": "hailuo",
+      "provider": "minimax",
+      "provider_cn": "MiniMax",
+      "product": "hailuo",
+      "product_cn": "海螺 AI",
+      "category": "chat",
+      "region": "cn",
+      "domains": [
+        "hailuoai.com",
+        "www.hailuoai.com",
+        "*.hailuoai.com"
+      ],
+      "path_rules": [
+        "/",
+        "/chat",
+        "contains:/chat",
+        "contains:/message",
+        "contains:/conversation",
+        "contains:/completion"
+      ],
+      "request_decoder": "hailuo_web",
+      "response_decoder": "hailuo_web",
+      "retain_level": "content",
+      "risk_profile": "llm_web",
+      "enabled": true,
+      "priority": 90,
+      "source_url": "https://hailuoai.com/"
+    },
+    {
+      "id": "minimax_api",
+      "provider": "minimax",
+      "provider_cn": "MiniMax",
+      "product": "minimax_api",
+      "product_cn": "MiniMax API",
+      "category": "api",
+      "region": "cn",
+      "domains": [
+        "api.minimax.chat",
+        "platform.minimaxi.com"
+      ],
+      "path_rules": [
+        "/v1/",
+        "/v2/"
+      ],
+      "request_decoder": "minimax",
+      "response_decoder": "minimax",
+      "retain_level": "content",
+      "risk_profile": "llm_api",
+      "enabled": true,
+      "priority": 80,
+      "source_url": "https://www.minimaxi.com/"
+    }
+  ],
+  "agent_definitions": []
+}

@@ -1,0 +1,201 @@
+{
+  "id": "provider-bytedance",
+  "name": "字节跳动",
+  "vendor": "字节跳动",
+  "catalog_entries": [
+    {
+      "id": "doubao_static_assets",
+      "provider": "bytedance",
+      "provider_cn": "字节跳动",
+      "product": "doubao",
+      "product_cn": "豆包",
+      "category": "chat",
+      "region": "cn",
+      "domains": [
+        "www.doubao.com",
+        "doubao.com",
+        "*.doubao.com"
+      ],
+      "path_rules": [
+        "contains:/static/",
+        "contains:/assets/",
+        "suffix:.js",
+        "suffix:.css",
+        "suffix:.map",
+        "suffix:.png",
+        "suffix:.jpg",
+        "suffix:.jpeg",
+        "suffix:.webp",
+        "suffix:.svg",
+        "suffix:.ico",
+        "suffix:.woff",
+        "suffix:.woff2"
+      ],
+      "request_decoder": "web_support",
+      "response_decoder": "web_support",
+      "retain_level": "summary",
+      "risk_profile": "llm_web",
+      "enabled": true,
+      "priority": 105,
+      "source_url": "https://www.doubao.com/legal/ey01"
+    },
+    {
+      "id": "doubao_conversation_info",
+      "provider": "bytedance",
+      "provider_cn": "字节跳动",
+      "product": "doubao",
+      "product_cn": "豆包",
+      "category": "chat",
+      "region": "cn",
+      "domains": [
+        "www.doubao.com",
+        "doubao.com",
+        "*.doubao.com"
+      ],
+      "path_rules": [
+        "contains:/conversation/info",
+        "contains:/message/pre_handle",
+        "contains:/suggest"
+      ],
+      "request_decoder": "web_support",
+      "response_decoder": "web_support",
+      "retain_level": "summary",
+      "risk_profile": "llm_web",
+      "enabled": true,
+      "priority": 104,
+      "source_url": "https://www.doubao.com/legal/ey01"
+    },
+    {
+      "id": "doubao_upload",
+      "provider": "bytedance",
+      "provider_cn": "字节跳动",
+      "product": "doubao",
+      "product_cn": "豆包",
+      "category": "chat",
+      "region": "cn",
+      "domains": [
+        "www.doubao.com",
+        "doubao.com"
+      ],
+      "path_rules": [
+        "contains:/file",
+        "contains:/upload",
+        "contains:/attachment",
+        "contains:/document"
+      ],
+      "request_decoder": "doubao_web",
+      "response_decoder": "doubao_web",
+      "retain_level": "content",
+      "risk_profile": "llm_web",
+      "enabled": true,
+      "priority": 102,
+      "source_url": "https://www.doubao.com/legal/ey01"
+    },
+    {
+      "id": "doubao",
+      "provider": "bytedance",
+      "provider_cn": "字节跳动",
+      "product": "doubao",
+      "product_cn": "豆包",
+      "category": "chat",
+      "region": "cn",
+      "domains": [
+        "www.doubao.com",
+        "doubao.com",
+        "*.doubao.com"
+      ],
+      "path_rules": [
+        "contains:/chat",
+        "contains:/conversation",
+        "contains:/completion"
+      ],
+      "request_decoder": "doubao_web",
+      "response_decoder": "doubao_web",
+      "retain_level": "content",
+      "risk_profile": "llm_web",
+      "enabled": true,
+      "priority": 100,
+      "source_url": "https://www.doubao.com/legal/ey01"
+    },
+    {
+      "id": "volcengine_ark",
+      "provider": "bytedance",
+      "provider_cn": "火山引擎",
+      "product": "volcengine_ark",
+      "product_cn": "火山方舟",
+      "category": "api",
+      "region": "cn",
+      "domains": [
+        "ark.cn-beijing.volces.com",
+        "*.volces.com",
+        "*.volcengineapi.com"
+      ],
+      "path_rules": [
+        "/api/v3/chat/completions",
+        "/api/v3/responses",
+        "/api/v3/files",
+        "/api/v3/images",
+        "/api/v3/bots",
+        "/api/v3/contents"
+      ],
+      "request_decoder": "openai_compatible",
+      "response_decoder": "openai_compatible",
+      "retain_level": "content",
+      "risk_profile": "llm_api",
+      "enabled": true,
+      "priority": 90,
+      "source_url": "https://www.volcengine.com/product/ark"
+    },
+    {
+      "id": "doubao_web_support",
+      "provider": "bytedance",
+      "provider_cn": "字节跳动",
+      "product": "doubao",
+      "product_cn": "豆包",
+      "category": "chat",
+      "region": "cn",
+      "domains": [
+        "gator.volces.com",
+        "tab.volces.com",
+        "apmplus.volces.com",
+        "apm.volccdn.com",
+        "lf-flow-web-cdn.doubao.com",
+        "mcs.doubao.com",
+        "opt.doubao.com",
+        "*.doubao.com"
+      ],
+      "path_rules": null,
+      "request_decoder": "web_support",
+      "response_decoder": "web_support",
+      "retain_level": "summary",
+      "risk_profile": "llm_web",
+      "enabled": true,
+      "priority": 80,
+      "source_url": "https://www.doubao.com/legal/ey01"
+    },
+    {
+      "id": "feishu_ai",
+      "provider": "bytedance",
+      "provider_cn": "字节跳动",
+      "product": "feishu_ai",
+      "product_cn": "飞书智能伙伴",
+      "category": "office",
+      "region": "cn",
+      "domains": [
+        "feishu.cn",
+        "larkoffice.com"
+      ],
+      "path_rules": [
+        "/"
+      ],
+      "request_decoder": "office_ai",
+      "response_decoder": "office_ai",
+      "retain_level": "summary",
+      "risk_profile": "office_ai",
+      "enabled": true,
+      "priority": 50,
+      "source_url": "https://www.feishu.cn/"
+    }
+  ],
+  "agent_definitions": []
+}

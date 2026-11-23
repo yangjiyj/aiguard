@@ -1,0 +1,40 @@
+Name:          default
+Driver:        docker
+Last Activity: 2026-10-20 19:16:06 +0000 UTC
+
+Nodes:
+Name:             default
+Endpoint:         default
+Status:           running
+BuildKit version: v0.31.2
+Platforms:        linux/amd64, linux/amd64/v2, linux/amd64/v3, linux/amd64/v4, linux/386
+Labels:
+ org.mobyproject.buildkit.worker.moby.host-gateway-ip: 172.17.0.1
+Devices:
+ Name:                  nvidia.com/gpu=0
+ Automatically allowed: false
+ Name:                  nvidia.com/gpu=GPU-00000000-0000-0000-0000-000000000000
+ Automatically allowed: false
+ Name:                  nvidia.com/gpu=all
+ Automatically allowed: false
+GC Policy rule#0:
+ All:            false
+ Filters:        type==source.local type==exec.cachemount type==source.git.checkout
+ Keep Duration:  48h0m0s
+ Max Used Space: 24.19GiB
+GC Policy rule#1:
+ All:            false
+ Keep Duration:  1440h0m0s
+ Reserved Space: 175.1GiB
+ Max Used Space: 1.366TiB
+ Min Free Space: 350.2GiB
+GC Policy rule#2:
+ All:            false
+ Reserved Space: 175.1GiB
+ Max Used Space: 1.366TiB
+ Min Free Space: 350.2GiB
+GC Policy rule#3:
+ All:            true
+ Reserved Space: 175.1GiB
+ Max Used Space: 1.366TiB
+ Min Free Space: 350.2GiB

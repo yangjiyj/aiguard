@@ -1,0 +1,26 @@
+[Unit]
+Description=JJDGuard 运维诊断采集器
+After=docker.service network-online.target
+Wants=docker.service
+
+[Service]
+Type=simple
+User=root
+# @DIAG_DIR@ / @DEPLOY_DIR@ / @PROTECT_HOME@ 由 install-diag-agent.sh 安装时替换
+ExecStart=/usr/local/bin/jjdguard-diag-agent --dir @DIAG_DIR@ --key-file /etc/jjdguard/diag-agent.key --deploy-dir @DEPLOY_DIR@
+Restart=always
+RestartSec=5
+CPUQuota=20%
+MemoryMax=128M
+IOSchedulingClass=idle
+Nice=10
+NoNewPrivileges=yes
+# strict 使整个文件系统只读；docker.sock 只需 connect()，不受只读挂载影响，
+# 因此只放行诊断目录。
+ProtectSystem=strict
+ReadWritePaths=@DIAG_DIR@
+ProtectHome=@PROTECT_HOME@
+PrivateTmp=yes
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,32 @@
+{
+  "id": "provider-huggingface",
+  "name": "Hugging Face",
+  "vendor": "Hugging Face",
+  "catalog_entries": [
+    {
+      "id": "huggingface",
+      "provider": "huggingface",
+      "provider_cn": "Hugging Face",
+      "product": "huggingface",
+      "product_cn": "Hugging Face",
+      "category": "model-platform",
+      "region": "global",
+      "domains": [
+        "huggingface.co",
+        "hf.co"
+      ],
+      "path_rules": [
+        "/",
+        "/chat"
+      ],
+      "request_decoder": "model_platform",
+      "response_decoder": "model_platform",
+      "retain_level": "summary",
+      "risk_profile": "model_platform",
+      "enabled": true,
+      "priority": 50,
+      "source_url": "https://huggingface.co/"
+    }
+  ],
+  "agent_definitions": []
+}

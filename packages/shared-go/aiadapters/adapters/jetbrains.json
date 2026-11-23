@@ -1,0 +1,30 @@
+{
+  "id": "provider-jetbrains",
+  "name": "JetBrains",
+  "vendor": "JetBrains",
+  "catalog_entries": [
+    {
+      "id": "jetbrains_ai",
+      "provider": "jetbrains",
+      "provider_cn": "JetBrains",
+      "product": "jetbrains_ai",
+      "product_cn": "JetBrains AI Assistant",
+      "category": "coding",
+      "region": "global",
+      "domains": [
+        "api.jetbrains.ai",
+        "ai.jetbrains.com",
+        "*.ai.jetbrains.com"
+      ],
+      "path_rules": null,
+      "request_decoder": "coding_ai",
+      "response_decoder": "coding_ai",
+      "retain_level": "content",
+      "risk_profile": "ai_ide_agent",
+      "enabled": true,
+      "priority": 75,
+      "source_url": "https://www.jetbrains.com/ai/"
+    }
+  ],
+  "agent_definitions": []
+}

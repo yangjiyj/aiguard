@@ -1,0 +1,2117 @@
+[
+  {
+    "id": "K001",
+    "tool": "Bash",
+    "arguments": {
+      "command": "git -c credential.helper='!f() { echo password=hunter2pw; }; f' push -f origin main"
+    },
+    "subcategory": "vcs_destroy",
+    "must_not_contain": [
+      "hunter2pw"
+    ],
+    "must_contain": [
+      "git",
+      "push",
+      "-f"
+    ],
+    "note": "S 组（原 S01）；当前：已满足；-c 的值写 …，push 仍当子命令"
+  },
+  {
+    "id": "K002",
+    "tool": "Bash",
+    "arguments": {
+      "command": "git push --force hunter2pw main"
+    },
+    "subcategory": "vcs_destroy",
+    "must_not_contain": [
+      "hunter2pw"
+    ],
+    "must_contain": [
+      "git push --force"
+    ],
+    "note": "S 组（原 S02）；当前：泄漏；布尔长选项出现在子命令之后，后面的词不得再当子命令（当前显示成 git push --force hunter2pw …）"
+  },
+  {
+    "id": "K003",
+    "tool": "Bash",
+    "arguments": {
+      "command": "docker --tlsverify hunter2pw rm -f c1"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "hunter2pw"
+    ],
+    "must_contain": [
+      "docker"
+    ],
+    "note": "S 组（原 S03）；当前：无触发段（构造写法）；分析器不判破坏性；若将来触发，子命令前的布尔长选项规则仍会把该词当子命令，属已知局限"
+  },
+  {
+    "id": "K004",
+    "tool": "Bash",
+    "arguments": {
+      "command": "kubectl --force hunter2pw delete pod x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "hunter2pw"
+    ],
+    "must_contain": [
+      "kubectl"
+    ],
+    "note": "S 组（原 S04）；当前：无触发段（构造写法）；同 S03"
+  },
+  {
+    "id": "K005",
+    "tool": "Bash",
+    "arguments": {
+      "command": "helm uninstall --force hunter2pw"
+    },
+    "subcategory": "cluster_destroy",
+    "must_not_contain": [],
+    "must_contain": [
+      "helm uninstall --force",
+      "hunter2pw"
+    ],
+    "note": "S 组（原 S05）；当前：已满足；该位置是 release 名（分析器目标），按新口径作为目标显示，不算凭据"
+  },
+  {
+    "id": "K006",
+    "tool": "Bash",
+    "arguments": {
+      "command": "kubectl create secret generic s --from-literal=password=hunter2pw -o yaml > /etc/app/s.yaml"
+    },
+    "subcategory": "filesystem_overwrite",
+    "must_not_contain": [
+      "hunter2pw"
+    ],
+    "must_contain": [
+      "kubectl create secret",
+      "--from-literal=…",
+      "> /etc/app/s.yaml"
+    ],
+    "note": "S 组（原 S06）；当前：已满足；--x=值 写 --x=…"
+  },
+  {
+    "id": "K007",
+    "tool": "Bash",
+    "arguments": {
+      "command": "docker run --rm -e PASS=hunter2pw -v /data:/data img rm -rf /data/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "hunter2pw"
+    ],
+    "must_contain": [
+      "docker run"
+    ],
+    "note": "S 组（原 S07）；当前：无触发段（构造写法）；容器内命令，分析器不判破坏性"
+  },
+  {
+    "id": "K008",
+    "tool": "Bash",
+    "arguments": {
+      "command": "git push --force https://host/r.git?private_token=hunter2pw main"
+    },
+    "subcategory": "vcs_destroy",
+    "must_not_contain": [
+      "hunter2pw"
+    ],
+    "must_contain": [
+      "git push --force"
+    ],
+    "note": "S 组（原 S08）；当前：已满足；URL 不是分析器目标，写 …"
+  },
+  {
+    "id": "K009",
+    "tool": "Bash",
+    "arguments": {
+      "command": "git push -f https://oauth2:hunter2pw@gitlab.corp/g/r.git main"
+    },
+    "subcategory": "vcs_destroy",
+    "must_not_contain": [
+      "hunter2pw"
+    ],
+    "must_contain": [
+      "git push -f"
+    ],
+    "note": "S 组（原 S09）；当前：已满足；URL userinfo"
+  },
+  {
+    "id": "K010",
+    "tool": "Bash",
+    "arguments": {
+      "command": "terraform destroy -auto-approve -var password=hunter2pw"
+    },
+    "subcategory": "infrastructure_destroy",
+    "must_not_contain": [
+      "hunter2pw"
+    ],
+    "must_contain": [
+      "terraform destroy -auto-approve"
+    ],
+    "note": "S 组（原 S10）；当前：显示不足；新口径 -auto-approve 原样显示；当前写成 -a…；-var 的值仍写 …"
+  },
+  {
+    "id": "K011",
+    "tool": "Bash",
+    "arguments": {
+      "command": "aws --profile prod s3 rm s3://b/x --recursive"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "aws",
+      "s3://b/x"
+    ],
+    "note": "S 组（原 S11）；当前：无触发段（检测缺口）；aws s3 rm --recursive 不判破坏性"
+  },
+  {
+    "id": "K012",
+    "tool": "Bash",
+    "arguments": {
+      "command": "make clean PASSWORD=hunter2pw && rm -rf build"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "hunter2pw"
+    ],
+    "must_contain": [
+      "rm -rf build"
+    ],
+    "note": "S 组（原 S12）；当前：已满足；只取 rm 触发段"
+  },
+  {
+    "id": "K013",
+    "tool": "Bash",
+    "arguments": {
+      "command": "sudo -u x env A=hunter2pw rm -rf /opt/app"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "hunter2pw"
+    ],
+    "must_contain": [
+      "rm",
+      "/opt/app"
+    ],
+    "note": "W 组（原 W01）；当前：无触发段（检测缺口）；sudo -u 绕过删除检测；触发后前置赋值只写 NAME=…"
+  },
+  {
+    "id": "K014",
+    "tool": "Bash",
+    "arguments": {
+      "command": "sudo env PGPASSWORD=hunter2pw rm -rf /opt/app"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "hunter2pw"
+    ],
+    "must_contain": [
+      "rm",
+      "/opt/app"
+    ],
+    "note": "W 组（原 W02）；当前：无触发段（检测缺口）；sudo env 包装后不判破坏性；触发后前置赋值只写 NAME=…"
+  },
+  {
+    "id": "K015",
+    "tool": "Bash",
+    "arguments": {
+      "command": "nohup sh -c 'PGPASSWORD=hunter2pw rm -rf /opt/app' &"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "hunter2pw"
+    ],
+    "must_contain": [
+      "rm",
+      "/opt/app"
+    ],
+    "note": "W 组（原 W03）；当前：无触发段（检测缺口）；nohup sh -c 后台执行不判破坏性；触发后前置赋值只写 NAME=…"
+  },
+  {
+    "id": "K016",
+    "tool": "Bash",
+    "arguments": {
+      "command": "env -i PATH=/bin PASS=hunter2pw rm -rf /opt/app"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "hunter2pw"
+    ],
+    "must_contain": [
+      "rm",
+      "/opt/app"
+    ],
+    "note": "W 组（原 W04）；当前：无触发段（检测缺口）；env -i 包装不判破坏性；触发后前置赋值只写 NAME=…"
+  },
+  {
+    "id": "K017",
+    "tool": "Bash",
+    "arguments": {
+      "command": "time nice -n 5 nohup rm -rf /opt/app"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "rm",
+      "/opt/app"
+    ],
+    "note": "W 组（原 W05）；当前：无触发段（检测缺口）；time/nice/nohup 链不判破坏性；触发后前置赋值只写 NAME=…"
+  },
+  {
+    "id": "K018",
+    "tool": "Bash",
+    "arguments": {
+      "command": "exec env TOKEN=hunter2pw rm -rf /opt/app"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "hunter2pw"
+    ],
+    "must_contain": [
+      "rm",
+      "/opt/app"
+    ],
+    "note": "W 组（原 W06）；当前：无触发段（检测缺口）；exec env 包装不判破坏性；触发后前置赋值只写 NAME=…"
+  },
+  {
+    "id": "K019",
+    "tool": "Bash",
+    "arguments": {
+      "command": "sudo -- rm -rf /opt/app"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "rm",
+      "/opt/app"
+    ],
+    "note": "W 组（原 W07）；当前：无触发段（检测缺口）；sudo -- 不判破坏性；触发后前置赋值只写 NAME=…"
+  },
+  {
+    "id": "K020",
+    "tool": "Bash",
+    "arguments": {
+      "command": "sudo hunter2pw rm -rf /opt/app"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "hunter2pw"
+    ],
+    "must_contain": [],
+    "note": "W 组（原 W08）；当前：无触发段（构造写法）；非法写法，分析器不判破坏性"
+  },
+  {
+    "id": "K021",
+    "tool": "Bash",
+    "arguments": {
+      "command": "env hunter2pw=1 rm -rf /opt/app"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "rm",
+      "/opt/app"
+    ],
+    "note": "W 组（原 W09）；当前：无触发段（检测缺口）；env 包装不判破坏性；变量名按设计显示（NAME=…），不算凭据"
+  },
+  {
+    "id": "K022",
+    "tool": "shell",
+    "arguments": {
+      "command": [
+        "env",
+        "TOKEN=correct horsepw",
+        "rm",
+        "-rf",
+        "/opt/app"
+      ]
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "horsepw"
+    ],
+    "must_contain": [
+      "rm",
+      "/opt/app"
+    ],
+    "note": "W 组（原 W10）；当前：无触发段（检测缺口）；Codex argv 被空格拼接后 env 后面的口令片段成了命令名；需拼接加引号且分析器识别 env 才有触发段，届时 horsepw 不得显示"
+  },
+  {
+    "id": "K023",
+    "tool": "shell",
+    "arguments": {
+      "command": [
+        "sudo",
+        "PASS=correct horsepw",
+        "rm",
+        "-rf",
+        "/opt/app"
+      ]
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "horsepw"
+    ],
+    "must_contain": [
+      "rm",
+      "/opt/app"
+    ],
+    "note": "W 组（原 W11）；当前：无触发段（检测缺口）；同 W10，sudo 前置赋值"
+  },
+  {
+    "id": "K024",
+    "tool": "shell",
+    "arguments": {
+      "command": [
+        "git",
+        "push",
+        "--force",
+        "https://user:correct horsepw@host/r.git",
+        "main"
+      ]
+    },
+    "subcategory": "vcs_destroy",
+    "must_not_contain": [
+      "horsepw",
+      "correct"
+    ],
+    "must_contain": [
+      "git push --force"
+    ],
+    "note": "W 组（原 W12）；当前：已满足；argv 拼接拆开的 URL 片段写 …"
+  },
+  {
+    "id": "K025",
+    "tool": "shell",
+    "arguments": {
+      "command": [
+        "nohup",
+        "env",
+        "A=x horsepw",
+        "rm",
+        "-rf",
+        "/opt/app"
+      ]
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "horsepw"
+    ],
+    "must_contain": [
+      "rm",
+      "/opt/app"
+    ],
+    "note": "W 组（原 W13）；当前：无触发段（检测缺口）；同 W10，nohup env"
+  },
+  {
+    "id": "K026",
+    "tool": "exec",
+    "arguments": {
+      "argv": [
+        "sudo",
+        "env",
+        "A=x horsepw",
+        "rm",
+        "-rf",
+        "/opt/app"
+      ]
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "horsepw"
+    ],
+    "must_contain": [
+      "rm",
+      "/opt/app"
+    ],
+    "note": "W 组（原 W14）；当前：无触发段（检测缺口）；argv 键形态 sudo env 包装不判破坏性"
+  },
+  {
+    "id": "K027",
+    "tool": "shell",
+    "arguments": {
+      "command": [
+        "bash",
+        "-lc",
+        "env A='x horsepw' rm -rf /opt/app"
+      ]
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "horsepw"
+    ],
+    "must_contain": [
+      "rm",
+      "/opt/app"
+    ],
+    "note": "W 组（原 W15）；当前：无触发段（检测缺口）；bash -lc 里 env 包装不判破坏性"
+  },
+  {
+    "id": "K028",
+    "tool": "Bash",
+    "arguments": {
+      "command": "rm -rf /tmp/ghp_abcdefghijklmnopqrstuvwxyz0123456789AB"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "ghp_abc"
+    ],
+    "must_contain": [
+      "rm -rf /tmp/"
+    ],
+    "note": "G 组（原 G01）；当前：已满足；目标里的令牌前缀被纵深检测遮掉"
+  },
+  {
+    "id": "K029",
+    "tool": "Bash",
+    "arguments": {
+      "command": "rm -rf /data/x?token=hunter2pw"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "hunter2pw"
+    ],
+    "must_contain": [
+      "rm -rf /data/x"
+    ],
+    "note": "G 组（原 G02）；当前：泄漏；已知局限候选（新决定未覆盖）：路径里的 ?token= 原样显示；可在纵深检测里加查询参数规则，或在测试里列为已知局限"
+  },
+  {
+    "id": "K030",
+    "tool": "Bash",
+    "arguments": {
+      "command": "aws s3 rm s3://AKIDKEY:hunter2pw@bucket/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "hunter2pw"
+    ],
+    "must_contain": [
+      "aws"
+    ],
+    "note": "G 组（原 G03）；当前：无触发段（检测缺口）；aws s3 rm 不判破坏性；触发后 URL userinfo 应被遮"
+  },
+  {
+    "id": "K031",
+    "tool": "Bash",
+    "arguments": {
+      "command": "rm -rf smb://bob:hunter2pw@10.0.0.5/share/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "hunter2pw"
+    ],
+    "must_contain": [
+      "rm -rf",
+      "@10.0.0.5/share/x"
+    ],
+    "note": "G 组（原 G04）；当前：已满足；目标 URL userinfo"
+  },
+  {
+    "id": "K032",
+    "tool": "Bash",
+    "arguments": {
+      "command": "rm -rf /home/zhang.san@acme-tech.com/cache"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "zhang.san@acme-tech.com"
+    ],
+    "must_contain": [
+      "rm -rf /home/",
+      "/cache"
+    ],
+    "note": "G 组（原 G05）；当前：已满足；目标里的邮箱写 <redacted:email>"
+  },
+  {
+    "id": "K033",
+    "tool": "Bash",
+    "arguments": {
+      "command": "echo x > /etc/app/out-eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIn0.c2lnc2lnc2ln.txt"
+    },
+    "subcategory": "filesystem_overwrite",
+    "must_not_contain": [
+      "eyJzdWIiOiIxIn0"
+    ],
+    "must_contain": [
+      "echo",
+      "> /etc/app/out-"
+    ],
+    "note": "G 组（原 G06）；当前：已满足；重定向目标里的 JWT"
+  },
+  {
+    "id": "K034",
+    "tool": "Bash",
+    "arguments": {
+      "command": "rm -f /etc/app/AbCdEfGh12345678ijklMNOP90qrstUVWXyz012345"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "rm -f /etc/app/"
+    ],
+    "note": "G 组（原 G07）；当前：已满足；带目录的随机长文件名按设计保留（已知局限候选：无法区分口令式文件名）"
+  },
+  {
+    "id": "K035",
+    "tool": "Bash",
+    "arguments": {
+      "command": "rm -rf /etc/app/sk-proj-abcdefghijklmnop1234"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "abcdefghijklmnop1234"
+    ],
+    "must_contain": [
+      "rm -rf /etc/app/"
+    ],
+    "note": "G 组（原 G08）；当前：已满足；目标里的 sk- 前缀"
+  },
+  {
+    "id": "K036",
+    "tool": "Bash",
+    "arguments": {
+      "command": "mysql -pS3 -e 'select 1' > /etc/app/x"
+    },
+    "subcategory": "filesystem_overwrite",
+    "must_not_contain": [
+      "-pS3"
+    ],
+    "must_contain": [
+      "mysql",
+      "> /etc/app/x"
+    ],
+    "note": "O 组（原 O01）；当前：已满足；短选项连写 2 字符口令"
+  },
+  {
+    "id": "K037",
+    "tool": "Bash",
+    "arguments": {
+      "command": "sshpass -pab ssh h cat x > /etc/app/x"
+    },
+    "subcategory": "filesystem_overwrite",
+    "must_not_contain": [
+      "-pab"
+    ],
+    "must_contain": [
+      "sshpass",
+      "> /etc/app/x"
+    ],
+    "note": "O 组（原 O02）；当前：已满足；短选项连写 2 字符口令"
+  },
+  {
+    "id": "K038",
+    "tool": "Bash",
+    "arguments": {
+      "command": "7z x -pS3cretO3 -so a.7z > /etc/app/x"
+    },
+    "subcategory": "filesystem_overwrite",
+    "must_not_contain": [
+      "S3cretO3"
+    ],
+    "must_contain": [
+      "7z",
+      "> /etc/app/x"
+    ],
+    "note": "O 组（原 O03）；当前：已满足；7z -p 连写"
+  },
+  {
+    "id": "K039",
+    "tool": "Bash",
+    "arguments": {
+      "command": "mysqldump --password -S3cretO4 db > /data/x.sql"
+    },
+    "subcategory": "filesystem_overwrite",
+    "must_not_contain": [
+      "S3cretO4"
+    ],
+    "must_contain": [
+      "mysqldump",
+      "> /data/x.sql"
+    ],
+    "note": "O 组（原 O04）；当前：已满足；口令以 - 开头被当成选项"
+  },
+  {
+    "id": "K040",
+    "tool": "Bash",
+    "arguments": {
+      "command": "openssl enc -d -aes-256-cbc -kS3cretO5 -in a > /etc/app/x"
+    },
+    "subcategory": "filesystem_overwrite",
+    "must_not_contain": [
+      "S3cretO5"
+    ],
+    "must_contain": [
+      "openssl",
+      "> /etc/app/x"
+    ],
+    "note": "O 组（原 O05）；当前：已满足；openssl -k 连写"
+  },
+  {
+    "id": "K041",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl -uadmin:S3cretO6 https://x > /etc/app/x"
+    },
+    "subcategory": "filesystem_overwrite",
+    "must_not_contain": [
+      "S3cretO6",
+      "admin:"
+    ],
+    "must_contain": [
+      "curl",
+      "> /etc/app/x"
+    ],
+    "note": "O 组（原 O06）；当前：已满足；curl -u 连写"
+  },
+  {
+    "id": "K042",
+    "tool": "Bash",
+    "arguments": {
+      "command": "redis-cli -aS3cretO7 info > /data/out"
+    },
+    "subcategory": "filesystem_overwrite",
+    "must_not_contain": [
+      "S3cretO7"
+    ],
+    "must_contain": [
+      "redis-cli",
+      "> /data/out"
+    ],
+    "note": "O 组（原 O07）；当前：已满足；redis-cli -a 连写"
+  },
+  {
+    "id": "K043",
+    "tool": "powershell",
+    "arguments": {
+      "command": "Remove-Item \\\\h\\s\\x -Recurse -Credential $(New-Object PSCredential 'bob', (ConvertTo-SecureString 'S3cretP1' -AsPlainText -Force))"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP1"
+    ],
+    "must_contain": [
+      "Remove-Item",
+      "\\\\h\\s\\x",
+      "-Recurse"
+    ],
+    "note": "P 组（原 P01）；当前：已满足；-Credential $(…) 内联"
+  },
+  {
+    "id": "K044",
+    "tool": "powershell",
+    "arguments": {
+      "command": "Remove-Item C:\\x -Recurse -Credential(New-Object PSCredential('bob',(ConvertTo-SecureString 'S3cretP2' -AsPlainText -Force)))"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP2"
+    ],
+    "must_contain": [
+      "Remove-Item C:\\x -Recurse"
+    ],
+    "note": "P 组（原 P02）；当前：已满足；-Credential( 无空格"
+  },
+  {
+    "id": "K045",
+    "tool": "powershell",
+    "arguments": {
+      "command": "Remove-Item -Path \"C:\\Users\\bob\\token-S3cretP3.txt\""
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "Remove-Item -Path",
+      "token-S3cretP3.txt"
+    ],
+    "note": "P 组（原 P03）；当前：显示不足；新口径 -Path 后的目标显示（文件名不是凭据）；当前写成 -Path …"
+  },
+  {
+    "id": "K046",
+    "tool": "powershell",
+    "arguments": {
+      "command": "Remove-Item C:\\x -Recurse -Password S3cretP4"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP4"
+    ],
+    "must_contain": [
+      "Remove-Item C:\\x -Recurse",
+      "-Password"
+    ],
+    "note": "P 组（原 P04）；当前：已满足；-Password 值写 …"
+  },
+  {
+    "id": "K047",
+    "tool": "powershell",
+    "arguments": {
+      "command": "Remove-Item C:\\x -Recurse -Credential bob:S3cretP5"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP5"
+    ],
+    "must_contain": [
+      "Remove-Item C:\\x -Recurse -Credential"
+    ],
+    "note": "P 组（原 P05）；当前：已满足；-Credential 值写 …"
+  },
+  {
+    "id": "K048",
+    "tool": "powershell",
+    "arguments": {
+      "command": "Remove-Item -Path C:\\x -Recurse; $env:PW='S3cretP6'"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP6"
+    ],
+    "must_contain": [
+      "Remove-Item -Path C:\\x -Recurse"
+    ],
+    "note": "P 组（原 P06）；当前：显示不足；新口径 -Path 后的目标显示；当前写成 -Path …"
+  },
+  {
+    "id": "K049",
+    "tool": "cmd",
+    "arguments": {
+      "command": "net use \\\\10.0.0.5\\share S3cretP7 /user:bob && rd /s /q \\\\10.0.0.5\\share\\x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP7"
+    ],
+    "must_contain": [
+      "rd /s /q \\\\10.0.0.5\\share\\x"
+    ],
+    "note": "P 组（原 P07）；当前：已满足；只取 rd 触发段"
+  },
+  {
+    "id": "K050",
+    "tool": "cmd",
+    "arguments": {
+      "command": "rd /s /q \\\\10.0.0.5\\share\\x /user:bob:S3cretP8"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP8",
+      "bob:S3cretP8"
+    ],
+    "must_contain": [
+      "rd /s /q \\\\10.0.0.5\\share\\x",
+      "/user:"
+    ],
+    "note": "P 组（原 P08）；当前：泄漏；新口径先判斜杠开关再判目标，/user:… 不显示值；当前被当作目标原样显示"
+  },
+  {
+    "id": "K051",
+    "tool": "cmd",
+    "arguments": {
+      "command": "del /f /q C:\\data\\* /p:S3cretP9"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP9"
+    ],
+    "must_contain": [
+      "del /f /q C:\\data\\*"
+    ],
+    "note": "P 组（原 P09）；当前：泄漏；同 P08，/p:… 不显示值"
+  },
+  {
+    "id": "K052",
+    "tool": "powershell",
+    "arguments": {
+      "command": "Remove-Item C:\\x -Recurse -Force -ErrorAction SilentlyContinue S3cretP10"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP10"
+    ],
+    "must_contain": [
+      "Remove-Item C:\\x -Recurse -Force"
+    ],
+    "note": "P 组（原 P10）；当前：泄漏；已知局限候选（新决定未覆盖）：多余位置参数被分析器当作目标显示"
+  },
+  {
+    "id": "K053",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "UPDATE users SET password = 'S3cretQ1'"
+    },
+    "subcategory": "database_unscoped_mutation",
+    "must_not_contain": [
+      "S3cretQ1"
+    ],
+    "must_contain": [
+      "UPDATE users SET password = ?"
+    ],
+    "note": "Q 组（原 Q01）；当前：已满足；字符串字面量"
+  },
+  {
+    "id": "K054",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "UPDATE users SET password = $a1$S3cretQ2$a1$"
+    },
+    "subcategory": "database_unscoped_mutation",
+    "must_not_contain": [
+      "S3cretQ2"
+    ],
+    "must_contain": [
+      "UPDATE users SET password = ?"
+    ],
+    "note": "Q 组（原 Q02）；当前：泄漏；美元引用标签带数字，新口径允许数字"
+  },
+  {
+    "id": "K055",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "UPDATE users SET password = \"S3cretQ3\""
+    },
+    "subcategory": "database_unscoped_mutation",
+    "must_not_contain": [
+      "S3cretQ3"
+    ],
+    "must_contain": [
+      "UPDATE users SET password = ?"
+    ],
+    "note": "Q 组（原 Q03）；当前：已满足；MySQL 双引号字符串"
+  },
+  {
+    "id": "K056",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "UPDATE users SET token = \"S3cretQ4\", note = \"x\""
+    },
+    "subcategory": "database_unscoped_mutation",
+    "must_not_contain": [
+      "S3cretQ4"
+    ],
+    "must_contain": [
+      "UPDATE users SET token = ?, note = ?"
+    ],
+    "note": "Q 组（原 Q04）；当前：已满足；多个双引号字符串"
+  },
+  {
+    "id": "K057",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "UPDATE users SET pwd = E'S3cretQ5'"
+    },
+    "subcategory": "database_unscoped_mutation",
+    "must_not_contain": [
+      "S3cretQ5"
+    ],
+    "must_contain": [
+      "UPDATE users SET pwd ="
+    ],
+    "note": "Q 组（原 Q05）；当前：已满足；E'' 转义字符串"
+  },
+  {
+    "id": "K058",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "UPDATE users SET pwd = q'[S3cretQ6]'"
+    },
+    "subcategory": "database_unscoped_mutation",
+    "must_not_contain": [
+      "S3cretQ6"
+    ],
+    "must_contain": [
+      "UPDATE users SET pwd ="
+    ],
+    "note": "Q 组（原 Q06）；当前：已满足；Oracle q'[]'"
+  },
+  {
+    "id": "K059",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "UPDATE users SET pwd = 0x5333637265745137"
+    },
+    "subcategory": "database_unscoped_mutation",
+    "must_not_contain": [
+      "5333637265745137"
+    ],
+    "must_contain": [
+      "UPDATE users SET pwd = ?"
+    ],
+    "note": "Q 组（原 Q07）；当前：已满足；十六进制字面量"
+  },
+  {
+    "id": "K060",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "UPDATE users SET pwd = 'a' || 'S3cretQ8'"
+    },
+    "subcategory": "database_unscoped_mutation",
+    "must_not_contain": [
+      "S3cretQ8"
+    ],
+    "must_contain": [
+      "UPDATE users SET pwd = ? || ?"
+    ],
+    "note": "Q 组（原 Q08）；当前：已满足；字符串拼接"
+  },
+  {
+    "id": "K061",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "UPDATE users SET col = $tag_x$S3cretQ9$tag_x$"
+    },
+    "subcategory": "database_unscoped_mutation",
+    "must_not_contain": [
+      "S3cretQ9"
+    ],
+    "must_contain": [
+      "UPDATE users SET col = ?"
+    ],
+    "note": "Q 组（原 Q09）；当前：已满足；美元引用带下划线标签"
+  },
+  {
+    "id": "K062",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "UPDATE users SET col = 'S3cret\\'Q10'"
+    },
+    "subcategory": "database_unscoped_mutation",
+    "must_not_contain": [
+      "Q10"
+    ],
+    "must_contain": [
+      "UPDATE users SET col = ?"
+    ],
+    "note": "Q 组（原 Q10）；当前：已满足；反斜杠转义引号"
+  },
+  {
+    "id": "K063",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "UPDATE users SET col = 'S3cret''Q11'"
+    },
+    "subcategory": "database_unscoped_mutation",
+    "must_not_contain": [
+      "Q11"
+    ],
+    "must_contain": [
+      "UPDATE users SET col = ?"
+    ],
+    "note": "Q 组（原 Q11）；当前：已满足；双写单引号"
+  },
+  {
+    "id": "K064",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "UPDATE \"users\" SET \"password\" = 'S3cretQ12'"
+    },
+    "subcategory": "database_unscoped_mutation",
+    "must_not_contain": [
+      "S3cretQ12"
+    ],
+    "must_contain": [
+      "UPDATE \"users\" SET \"password\" = ?"
+    ],
+    "note": "Q 组（原 Q12）；当前：已满足；引号标识符保留"
+  },
+  {
+    "id": "K065",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "TRUNCATE TABLE users -- password S3cretQ13"
+    },
+    "subcategory": "database_destroy",
+    "must_not_contain": [
+      "S3cretQ13"
+    ],
+    "must_contain": [
+      "TRUNCATE TABLE users"
+    ],
+    "note": "Q 组（原 Q13）；当前：已满足；行注释去掉"
+  },
+  {
+    "id": "K066",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "DROP TABLE users /* S3cretQ14 */"
+    },
+    "subcategory": "database_destroy",
+    "must_not_contain": [
+      "S3cretQ14"
+    ],
+    "must_contain": [
+      "DROP TABLE users"
+    ],
+    "note": "Q 组（原 Q14）；当前：已满足；块注释去掉"
+  },
+  {
+    "id": "K067",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "UPDATE users SET password = @pw := 'S3cretQ15'"
+    },
+    "subcategory": "database_unscoped_mutation",
+    "must_not_contain": [
+      "S3cretQ15"
+    ],
+    "must_contain": [
+      "UPDATE users SET password = @pw := ?"
+    ],
+    "note": "Q 组（原 Q15）；当前：已满足；MySQL 变量赋值"
+  },
+  {
+    "id": "K068",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "UPDATE users SET password = crypt('S3cretQ16', gen_salt('bf'))"
+    },
+    "subcategory": "database_unscoped_mutation",
+    "must_not_contain": [
+      "S3cretQ16"
+    ],
+    "must_contain": [
+      "UPDATE users SET password = crypt(?, gen_salt(?))"
+    ],
+    "note": "Q 组（原 Q16）；当前：已满足；函数包裹"
+  },
+  {
+    "id": "K069",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "UPDATE users SET pwd = U&'S3cretQ17'"
+    },
+    "subcategory": "database_unscoped_mutation",
+    "must_not_contain": [
+      "S3cretQ17"
+    ],
+    "must_contain": [
+      "UPDATE users SET pwd ="
+    ],
+    "note": "Q 组（原 Q17）；当前：已满足；U&'' 字符串"
+  },
+  {
+    "id": "K070",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "UPDATE users SET pwd = $1, note = 'S3cretQ18'"
+    },
+    "subcategory": "database_unscoped_mutation",
+    "must_not_contain": [
+      "S3cretQ18"
+    ],
+    "must_contain": [
+      "UPDATE users SET pwd = $1, note = ?"
+    ],
+    "note": "Q 组（原 Q18）；当前：已满足；位置参数 $1 保留"
+  },
+  {
+    "id": "K071",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "UPDATE users SET pwd = \"S3cret\"\"Q19\""
+    },
+    "subcategory": "database_unscoped_mutation",
+    "must_not_contain": [
+      "Q19"
+    ],
+    "must_contain": [
+      "UPDATE users SET pwd = ?"
+    ],
+    "note": "Q 组（原 Q19）；当前：已满足；双写双引号"
+  },
+  {
+    "id": "K072",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "UPDATE users SET pwd = $A1$S3cretQ20$A1$"
+    },
+    "subcategory": "database_unscoped_mutation",
+    "must_not_contain": [
+      "S3cretQ20"
+    ],
+    "must_contain": [
+      "UPDATE users SET pwd = ?"
+    ],
+    "note": "Q 组（原 Q20）；当前：泄漏；美元引用标签带数字（大写），新口径允许数字"
+  },
+  {
+    "id": "K073",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "UPDATE users SET pwd = 'S3cretQ21"
+    },
+    "subcategory": "database_unscoped_mutation",
+    "must_not_contain": [
+      "S3cretQ21"
+    ],
+    "must_contain": [
+      "UPDATE users SET pwd = ?"
+    ],
+    "note": "Q 组（原 Q21）；当前：已满足；未闭合引号吃到末尾"
+  },
+  {
+    "id": "K074",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "DROP USER \"S3cretQ22\""
+    },
+    "subcategory": "database_destroy",
+    "must_not_contain": [],
+    "must_contain": [
+      "DROP USER"
+    ],
+    "note": "Q 组（原 Q22）；当前：已满足；用户名是标识符，按设计显示，不算凭据"
+  },
+  {
+    "id": "K075",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "UPDATE users SET pwd = 'x' # S3cretQ23"
+    },
+    "subcategory": "database_unscoped_mutation",
+    "must_not_contain": [
+      "S3cretQ23"
+    ],
+    "must_contain": [
+      "UPDATE users SET pwd = ?"
+    ],
+    "note": "Q 组（原 Q23）；当前：已满足；MySQL # 注释去掉"
+  },
+  {
+    "id": "K076",
+    "tool": "Bash",
+    "arguments": {
+      "command": "powershell -e JABwAD0AJwBTADMAYwByAGUAdABFADEAJwA7ACAAUgBlAG0AbwB2AGUALQBJAHQAZQBtACAAQwA6AFwAZABhAHQAYQAgAC0AUgBlAGMAdQByAHMAZQAgAC0ARgBvAHIAYwBlAA== > /etc/app/o.txt"
+    },
+    "subcategory": "filesystem_overwrite",
+    "must_not_contain": [
+      "S3cretE1",
+      "JABwAD0AJwBTADMA"
+    ],
+    "must_contain": [
+      "-EncodedCommand",
+      "Remove-Item C:\\data",
+      "> /etc/app/o.txt"
+    ],
+    "note": "E 组（原 E01）；当前：已满足；-e 别名；解码后只写触发段骨架"
+  },
+  {
+    "id": "K077",
+    "tool": "Bash",
+    "arguments": {
+      "command": "powershell -ec JABwAD0AJwBTADMAYwByAGUAdABFADEAJwA7ACAAUgBlAG0AbwB2AGUALQBJAHQAZQBtACAAQwA6AFwAZABhAHQAYQAgAC0AUgBlAGMAdQByAHMAZQAgAC0ARgBvAHIAYwBlAA== > /etc/app/o.txt"
+    },
+    "subcategory": "filesystem_overwrite",
+    "must_not_contain": [
+      "S3cretE1",
+      "JABwAD0AJwBTADMA"
+    ],
+    "must_contain": [
+      "-EncodedCommand",
+      "Remove-Item C:\\data",
+      "> /etc/app/o.txt"
+    ],
+    "note": "E 组（原 E02）；当前：已满足；-ec 别名；解码后只写触发段骨架"
+  },
+  {
+    "id": "K078",
+    "tool": "Bash",
+    "arguments": {
+      "command": "powershell -en JABwAD0AJwBTADMAYwByAGUAdABFADEAJwA7ACAAUgBlAG0AbwB2AGUALQBJAHQAZQBtACAAQwA6AFwAZABhAHQAYQAgAC0AUgBlAGMAdQByAHMAZQAgAC0ARgBvAHIAYwBlAA== > /etc/app/o.txt"
+    },
+    "subcategory": "filesystem_overwrite",
+    "must_not_contain": [
+      "S3cretE1",
+      "JABwAD0AJwBTADMA"
+    ],
+    "must_contain": [
+      "-EncodedCommand",
+      "Remove-Item C:\\data",
+      "> /etc/app/o.txt"
+    ],
+    "note": "E 组（原 E03）；当前：已满足；-en 前缀；解码后只写触发段骨架"
+  },
+  {
+    "id": "K079",
+    "tool": "Bash",
+    "arguments": {
+      "command": "powershell -enc JABwAD0AJwBTADMAYwByAGUAdABFADEAJwA7ACAAUgBlAG0AbwB2AGUALQBJAHQAZQBtACAAQwA6AFwAZABhAHQAYQAgAC0AUgBlAGMAdQByAHMAZQAgAC0ARgBvAHIAYwBlAA== > /etc/app/o.txt"
+    },
+    "subcategory": "filesystem_overwrite",
+    "must_not_contain": [
+      "S3cretE1",
+      "JABwAD0AJwBTADMA"
+    ],
+    "must_contain": [
+      "-EncodedCommand",
+      "Remove-Item C:\\data",
+      "> /etc/app/o.txt"
+    ],
+    "note": "E 组（原 E04）；当前：已满足；-enc 别名；解码后只写触发段骨架"
+  },
+  {
+    "id": "K080",
+    "tool": "Bash",
+    "arguments": {
+      "command": "powershell -EncodedCommand JABwAD0AJwBTADMAYwByAGUAdABFADEAJwA7ACAAUgBlAG0AbwB2AGUALQBJAHQAZQBtACAAQwA6AFwAZABhAHQAYQAgAC0AUgBlAGMAdQByAHMAZQAgAC0ARgBvAHIAYwBlAA== > /etc/app/o.txt"
+    },
+    "subcategory": "filesystem_overwrite",
+    "must_not_contain": [
+      "S3cretE1",
+      "JABwAD0AJwBTADMA"
+    ],
+    "must_contain": [
+      "-EncodedCommand",
+      "Remove-Item C:\\data",
+      "> /etc/app/o.txt"
+    ],
+    "note": "E 组（原 E05）；当前：已满足；完整写法；解码后只写触发段骨架"
+  },
+  {
+    "id": "K081",
+    "tool": "Bash",
+    "arguments": {
+      "command": "powershell -EC JABwAD0AJwBTADMAYwByAGUAdABFADEAJwA7ACAAUgBlAG0AbwB2AGUALQBJAHQAZQBtACAAQwA6AFwAZABhAHQAYQAgAC0AUgBlAGMAdQByAHMAZQAgAC0ARgBvAHIAYwBlAA== > /etc/app/o.txt"
+    },
+    "subcategory": "filesystem_overwrite",
+    "must_not_contain": [
+      "S3cretE1",
+      "JABwAD0AJwBTADMA"
+    ],
+    "must_contain": [
+      "-EncodedCommand",
+      "Remove-Item C:\\data",
+      "> /etc/app/o.txt"
+    ],
+    "note": "E 组（原 E06）；当前：已满足；大写别名；解码后只写触发段骨架"
+  },
+  {
+    "id": "K082",
+    "tool": "Bash",
+    "arguments": {
+      "command": "powershell /enc JABwAD0AJwBTADMAYwByAGUAdABFADEAJwA7ACAAUgBlAG0AbwB2AGUALQBJAHQAZQBtACAAQwA6AFwAZABhAHQAYQAgAC0AUgBlAGMAdQByAHMAZQAgAC0ARgBvAHIAYwBlAA== > /etc/app/o.txt"
+    },
+    "subcategory": "filesystem_overwrite",
+    "must_not_contain": [
+      "S3cretE1",
+      "JABwAD0AJwBTADMA"
+    ],
+    "must_contain": [
+      "powershell",
+      "> /etc/app/o.txt"
+    ],
+    "note": "E 组（原 E07）；当前：已满足；斜杠写法按位置参数写 …；解码后只写触发段骨架"
+  },
+  {
+    "id": "K083",
+    "tool": "Bash",
+    "arguments": {
+      "command": "powershell --encodedcommand JABwAD0AJwBTADMAYwByAGUAdABFADEAJwA7ACAAUgBlAG0AbwB2AGUALQBJAHQAZQBtACAAQwA6AFwAZABhAHQAYQAgAC0AUgBlAGMAdQByAHMAZQAgAC0ARgBvAHIAYwBlAA== > /etc/app/o.txt"
+    },
+    "subcategory": "filesystem_overwrite",
+    "must_not_contain": [
+      "S3cretE1",
+      "JABwAD0AJwBTADMA"
+    ],
+    "must_contain": [
+      "powershell",
+      "> /etc/app/o.txt"
+    ],
+    "note": "E 组（原 E08）；当前：已满足；双横线写法，值写 …；解码后只写触发段骨架"
+  },
+  {
+    "id": "K084",
+    "tool": "Bash",
+    "arguments": {
+      "command": "pwsh -NoProfile -NonInteractive -enc JABwAD0AJwBTADMAYwByAGUAdABFADEAJwA7ACAAUgBlAG0AbwB2AGUALQBJAHQAZQBtACAAQwA6AFwAZABhAHQAYQAgAC0AUgBlAGMAdQByAHMAZQAgAC0ARgBvAHIAYwBlAA== > /etc/app/o.txt"
+    },
+    "subcategory": "filesystem_overwrite",
+    "must_not_contain": [
+      "S3cretE1",
+      "JABwAD0AJwBTADMA"
+    ],
+    "must_contain": [
+      "-EncodedCommand",
+      "Remove-Item C:\\data",
+      "> /etc/app/o.txt"
+    ],
+    "note": "E 组（原 E09）；当前：已满足；pwsh 带前置选项；解码后只写触发段骨架"
+  },
+  {
+    "id": "K085",
+    "tool": "Bash",
+    "arguments": {
+      "command": "powershell.exe -ExecutionPolicy Bypass -enc JABwAD0AJwBTADMAYwByAGUAdABFADEAJwA7ACAAUgBlAG0AbwB2AGUALQBJAHQAZQBtACAAQwA6AFwAZABhAHQAYQAgAC0AUgBlAGMAdQByAHMAZQAgAC0ARgBvAHIAYwBlAA== > /etc/app/o.txt"
+    },
+    "subcategory": "filesystem_overwrite",
+    "must_not_contain": [
+      "S3cretE1",
+      "JABwAD0AJwBTADMA"
+    ],
+    "must_contain": [
+      "-EncodedCommand",
+      "Remove-Item C:\\data",
+      "> /etc/app/o.txt"
+    ],
+    "note": "E 组（原 E12）；当前：已满足；powershell.exe 带 -ExecutionPolicy；解码后只写触发段骨架"
+  },
+  {
+    "id": "K086",
+    "tool": "Bash",
+    "arguments": {
+      "command": "powershell -enc JABwAD0AJwBTADMAYwByAGUAdABFADIAJwA7ACAARwBlAHQALQBDAGgAaQBsAGQASQB0AGUAbQAgAEMAOgBcAGQAYQB0AGEA > /etc/app/o.txt"
+    },
+    "subcategory": "filesystem_overwrite",
+    "must_not_contain": [
+      "S3cretE2",
+      "JABwAD0AJwBTADMA"
+    ],
+    "must_contain": [
+      "-EncodedCommand",
+      "> /etc/app/o.txt"
+    ],
+    "note": "E 组（原 E10）；当前：已满足；解码后无触发段，写 …"
+  },
+  {
+    "id": "K087",
+    "tool": "Bash",
+    "arguments": {
+      "command": "powershell -enc NotBase64S3cretE3!! > /etc/app/o.txt"
+    },
+    "subcategory": "filesystem_overwrite",
+    "must_not_contain": [
+      "S3cretE3"
+    ],
+    "must_contain": [
+      "-EncodedCommand",
+      "> /etc/app/o.txt"
+    ],
+    "note": "E 组（原 E11）；当前：已满足；非法 base64，写 …"
+  },
+  {
+    "id": "K088",
+    "tool": "shell",
+    "arguments": {
+      "command": [
+        "powershell",
+        "-ec",
+        "JABwAD0AJwBTADMAYwByAGUAdABFADEAJwA7ACAAUgBlAG0AbwB2AGUALQBJAHQAZQBtACAAQwA6AFwAZABhAHQAYQAgAC0AUgBlAGMAdQByAHMAZQAgAC0ARgBvAHIAYwBlAA=="
+      ]
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretE1",
+      "JABwAD0AJwBTADMA"
+    ],
+    "must_contain": [
+      "Remove-Item C:\\data"
+    ],
+    "note": "E 组（原 E13）；当前：已满足；数组形态 -ec 由分析器解码"
+  },
+  {
+    "id": "K089",
+    "tool": "shell",
+    "arguments": {
+      "command": [
+        "terraform",
+        "destroy",
+        "-auto-approve",
+        "-var",
+        "db_password=correct horsepw"
+      ]
+    },
+    "subcategory": "infrastructure_destroy",
+    "must_not_contain": [
+      "horsepw",
+      "correct"
+    ],
+    "must_contain": [
+      "terraform destroy -auto-approve"
+    ],
+    "note": "A 组（原 A01）；当前：显示不足；新口径 -auto-approve 原样显示；当前写成 -a…；值片段写 …"
+  },
+  {
+    "id": "K090",
+    "tool": "shell",
+    "arguments": {
+      "command": [
+        "kubectl",
+        "--token",
+        "correct horsepw",
+        "delete",
+        "ns",
+        "prod"
+      ]
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "horsepw",
+      "correct"
+    ],
+    "must_contain": [
+      "kubectl"
+    ],
+    "note": "A 组（原 A02）；当前：无触发段（构造写法）；argv 拼接后 horsepw 成了子命令位，分析器不判破坏性"
+  },
+  {
+    "id": "K091",
+    "tool": "shell",
+    "arguments": {
+      "command": [
+        "git",
+        "push",
+        "-f",
+        "origin",
+        "main",
+        "--push-option",
+        "token=correct horsepw"
+      ]
+    },
+    "subcategory": "vcs_destroy",
+    "must_not_contain": [
+      "horsepw"
+    ],
+    "must_contain": [
+      "git push -f"
+    ],
+    "note": "A 组（原 A03）；当前：已满足；拼接拆开的选项值片段写 …"
+  },
+  {
+    "id": "K092",
+    "tool": "shell",
+    "arguments": {
+      "command": [
+        "rm",
+        "-rf",
+        "/opt/app",
+        "hunter2pw"
+      ]
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "rm -rf /opt/app",
+      "hunter2pw"
+    ],
+    "note": "A 组（原 A04）；当前：已满足；rm 的位置参数都是删除目标，按设计显示"
+  },
+  {
+    "id": "K093",
+    "tool": "shell",
+    "arguments": {
+      "command": [
+        "docker",
+        "rm",
+        "-f",
+        "c1",
+        "--",
+        "correct horsepw"
+      ]
+    },
+    "subcategory": "container_destroy",
+    "must_not_contain": [],
+    "must_contain": [
+      "docker rm -f c1"
+    ],
+    "note": "A 组（原 A05）；当前：已满足；已知局限候选：拼接后被拆成两个容器名并按目标显示（argv 未加引号）"
+  },
+  {
+    "id": "V001",
+    "tool": "Bash",
+    "arguments": {
+      "command": "rm -rf /data/models/qwen2-72b/checkpoint-12000"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "rm -rf /data/models/qwen2-72b/checkpoint-12000"
+    ],
+    "note": "V 组可读性（原 U01）；当前：已满足；长路径保留"
+  },
+  {
+    "id": "V002",
+    "tool": "Bash",
+    "arguments": {
+      "command": "git reset --hard HEAD~3"
+    },
+    "subcategory": "vcs_destroy",
+    "must_not_contain": [],
+    "must_contain": [
+      "git reset --hard"
+    ],
+    "note": "V 组可读性（原 U02）；当前：已满足；提交号按骨架写 …"
+  },
+  {
+    "id": "V003",
+    "tool": "Bash",
+    "arguments": {
+      "command": "git push -f origin main"
+    },
+    "subcategory": "vcs_destroy",
+    "must_not_contain": [],
+    "must_contain": [
+      "git push -f"
+    ],
+    "note": "V 组可读性（原 U03）；当前：已满足；远端与分支写 …"
+  },
+  {
+    "id": "V004",
+    "tool": "Bash",
+    "arguments": {
+      "command": "git clean -fdx"
+    },
+    "subcategory": "vcs_destroy",
+    "must_not_contain": [],
+    "must_contain": [
+      "git clean -fdx"
+    ],
+    "note": "V 组可读性（原 U04）；当前：显示不足；新口径 git clean 短选项簇原样；当前写成 -f…"
+  },
+  {
+    "id": "V005",
+    "tool": "Bash",
+    "arguments": {
+      "command": "docker rm -f $(docker ps -aq)"
+    },
+    "subcategory": "container_destroy",
+    "must_not_contain": [],
+    "must_contain": [
+      "docker rm -f"
+    ],
+    "note": "V 组可读性（原 U05）；当前：已满足；动态参数写 …"
+  },
+  {
+    "id": "V006",
+    "tool": "Bash",
+    "arguments": {
+      "command": "docker system prune -af --volumes"
+    },
+    "subcategory": "container_destroy",
+    "must_not_contain": [],
+    "must_contain": [
+      "docker system prune -af --volumes"
+    ],
+    "note": "V 组可读性（原 U06）；当前：已满足"
+  },
+  {
+    "id": "V007",
+    "tool": "Bash",
+    "arguments": {
+      "command": "kubectl delete ns prod"
+    },
+    "subcategory": "cluster_destroy",
+    "must_not_contain": [],
+    "must_contain": [
+      "kubectl delete ns prod"
+    ],
+    "note": "V 组可读性（原 U07）；当前：已满足"
+  },
+  {
+    "id": "V008",
+    "tool": "Bash",
+    "arguments": {
+      "command": "kubectl delete pod -n prod api-7d9f8b6c5d-x2x9z --force --grace-period=0"
+    },
+    "subcategory": "cluster_destroy",
+    "must_not_contain": [],
+    "must_contain": [
+      "kubectl delete pod",
+      "api-7d9f8b6c5d-x2x9z",
+      "--force"
+    ],
+    "note": "V 组可读性（原 U08）；当前：已满足；pod 名作为目标显示"
+  },
+  {
+    "id": "V009",
+    "tool": "Bash",
+    "arguments": {
+      "command": "helm uninstall app -n prod"
+    },
+    "subcategory": "cluster_destroy",
+    "must_not_contain": [],
+    "must_contain": [
+      "helm uninstall app"
+    ],
+    "note": "V 组可读性（原 U09）；当前：已满足"
+  },
+  {
+    "id": "V010",
+    "tool": "Bash",
+    "arguments": {
+      "command": "terraform destroy -auto-approve -target=aws_instance.web"
+    },
+    "subcategory": "infrastructure_destroy",
+    "must_not_contain": [],
+    "must_contain": [
+      "terraform destroy -auto-approve -target=aws_instance.web"
+    ],
+    "note": "V 组可读性（原 U10）；当前：显示不足；新口径 -auto-approve 与 -target=<资源> 原样；当前写成 -a… -t…"
+  },
+  {
+    "id": "V011",
+    "tool": "Bash",
+    "arguments": {
+      "command": "cat template.txt > config.yaml"
+    },
+    "subcategory": "filesystem_overwrite",
+    "must_not_contain": [],
+    "must_contain": [
+      "cat",
+      "> config.yaml"
+    ],
+    "note": "V 组可读性（原 U11）；当前：已满足"
+  },
+  {
+    "id": "V012",
+    "tool": "Bash",
+    "arguments": {
+      "command": "echo '127.0.0.1 x' > /etc/hosts"
+    },
+    "subcategory": "filesystem_overwrite",
+    "must_not_contain": [],
+    "must_contain": [
+      "echo",
+      "> /etc/hosts"
+    ],
+    "note": "V 组可读性（原 U12）；当前：已满足"
+  },
+  {
+    "id": "V013",
+    "tool": "Bash",
+    "arguments": {
+      "command": "dd if=/dev/zero of=/dev/sdb bs=1M count=100"
+    },
+    "subcategory": "block_device_destroy",
+    "must_not_contain": [],
+    "must_contain": [
+      "dd",
+      "of=/dev/sdb"
+    ],
+    "note": "V 组可读性（原 U13）；当前：显示不足；新口径 of= 的值是目标，显示 of=/dev/sdb；当前写成 of=…"
+  },
+  {
+    "id": "V014",
+    "tool": "Bash",
+    "arguments": {
+      "command": "wipefs -a /dev/sdb"
+    },
+    "subcategory": "block_device_destroy",
+    "must_not_contain": [],
+    "must_contain": [
+      "wipefs -a /dev/sdb"
+    ],
+    "note": "V 组可读性（原 U14）；当前：显示不足；新口径破坏性工具选项后的目标照样显示；当前写成 -a …"
+  },
+  {
+    "id": "V015",
+    "tool": "Bash",
+    "arguments": {
+      "command": "mkfs.ext4 -F /dev/sdb1"
+    },
+    "subcategory": "block_device_destroy",
+    "must_not_contain": [],
+    "must_contain": [
+      "mkfs.ext4 -F /dev/sdb1"
+    ],
+    "note": "V 组可读性（原 U15）；当前：已满足"
+  },
+  {
+    "id": "V016",
+    "tool": "Bash",
+    "arguments": {
+      "command": "find /data/logs -name '*.log' -mtime +7 -delete"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "find /data/logs",
+      "-name",
+      "-mtime",
+      "-delete"
+    ],
+    "note": "V 组可读性（原 U16）；当前：显示不足；新口径 find 谓词原样；当前写成 -n… … -m… … -d…"
+  },
+  {
+    "id": "V017",
+    "tool": "Bash",
+    "arguments": {
+      "command": "truncate -s 0 /var/log/app.log"
+    },
+    "subcategory": "filesystem_overwrite",
+    "must_not_contain": [],
+    "must_contain": [
+      "truncate -s",
+      "/var/log/app.log"
+    ],
+    "note": "V 组可读性（原 U17）；当前：已满足"
+  },
+  {
+    "id": "V018",
+    "tool": "Bash",
+    "arguments": {
+      "command": "shred -u /etc/app/secret.key"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "shred -u /etc/app/secret.key"
+    ],
+    "note": "V 组可读性（原 U18）；当前：显示不足；新口径选项后的目标照样显示；当前写成 -u …"
+  },
+  {
+    "id": "V019",
+    "tool": "powershell",
+    "arguments": {
+      "command": "Remove-Item -Path C:\\data -Recurse -Force"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "Remove-Item -Path C:\\data -Recurse -Force"
+    ],
+    "note": "V 组可读性（原 U19）；当前：显示不足；新口径 -Path 后的目标显示；当前写成 -Path …"
+  },
+  {
+    "id": "V020",
+    "tool": "cmd",
+    "arguments": {
+      "command": "rd /s /q C:\\data"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "rd /s /q C:\\data"
+    ],
+    "note": "V 组可读性（原 U20）；当前：已满足"
+  },
+  {
+    "id": "V021",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "DROP TABLE users"
+    },
+    "subcategory": "database_destroy",
+    "must_not_contain": [],
+    "must_contain": [
+      "DROP TABLE users"
+    ],
+    "note": "V 组可读性（原 U21）；当前：已满足"
+  },
+  {
+    "id": "V022",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "DELETE FROM sessions"
+    },
+    "subcategory": "database_unscoped_mutation",
+    "must_not_contain": [],
+    "must_contain": [
+      "DELETE FROM sessions"
+    ],
+    "note": "V 组可读性（原 U22）；当前：已满足"
+  },
+  {
+    "id": "V023",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "UPDATE users SET status = 'inactive'"
+    },
+    "subcategory": "database_unscoped_mutation",
+    "must_not_contain": [],
+    "must_contain": [
+      "UPDATE users SET status = ?"
+    ],
+    "note": "V 组可读性（原 U23）；当前：已满足"
+  },
+  {
+    "id": "V024",
+    "tool": "Bash",
+    "arguments": {
+      "command": "rm -rf ~/.cache/huggingface/hub/models--Qwen--Qwen2-72B-Instruct"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "rm -rf ~/.cache/huggingface/hub/models--Qwen--Qwen2-72B-Instruct"
+    ],
+    "note": "V 组可读性（原 U24）；当前：已满足；长模型名保留"
+  },
+  {
+    "id": "V025",
+    "tool": "Bash",
+    "arguments": {
+      "command": "zfs destroy -r tank/data"
+    },
+    "subcategory": "storage_destroy",
+    "must_not_contain": [],
+    "must_contain": [
+      "zfs destroy",
+      "tank/data"
+    ],
+    "note": "V 组可读性（原 U25）；当前：无触发段（检测缺口）；zfs destroy 不判破坏性"
+  },
+  {
+    "id": "V026",
+    "tool": "Bash",
+    "arguments": {
+      "command": "parted -s /dev/sdb mklabel gpt"
+    },
+    "subcategory": "block_device_destroy",
+    "must_not_contain": [],
+    "must_contain": [
+      "parted -s /dev/sdb"
+    ],
+    "note": "V 组可读性（原 U26）；当前：显示不足；新口径选项后的目标照样显示；当前写成 -s …"
+  },
+  {
+    "id": "V027",
+    "tool": "Bash",
+    "arguments": {
+      "command": "sudo rm -rf /var/lib/docker"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "sudo rm -rf /var/lib/docker"
+    ],
+    "note": "V 组可读性（原 U27）；当前：已满足"
+  },
+  {
+    "id": "V028",
+    "tool": "Bash",
+    "arguments": {
+      "command": "git branch -D feature/x"
+    },
+    "subcategory": "vcs_destroy",
+    "must_not_contain": [],
+    "must_contain": [
+      "git branch -D"
+    ],
+    "note": "V 组可读性（原 U28）；当前：无触发段（检测缺口）；git branch -D 不判破坏性"
+  },
+  {
+    "id": "V029",
+    "tool": "Bash",
+    "arguments": {
+      "command": "docker volume rm pgdata"
+    },
+    "subcategory": "storage_destroy",
+    "must_not_contain": [],
+    "must_contain": [
+      "docker volume rm pgdata"
+    ],
+    "note": "V 组可读性（原 U29）；当前：已满足"
+  },
+  {
+    "id": "V030",
+    "tool": "Bash",
+    "arguments": {
+      "command": "> /etc/app/config.yaml"
+    },
+    "subcategory": "filesystem_overwrite",
+    "must_not_contain": [],
+    "must_contain": [
+      "> /etc/app/config.yaml"
+    ],
+    "note": "V 组可读性（原 U30）；当前：已满足；裸重定向"
+  },
+  {
+    "id": "V031",
+    "tool": "Bash",
+    "arguments": {
+      "command": "crontab -r"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "crontab -r"
+    ],
+    "note": "V 组可读性（原 U31）；当前：无触发段（检测缺口）；crontab -r 不判破坏性"
+  },
+  {
+    "id": "V032",
+    "tool": "Bash",
+    "arguments": {
+      "command": "systemctl stop app && rm -rf /opt/app"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "rm -rf /opt/app"
+    ],
+    "note": "V 组可读性（原 U32）；当前：已满足；只取 rm 触发段"
+  },
+  {
+    "id": "V033",
+    "tool": "Bash",
+    "arguments": {
+      "command": "kubectl delete -f deploy.yaml"
+    },
+    "subcategory": "cluster_destroy",
+    "must_not_contain": [],
+    "must_contain": [
+      "kubectl delete -f deploy.yaml"
+    ],
+    "note": "V 组可读性（原 U33）；当前：已满足"
+  },
+  {
+    "id": "V034",
+    "tool": "Bash",
+    "arguments": {
+      "command": "git push origin --delete feature/x"
+    },
+    "subcategory": "vcs_destroy",
+    "must_not_contain": [],
+    "must_contain": [
+      "git push",
+      "--delete"
+    ],
+    "note": "V 组可读性（原 U34）；当前：无触发段（检测缺口）；远端分支删除不判破坏性"
+  },
+  {
+    "id": "V035",
+    "tool": "Bash",
+    "arguments": {
+      "command": "rm -rf \"$DIR\"/build"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "rm -rf"
+    ],
+    "note": "V 组可读性（原 U35）；当前：已满足；动态目标写 …"
+  },
+  {
+    "id": "V036",
+    "tool": "powershell",
+    "arguments": {
+      "command": "Remove-Item -LiteralPath C:\\data -Recurse"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "Remove-Item -LiteralPath C:\\data -Recurse"
+    ],
+    "note": "V 组可读性（原 U36）；当前：已满足"
+  },
+  {
+    "id": "V037",
+    "tool": "Bash",
+    "arguments": {
+      "command": "rm -rf --no-preserve-root /"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "rm -rf --no-preserve-root /"
+    ],
+    "note": "V 组可读性（原 U37）；当前：已满足"
+  },
+  {
+    "id": "V038",
+    "tool": "Bash",
+    "arguments": {
+      "command": "mv /etc/app/config.yaml /tmp/"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "mv"
+    ],
+    "note": "V 组可读性（原 U38）；当前：无触发段（检测缺口）；mv 移走配置不判破坏性"
+  },
+  {
+    "id": "V039",
+    "tool": "Bash",
+    "arguments": {
+      "command": "cp /dev/null /etc/app/config.yaml"
+    },
+    "subcategory": "filesystem_overwrite",
+    "must_not_contain": [],
+    "must_contain": [
+      "cp",
+      "/etc/app/config.yaml"
+    ],
+    "note": "V 组可读性（原 U39）；当前：无触发段（检测缺口）；cp 覆盖不判破坏性（分析器已知局限）"
+  },
+  {
+    "id": "V040",
+    "tool": "Bash",
+    "arguments": {
+      "command": "lvremove -f /dev/vg0/data"
+    },
+    "subcategory": "storage_destroy",
+    "must_not_contain": [],
+    "must_contain": [
+      "lvremove -f /dev/vg0/data"
+    ],
+    "note": "V 组可读性（原 U40）；当前：无触发段（检测缺口）；lvremove 不判破坏性"
+  },
+  {
+    "id": "V041",
+    "tool": "Bash",
+    "arguments": {
+      "command": "rmdir -p /data/a/b"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "rmdir -p /data/a/b"
+    ],
+    "note": "V 组可读性（原 U41）；当前：显示不足；新口径选项后的目标照样显示；当前写成 -p …"
+  },
+  {
+    "id": "V042",
+    "tool": "Bash",
+    "arguments": {
+      "command": "rm -rf /data/ckpt/DeepSeekV3Base671BInstructFP8Weights2026Release01"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "rm -rf /data/ckpt/DeepSeekV3Base671BInstructFP8Weights2026Release01"
+    ],
+    "note": "V 组可读性（原 U42）；当前：已满足；带目录的长名保留"
+  },
+  {
+    "id": "V043",
+    "tool": "Bash",
+    "arguments": {
+      "command": "rm -f /var/log/app/1731484800123"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "rm -f /var/log/app/1731484800123"
+    ],
+    "note": "V 组可读性（原 U43）；当前：已满足；路径段里的纯数字文件名（时间戳、编号）不再按银行卡遮"
+  },
+  {
+    "id": "V044",
+    "tool": "Bash",
+    "arguments": {
+      "command": "kubectl delete secret db-password --namespace prod"
+    },
+    "subcategory": "cluster_destroy",
+    "must_not_contain": [],
+    "must_contain": [
+      "kubectl delete secret db-password"
+    ],
+    "note": "V 组可读性（原 U44）；当前：已满足"
+  },
+  {
+    "id": "V045",
+    "tool": "Bash",
+    "arguments": {
+      "command": "aws secretsmanager delete-secret --secret-id prod/db/main"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "aws secretsmanager delete-secret"
+    ],
+    "note": "V 组可读性（原 U45）；当前：无触发段（检测缺口）；delete-secret 不判破坏性；另注意 --secret-id 名字含 secret 会被凭据类选项判断挡住目标，建议排除 -id/-name/-arn 后缀"
+  }
+]

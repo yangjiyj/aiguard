@@ -1,0 +1,13 @@
+.git
+.env
+.env.*
+node_modules
+dist
+coverage
+test
+recovery
+prisma/*.db
+prisma/*.db-journal
+prisma/*.db-shm
+prisma/*.db-wal
+*.log

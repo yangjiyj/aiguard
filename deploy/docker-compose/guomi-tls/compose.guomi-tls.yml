@@ -1,0 +1,32 @@
+# W10 optional GM/T TLCP entry (disabled unless this file is added to the
+# compose chain *and* the "guomi-tls" profile is enabled):
+#
+#   docker compose -f docker-compose.offline.yml -f guomi-tls/compose.guomi-tls.yml \
+#     --profile guomi-tls up -d guomi-tls
+#
+# It does not replace or modify gateway-tls/web-console; removing this file
+# from the chain (or stopping the service) is the complete rollback.
+services:
+  guomi-tls:
+    image: ${GUOMI_TLS_IMAGE:-jjdguard/guomi-tls:local}
+    profiles: [guomi-tls]
+    restart: unless-stopped
+    ports:
+      - "${GUOMI_TLS_BIND:-0.0.0.0}:${GUOMI_TLS_PORT:-8443}:8443"
+    environment:
+      - GATEWAY_CORE_UPSTREAM=gateway-core:8080
+    volumes:
+      - ./tls:/certs:ro
+    depends_on:
+      gateway-core:
+        condition: service_healthy
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=16m
+      - /var/cache/guomi-tls:rw,noexec,nosuid,size=64m,uid=100,gid=101
+      - /var/run/guomi-tls:rw,noexec,nosuid,size=1m,uid=100,gid=101
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - jjdguard-net

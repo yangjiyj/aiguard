@@ -1,0 +1,563 @@
+{
+  "schema": "jjdguard-migration-lint-baseline/v1",
+  "entries": [
+    {
+      "path": "deploy/migrations/001_init_schema.sql",
+      "sha256": "08108a9246a69edf8de395e0de7389a5bd532eabb30ba37bfd3c14e77719b672",
+      "code": "nonconcurrent_large_index",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/003_private_deployment.sql",
+      "sha256": "ab137459594c3ebf57db478304cc05f0c4718738c83176be169809ff1270cc2b",
+      "code": "nonconcurrent_large_index",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/004_app_management.sql",
+      "sha256": "cdeec11dd9e9c7edea96a902fbe5234c2c7179944204556a0270022c90c5e562",
+      "code": "rewriting_or_validating_alter",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/005_content_audit.sql",
+      "sha256": "3ce6d3277ef34b9033bd420a5eef615587dd9cb165fdb96d63a61322e116d137",
+      "code": "nonconcurrent_large_index",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/006_tool_call_audit.sql",
+      "sha256": "f4501cbd599d298c78d09557105fd52e656d1634ec071fa8ab6acb9f903c81a9",
+      "code": "nonconcurrent_large_index",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/007_fix_request_logs_audit_fields.sql",
+      "sha256": "1bea27c7aec097b8571e1bed6c31fc26e37989c031c66a5579aa23466a63aeb6",
+      "code": "nonconcurrent_large_index",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/016_tool_call_rule_match.sql",
+      "sha256": "e23b6986ecb46da5b1fecceac56c6a2386b62f5dfde133ab13ee0c6f3fef76f3",
+      "code": "nonconcurrent_large_index",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/019_request_log_cost_meta.sql",
+      "sha256": "d11ced1d0eabce7d9825c996668f48aff39caaf37285a426944bd70f44e090c2",
+      "code": "nonconcurrent_large_index",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/031_request_logs_governor_fields.sql",
+      "sha256": "ba5058ebf93d309847fe276c33d99140e8743ab86b9ed0c07b7af20aa08c50e6",
+      "code": "nonconcurrent_large_index",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/032_pause_log_key_prefix_extend.sql",
+      "sha256": "55aae40e639d86f4603c10d1628ae8158160890f63126d51de37dbb1dda33470",
+      "code": "rewriting_or_validating_alter",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/033_audit_chain.sql",
+      "sha256": "b14b9eb2e770caec14a9f19ca408168a97c126984d288d0bcaa9e7e94959e543",
+      "code": "nonconcurrent_large_index",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/033_audit_chain.sql",
+      "sha256": "b14b9eb2e770caec14a9f19ca408168a97c126984d288d0bcaa9e7e94959e543",
+      "code": "unbounded_update_delete",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/045_rbac_seed.sql",
+      "sha256": "0aefc1175007fbe6d7d756296d5258faf20487b8ef5c26701f66fbf2c71c40c8",
+      "code": "unbounded_update_delete",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/051_audit_operations_user_nullable.sql",
+      "sha256": "dcba2e700ddc148e655a928d3b879b321faa694a12e6bfd97303d19736663e6a",
+      "code": "large_dml_transaction",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/052_agent_stats_query_indexes.sql",
+      "sha256": "828ace0360089b77cc36d954c36052a9efaacf0c5c65dd6f970243f32e4f9fdd",
+      "code": "nonconcurrent_large_index",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/053_agentguard_tool_call_decision.sql",
+      "sha256": "7df6c88da969e23a65edea56e4c00092804982ce52612d7c24e561b77221eb31",
+      "code": "nonconcurrent_large_index",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/060_forward_proxy_access_records.sql",
+      "sha256": "9394721d30f30d5fb8b35691078384197a42d18c346acff620859a27c80d0d32",
+      "code": "nonconcurrent_large_index",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/061_access_retention.sql",
+      "sha256": "f6fe58e2b6065254786ee3436886b155173c8fd25d9d23f4bf840ba5193874c2",
+      "code": "nonconcurrent_large_index",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/063_security_events_alerted_at.sql",
+      "sha256": "4348c47e13099229735cd528ad2b380287e4019844fcd7c01984c66e9db30eac",
+      "code": "nonconcurrent_large_index",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/066_eval_integration_request_logs.sql",
+      "sha256": "5f09463e6c93ce724aac878428c3f42411264155c97474473a524f37588e8ffe",
+      "code": "nonconcurrent_large_index",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/069_request_logs_audit_action_indexes.sql",
+      "sha256": "3a9d2a4a1fe4c3d2945e970c10acf3f541d9258ad61c64c7e52461de5ed82926",
+      "code": "nonconcurrent_large_index",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/070_alert_groups.sql",
+      "sha256": "729292ff0415ef463e7306fdb4ae53f8eca4a599f24f009232d7f4519a8928d7",
+      "code": "nonconcurrent_large_index",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/072_outbox_events.sql",
+      "sha256": "4f39a360be7459a257eeea05787d74bdf83ff2bc56349cf89d29c0d473455cc6",
+      "code": "nonconcurrent_large_index",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/073_request_logs_risk_columns.sql",
+      "sha256": "915632450d8d2428a596ff42e1a024c6c0182efb079e13bb9039569aefe2a0fb",
+      "code": "nonconcurrent_large_index",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/079_drop_dead_indexes.sql",
+      "sha256": "ca21fdc88f88d0ffa39fb1441803550b861d305d97cc87cc802ed61ac634672f",
+      "code": "nonconcurrent_large_index",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/093_access_content_turn_index.sql",
+      "sha256": "9ceece4b7d56d6d57bd907b98090f1a3ec4620943cc4b25164cfe59d5e20ddaa",
+      "code": "nonconcurrent_large_index",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/110_scan_fingerprints.sql",
+      "sha256": "c4229cc5beaedcd84586bb460856371d69ac27954bd3121e17244f77e46edeaf",
+      "code": "nonconcurrent_large_index",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/111_alert_occurrence_dedup.sql",
+      "sha256": "5f9b68f0c5f8e8f60b30e2e2efdff6f54dbc3ed35ea164acb19bec5b6e5acafb",
+      "code": "nonconcurrent_large_index",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/112_remove_hard_floor.sql",
+      "sha256": "25b66c7ffb3e2669bb029e07e1cc80f97ea9572d5d57c44e92c99a74aa9abe03",
+      "code": "nonconcurrent_large_index",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/115_request_logs_ttft.sql",
+      "sha256": "5bcff158c5a4357bdb51ed0c1db83b7ccdb1b6a4321fc8a6047afd0290465b63",
+      "code": "synchronous_constraint_validation",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/115_skill_gateway_assets.sql",
+      "sha256": "c854ca19836b9e090b6aefee963f6a0831c43452597df7527c6264c6a06dd185",
+      "code": "unbounded_update_delete",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/116_mcp_confirmation_execution.sql",
+      "sha256": "5bd320688370c52f63d6c998cf22dc581341744cd2425082acfdc909196ccc13",
+      "code": "rewriting_or_validating_alter",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/116_mcp_confirmation_execution.sql",
+      "sha256": "5bd320688370c52f63d6c998cf22dc581341744cd2425082acfdc909196ccc13",
+      "code": "unbounded_update_delete",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/117_mcp_supply_chain_admission.sql",
+      "sha256": "aa477a379b2422c2c58f021b93e98de4c2a18c7bc21e7173d0d0ce3a87da9283",
+      "code": "unbounded_update_delete",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/122_header_contract_conflict_idempotency.sql",
+      "sha256": "5cc2dc209b302afcf70b67500870b358cc9cfa0f012e8f93b38a3d2879c71d7a",
+      "code": "nonconcurrent_large_index",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/125_policy_capability_bindings.sql",
+      "sha256": "3f06eeeac52d8fa1820ad62218be36f4ed5ab75e019943e87a739a433ad222bc",
+      "code": "row_function_backfill",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/131_content_evidence_lifecycle.sql",
+      "sha256": "9b22c5faba063df6a15974ea5d3f2d16023d0d593dbcb0af782cd8a8d5ab64c5",
+      "code": "unbounded_update_delete",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/137_enterprise_identity_department.sql",
+      "sha256": "ba9cda6d43512b1ade226782b3dbcb712ed602d0aeda2b19306580cc0a007b60",
+      "code": "nonconcurrent_large_index",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/137_enterprise_identity_department.sql",
+      "sha256": "ba9cda6d43512b1ade226782b3dbcb712ed602d0aeda2b19306580cc0a007b60",
+      "code": "rewriting_or_validating_alter",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/137_enterprise_identity_department.sql",
+      "sha256": "ba9cda6d43512b1ade226782b3dbcb712ed602d0aeda2b19306580cc0a007b60",
+      "code": "unbounded_update_delete",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/140_agent_destructive_operation_governance.sql",
+      "sha256": "ab50d65695dd382a44c876a27836d7d2f36cb7b15b3d70f76afdc4f437363e26",
+      "code": "nonconcurrent_large_index",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/140_agent_destructive_operation_governance.sql",
+      "sha256": "ab50d65695dd382a44c876a27836d7d2f36cb7b15b3d70f76afdc4f437363e26",
+      "code": "unbounded_update_delete",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/141_tool_call_log_status_width.sql",
+      "sha256": "a6cb60a2e1a06b3dce44739a0feeb076ce868e3849e9afed169f845b3316d498",
+      "code": "rewriting_or_validating_alter",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/143_alert_list_indexes.sql",
+      "sha256": "72b87cc073b90be5f775b1aafff785066cb8f839c864304d996b7db721600a63",
+      "code": "nonconcurrent_large_index",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/144_retained_artifacts.sql",
+      "sha256": "a22a3425e539bcc2f0a5a66d8e0fddf0249f7a5ec3434459e5d389abbcaaad3c",
+      "code": "nonconcurrent_large_index",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/145_evidence_runs.sql",
+      "sha256": "034abc1de5488f351e855bc3f808ca980c9de6bd70efce13f0fa5e206cee5068",
+      "code": "nonconcurrent_large_index",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/146_evidence_run_request_index.sql",
+      "sha256": "2a2a0ca31e77f752184cdbf1d8a0f8cb6dcfd3d99aa598d1975fa69b910b7f27",
+      "code": "materialized_full_table_dml",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/146_evidence_run_request_index.sql",
+      "sha256": "2a2a0ca31e77f752184cdbf1d8a0f8cb6dcfd3d99aa598d1975fa69b910b7f27",
+      "code": "nonconcurrent_large_index",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/146_evidence_run_request_index.sql",
+      "sha256": "2a2a0ca31e77f752184cdbf1d8a0f8cb6dcfd3d99aa598d1975fa69b910b7f27",
+      "code": "unbounded_update_delete",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/147_evidence_run_request_index_triggers.sql",
+      "sha256": "72c77cdb199a156ba8c16d0df2f11d71bd29bb375d5892a9666358aa5715d173",
+      "code": "unbounded_update_delete",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/148_evidence_run_request_index_catchup.sql",
+      "sha256": "728a47ab137ded317778124fb4fab8d6b97d02c82b444f45d69fa813d1b2d3c5",
+      "code": "materialized_full_table_dml",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/148_evidence_run_request_index_catchup.sql",
+      "sha256": "728a47ab137ded317778124fb4fab8d6b97d02c82b444f45d69fa813d1b2d3c5",
+      "code": "row_function_backfill",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/149_model_endpoint_capability_facts.sql",
+      "sha256": "d70d7d689b24b9a8fc965589cb5e030f29e3c8b64a0666fd7588c500c4f38807",
+      "code": "nonconcurrent_large_index",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/152_request_outcome_dimensions.sql",
+      "sha256": "b21521d135b99ce7bdf23adaa3cf96b59190a5644e6e79735a8cfce82ac8f043",
+      "code": "nonconcurrent_large_index",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/154_sensitive_data_capabilities.sql",
+      "sha256": "259947088dbc33eccf2407e101adeefca4565827ef4e7a63da0e67c4b8ebbc66",
+      "code": "unbounded_update_delete",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/156_runtime_policy_catalog.sql",
+      "sha256": "9135e6d1656a6a07c9f973b9072fa350926911fbe51344320aae5e0c8e0e247e",
+      "code": "unbounded_update_delete",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/157_deterministic_policy_catalog.sql",
+      "sha256": "2e1226e7431a986357e6a8bea38232a1701950ce34a8e6fa041fbbe18bd6e3a3",
+      "code": "unbounded_update_delete",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/158_code_security_policy_catalog.sql",
+      "sha256": "3ba0cb9dcf5b572c63f860bedd27ec15d149b81bfa4f72de08e6329f367dc2b4",
+      "code": "unbounded_update_delete",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/159_fraud_trade_policy_catalog.sql",
+      "sha256": "634651a5a142817d4864a8c0a551666ab917292be99c95497835dd701f3f961d",
+      "code": "unbounded_update_delete",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/160_injection_policy_catalog.sql",
+      "sha256": "775422b01e9e6ddb322ef360b36708a7d748f324aa3fe840d29dc3915014a2bb",
+      "code": "unbounded_update_delete",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/161_copyright_plugin_policy_catalog.sql",
+      "sha256": "b1109d19c94d26382dd56aca95539535f066f0223b389542310f7dcca5d52b50",
+      "code": "unbounded_update_delete",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/162_content_safety_policy_catalog.sql",
+      "sha256": "81e17c886dd637ee849dbf0b685e33d5fdc0ed78be98f92125b3614ee03c3b3e",
+      "code": "unbounded_update_delete",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/163_rag_supply_policy_catalog.sql",
+      "sha256": "307705510860f4b6622e4cce29365242aa24630aa51cee4ee535bf1b7b05d52c",
+      "code": "unbounded_update_delete",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/164_semantic_pretext_policy_catalog.sql",
+      "sha256": "e624d2a3ab256037c806bfbd8dd33e4df9429ba41c2d1c83a1cff24eddc08caa",
+      "code": "unbounded_update_delete",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/165_request_context_policy_catalog.sql",
+      "sha256": "155e8713024faf7742d5ff1a1bbcc942be2fe2a5896b21bf78d6a31601ff4e0c",
+      "code": "unbounded_update_delete",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/166_policy_catalog_retirement.sql",
+      "sha256": "77b36ddcc185dfdc582ccb64d1bf8186d59e5a70db71a429cd9d4635b1840a4d",
+      "code": "large_dml_transaction",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/166_policy_catalog_retirement.sql",
+      "sha256": "77b36ddcc185dfdc582ccb64d1bf8186d59e5a70db71a429cd9d4635b1840a4d",
+      "code": "unbounded_update_delete",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/800_acme_billing_core.sql",
+      "sha256": "852404a1590129d7859405e3d9f719f82dae87455cb5d4306798320eba6342ee",
+      "code": "unbounded_update_delete",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/803_billing_customer_groups.sql",
+      "sha256": "79cd117d9c30f1cc33e1f2e7be405729c26580ab578fac892f8ee2e5279f266d",
+      "code": "unbounded_update_delete",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/807_billing_tariffs_analytics.sql",
+      "sha256": "6a90efc7b588ab4ea8f8d138167633f0fbeb71c2585d24d2ffc609e8684849cd",
+      "code": "unbounded_update_delete",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/809_model_scoped_tariffs.sql",
+      "sha256": "a79a58cda4e473b2115c2b2d1646847681f2266497b859ebaa85ca4b6a3e2d21",
+      "code": "row_function_backfill",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/817_model_name_history.sql",
+      "sha256": "3a4fe3b7a6bd7d5948e1316ebc001f8b38ec844502158118609de5d69d46586b",
+      "code": "unbounded_update_delete",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/820_customer_content_projection_triggers.sql",
+      "sha256": "a890afe095548d1ac0f49b23141d1a97bc37f4ecf69b967db80fefa09ec8ca07",
+      "code": "unbounded_update_delete",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/823_principal_context_subject_binding.sql",
+      "sha256": "c5cb98071f012d4f2e254ae07e325c46a022926c724a9732b20b1eb4f08bc5a9",
+      "code": "nonconcurrent_large_index",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/827_quota_policy_money_micros.sql",
+      "sha256": "4662e420ad1f521ca252415e82f730cf1b691a01e04644aa59cedc25e74ccc92",
+      "code": "unbounded_update_delete",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/830_agent_identity_registration.sql",
+      "sha256": "a40ec32844d28978312aa4aa434da62e1577504065ade4770707e3e62e38f928",
+      "code": "nonconcurrent_large_index",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/830_agent_identity_registration.sql",
+      "sha256": "a40ec32844d28978312aa4aa434da62e1577504065ade4770707e3e62e38f928",
+      "code": "unbounded_update_delete",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/861_mcp_server_change_notify.sql",
+      "sha256": "58c1b32b873e4714e913a77f7b4b1c9c90d66174ff99f48141f005d218f1a5af",
+      "code": "unbounded_update_delete",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/870_revoke_user_keys_on_disable.sql",
+      "sha256": "57d0f4a3c6ce5a6c94493dc73378969d9333136dd6423058a79cb65923bff145",
+      "code": "large_dml_transaction",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/870_revoke_user_keys_on_disable.sql",
+      "sha256": "57d0f4a3c6ce5a6c94493dc73378969d9333136dd6423058a79cb65923bff145",
+      "code": "unbounded_update_delete",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/890_three_officer_roles.sql",
+      "sha256": "721e35e8daba72c6c50ded177e5e3d099b42fb4d4f64e47183de9877b2be0d60",
+      "code": "large_dml_transaction",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/890_three_officer_roles.sql",
+      "sha256": "721e35e8daba72c6c50ded177e5e3d099b42fb4d4f64e47183de9877b2be0d60",
+      "code": "unbounded_update_delete",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/900_agentguard_policy_center_merge.sql",
+      "sha256": "6b4afbe563e94fd0bbb9233cf975fc632e63e9a8822a132cfd724f8a97b0956a",
+      "code": "row_function_backfill",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/900_agentguard_policy_center_merge.sql",
+      "sha256": "6b4afbe563e94fd0bbb9233cf975fc632e63e9a8822a132cfd724f8a97b0956a",
+      "code": "unbounded_update_delete",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/910_billing_exception_resolutions.sql",
+      "sha256": "04dba9186376ac15db3f6350e6c29ae823a6f2773834336e9072154dd435e998",
+      "code": "unbounded_update_delete",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/930_identity_sources_multi.sql",
+      "sha256": "837835cbbb318e82436d645cdc233de096b516aedaa581ee3d9e86712a2bbddc",
+      "code": "rewriting_or_validating_alter",
+      "reason": "Published historical behavior; tracked in the risk register for staged expand-contract replacement."
+    },
+    {
+      "path": "deploy/migrations/863_agent_hook_event_projection.sql",
+      "sha256": "1be716bef6023e528644bc671071285864d21618f27f25e9315f897a6bd1b3a5",
+      "code": "rewriting_or_validating_alter",
+      "reason": "Reviewed integration schema expansion: VARCHAR to TEXT is binary-coercible, keeps all values, requires a bounded quiesced writer window; large index moved to independent concurrent migration947. Exact production clone upgrade and rollback must verify compatibility."
+    },
+    {
+      "path": "deploy/migrations/941_alert_groups_domain.sql",
+      "sha256": "95fd36f854c19d4414b2e9f5ac06a8df2509ccb51be1244a322872e8a8c03c7e",
+      "code": "nonconcurrent_large_index",
+      "reason": "Existing main migration unchanged from fd830e3f and already deployed; preserve historical checksum and do not reexecute on upgraded nodes. Kept as historical accepted risk; clean installation has empty audit tables."
+    },
+    {
+      "path": "deploy/migrations/963_p2_billing_ops_alerts.sql",
+      "sha256": "f5e5546b29fbeea21388c2d50e723579cc230bc282520ca761548b4cfa2d9d63",
+      "code": "nonconcurrent_large_index",
+      "reason": "CREATE INDEX targets billing_ops_alert_marks, a table created empty earlier in the same migration; no preexisting large table is scanned."
+    },
+    {
+      "path": "deploy/migrations/972_user_model_extra_grants.sql",
+      "sha256": "939973d0ce8567d89235cb027d68bafbd6cd519dd07eb7accf307a66fca19674",
+      "code": "nonconcurrent_large_index",
+      "reason": "Indexes target user_model_extra_grants, a new empty table created in this same additive migration; no preexisting large table is scanned."
+    },
+    {
+      "path": "deploy/migrations/974_user_account_merges.sql",
+      "sha256": "776f96e2e429bc3f3ef0b263a31aad52166887acb9f5fd7c53b7c292c08132fc",
+      "code": "nonconcurrent_large_index",
+      "reason": "Index targets the new empty user_account_merges annotation table created in this same additive migration; no existing usage or billing history is rewritten."
+    },
+    {
+      "path": "deploy/migrations/987_content_logs_body_dedup.sql",
+      "sha256": "d7b7de2e76f2099c6539a1ae3d7a06b62e2a8bbd268f58956a3a8d26bc04fa9d",
+      "code": "nonconcurrent_large_index",
+      "reason": "Indexes target content_log_entries and content_log_bodies, new empty tables created earlier in this same migration; the large original table is only renamed (catalog-only) and is not scanned or reindexed."
+    },
+    {
+      "path": "deploy/migrations/988_internal_title_request.sql",
+      "sha256": "0bf46049f66b5512f583abd30933e5b079b439e1cb3e13ad9f5a212ec56dd5c2",
+      "code": "nonconcurrent_large_index",
+      "reason": "Already merged to main and applied on field nodes (192.168.20.246); rewriting it would break the applied checksum. The partial index covers every existing request_logs row (the column is added NULL in this same migration), so it is a full scan that blocks request_logs writes while it builds; accepted because field request_logs volume is small (~12k rows / 271 MB on 246). Future request_logs indexes must use CREATE INDEX CONCURRENTLY."
+    }
+  ]
+}

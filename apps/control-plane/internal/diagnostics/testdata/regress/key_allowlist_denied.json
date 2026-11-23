@@ -1,0 +1,128 @@
+{
+  "name": "key_allowlist_denied",
+  "description": "同一账号两把密钥，其中一把的模型白名单不含该模型：网关 403 key_model_not_allowed 会写请求记录（reject_reason=key_allowlist），请求树应确定指出是哪把密钥，而不是甩给上游鉴权",
+  "fixture": {
+    "teams": [
+      {
+        "key": "dev",
+        "mode": "allowlist",
+        "models": [
+          "sol",
+          "luna"
+        ]
+      }
+    ],
+    "providers": [
+      {
+        "key": "p1",
+        "name": "主渠道",
+        "type": "openai",
+        "base_url": "https://api.example.com"
+      }
+    ],
+    "models": [
+      {
+        "key": "sol",
+        "provider": "p1",
+        "name": "gpt-6.1-sol"
+      },
+      {
+        "key": "luna",
+        "provider": "p1",
+        "name": "gpt-6-luna"
+      }
+    ],
+    "users": [
+      {
+        "key": "zs",
+        "username": "zhangsan",
+        "team": "dev"
+      }
+    ],
+    "internal_keys": [
+      {
+        "key": "k_open",
+        "user": "zs",
+        "name": "张三的网页助手"
+      },
+      {
+        "key": "k_narrow",
+        "user": "zs",
+        "name": "张三的编程助手",
+        "model_allowlist": [
+          "gpt-6-luna"
+        ]
+      }
+    ],
+    "request_logs": [
+      {
+        "label": "denied",
+        "count": 1,
+        "user": "zs",
+        "key": "k_narrow",
+        "status": "key_model_not_allowed",
+        "upstream_status": 403,
+        "from": "-5m",
+        "to": "-5m",
+        "routing_decision_json": {
+          "client_model": "gpt-6.1-sol",
+          "reject_reason": "key_allowlist",
+          "fallback_retries": 0
+        }
+      }
+    ]
+  },
+  "input": {
+    "kind": "request",
+    "ref": "@denied:1",
+    "text": "张三的编程助手调用 gpt-6.1-sol 返回 403",
+    "scope": "admin"
+  },
+  "expect": {
+    "tier": "L2",
+    "must_check_ids_any": [
+      "key_model_allowlist"
+    ],
+    "must_keywords": [
+      "白名单",
+      "gpt-6.1-sol",
+      "张三的编程助手",
+      "密钥管理"
+    ],
+    "must_level": {
+      "key_model_allowlist": "confirmed"
+    },
+    "forbid_keywords": [
+      "凭据",
+      "鉴权",
+      "上游"
+    ],
+    "l3": {
+      "level_by_kw": [
+        {
+          "kw": [
+            "白名单"
+          ],
+          "level": "confirmed"
+        }
+      ],
+      "forbid_keywords": [
+        "上游",
+        "凭据"
+      ],
+      "must_keywords": [
+        "gpt-6.1-sol",
+        "白名单"
+      ],
+      "must_keywords_any": [
+        "张三的编程助手",
+        "t160"
+      ],
+      "must_keywords_any2": [
+        "密钥",
+        "Key",
+        "key"
+      ]
+    }
+  }
+}

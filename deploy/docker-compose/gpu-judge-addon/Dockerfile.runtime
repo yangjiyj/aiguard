@@ -1,0 +1,22 @@
+ARG LOCAL_RUNTIME_IMAGE
+FROM ${LOCAL_RUNTIME_IMAGE}
+USER root
+RUN install -d -m 755 /usr/share/jjdguard
+ARG RELEASE_REVISION
+LABEL org.opencontainers.image.title="JJDGuard GPU Judge" \
+      org.opencontainers.image.revision="$RELEASE_REVISION" \
+      com.jjdguard.llama_cpp_revision="3653e6d6d547ec763317d9ecd0ace334a7e21359" \
+      com.jjdguard.cuda_architectures="86" \
+      com.jjdguard.build_mode="verified-runtime-reuse"
+COPY --chmod=755 --from=gpu-runtime-input llama/ /opt/llama/
+COPY --chmod=755 --from=gpu-runtime-input lib/ /opt/jjdguard/cuda-lib/
+COPY --chmod=755 --from=gpu-runtime-input licenses/ /usr/share/licenses/jjdguard-cuda-runtime/
+COPY --chmod=444 --from=gpu-runtime-input receipt.json /usr/share/jjdguard/gpu-runtime-input.json
+COPY --chmod=755 entrypoint.sh /usr/local/bin/jjdguard-gpu-judge
+COPY --chmod=755 healthcheck.sh /usr/local/bin/jjdguard-gpu-judge-health
+ENV LD_LIBRARY_PATH=/opt/llama:/opt/jjdguard/cuda-lib \
+    GGML_BACKEND_PATH=/opt/llama/libggml-cuda.so \
+    NVIDIA_VISIBLE_DEVICES=all \
+    NVIDIA_DRIVER_CAPABILITIES=compute,utility
+USER judge
+ENTRYPOINT ["/usr/local/bin/jjdguard-gpu-judge"]

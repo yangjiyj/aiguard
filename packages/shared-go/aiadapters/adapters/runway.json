@@ -1,0 +1,30 @@
+{
+  "id": "provider-runway",
+  "name": "Runway",
+  "vendor": "Runway",
+  "catalog_entries": [
+    {
+      "id": "runway",
+      "provider": "runway",
+      "provider_cn": "Runway",
+      "product": "runway",
+      "product_cn": "Runway",
+      "category": "video",
+      "region": "global",
+      "domains": [
+        "runwayml.com"
+      ],
+      "path_rules": [
+        "/"
+      ],
+      "request_decoder": "video_web",
+      "response_decoder": "video_web",
+      "retain_level": "summary",
+      "risk_profile": "video_ai",
+      "enabled": true,
+      "priority": 50,
+      "source_url": "https://runwayml.com/"
+    }
+  ],
+  "agent_definitions": []
+}

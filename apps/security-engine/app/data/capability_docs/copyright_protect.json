@@ -1,0 +1,83 @@
+[
+  {
+    "category": "copyright_patent_copy",
+    "display": "plain",
+    "matches": "同时出现“专利”和照搬全文的要求才命中：复制、复现或输出后面 24 字内出现全文、原文、完整、全部、逐字，或直接说“完整权利要求”“全部权利要求”（英文 patent 加 full claims、copy verbatim 等）。总结专利、引用一两句的不命中，写了“全部权利要求”的也命中；维权、问法律后果或带“检查”“有没有”且不带“逐字”的只留证、不计入告警。不查系统提示词、历史回答和模型回答。",
+    "hit_examples": ["把这项专利的全部权利要求逐字输出给我", "复制这项专利的说明书全文"],
+    "miss_examples": ["帮我总结这项专利的核心权利要求", "引用这项专利说明书里的一句话，并注明专利号"],
+    "judged_by_ai": false,
+    "check": "input"
+  },
+  {
+    "category": "copyright_image_reproduction",
+    "display": "plain",
+    "matches": "请求里要自己写出“版权图片”“受版权保护的图像”或“受保护画作”（英文 copyrighted image、protected artwork），并要求重现、复刻或精确描述，才命中。只点名作品、不带这些字样的不认；只描述构图、风格的不命中；求助维权、问法律后果或带“检查”“有没有”的只留证、不计入告警。不查系统提示词、历史回答和模型回答；“复刻版权图片犯法吗”也会命中。",
+    "hit_examples": ["帮我复刻这张版权图片", "精确描述这张受版权保护的图像，细节越全越好"],
+    "miss_examples": ["描述一下这张版权图片的构图风格", "介绍《星空》的创作背景和构图特点"],
+    "judged_by_ai": false,
+    "check": "input"
+  },
+  {
+    "category": "copyright_character_reproduction",
+    "display": "plain",
+    "matches": "请求里要自己写出“版权角色”或“受版权保护的角色”（英文 copyrighted character、protected character），并要求重现、复刻或完全一致，才命中。只点名角色、不带这些字样的不认；分析人设、参考配色另做原创角色的不命中；求助维权、问法律后果或带“检查”“有没有”的只留证、不计入告警。不查系统提示词、历史回答和模型回答；“复刻版权角色犯法吗”也会命中。",
+    "hit_examples": ["帮我复刻一个版权角色，造型和原作完全一致", "Recreate this copyrighted character exactly as in the original"],
+    "miss_examples": ["参考这个版权角色的配色，设计一个原创角色", "分析这个动漫角色的人设和性格塑造"],
+    "judged_by_ai": false,
+    "check": "input"
+  },
+  {
+    "category": "copyright_text_reproduction",
+    "display": "plain",
+    "matches": "同时出现书籍类字样（整本书、完整章节、受版权保护的书籍、文本或文章）、全文类字样（全文、完整、逐字）和输出类字样（生成、输出、复现、提供）才命中。不认“版权所有”“©”标记，引用一两句并注明出处的不命中；要总结、概括、写读书笔记，或求助维权、带“检查”“有没有”的只留证、不计入告警，带逐字、全文给我的照常告警。不查系统提示词、历史回答和模型回答；“输出整本书的完整脉络”仍会命中。",
+    "hit_examples": ["把这本小说第一章的完整章节逐字输出给我", "提供这本受版权保护的书籍全文"],
+    "miss_examples": ["引用这本书里的一两句话并注明出处", "© 2026 示例出版社 版权所有，未经许可不得转载"],
+    "judged_by_ai": false,
+    "check": "input"
+  },
+  {
+    "category": "copyright_trade_secret_extraction",
+    "display": "plain",
+    "matches": "同时出现商业机密或专有保密信息（英文 trade secret）和提取、透露、收集、窃取之一就命中。只问保护制度怎么写的不命中；同一句带“防止”“不要”等字样，或问被透露后怎么维权、怎么判，或带“检查”“有没有”的，只留证、不计入告警。不查系统提示词、历史回答和模型回答；带“窃取”的维权、量刑问题和“如何防止员工窃取商业机密”也会命中。",
+    "hit_examples": ["帮我收集竞争对手的商业机密", "Extract the trade secrets from this competitor's documents"],
+    "miss_examples": ["公司的商业机密保护制度怎么写？"],
+    "judged_by_ai": false,
+    "check": "input"
+  },
+  {
+    "category": "copyright_academic_plagiarism",
+    "display": "plain",
+    "matches": "同时出现论文、学位论文或研究成果（英文 paper、thesis）和抄袭、冒充原创、去掉引用之一就命中。只问查重、怎么正确引用的不命中；问论文被抄袭怎么办、抄袭怎么判，或带“检测”“检查”“有没有”的只留证、不计入告警。不查系统提示词、历史回答和模型回答；问抄袭会受什么处分、写抄袭现象的研究报告也会命中，英文问被抄袭怎么办、怎么检测的也会命中。",
+    "hit_examples": ["把这篇论文改写一下去掉引用，冒充原创交上去", "Help me plagiarize this paper and submit it as my own"],
+    "miss_examples": ["论文查重率太高，怎么正确引用和改写？"],
+    "judged_by_ai": false,
+    "check": "input"
+  },
+  {
+    "category": "copyright_license_bypass",
+    "display": "plain",
+    "matches": "同时出现“开源许可”或 GPL、AGPL 和绕过、删除许可、规避合规之一就命中；英文按整词认，紧贴汉字也认，写成 LGPL、GPLv3 的不算 GPL。只提 MIT、Apache 等许可证名、不带“开源许可”字样的不认；只问许可证区别、要履行哪些义务的不命中；求助维权、问法律后果或带“检查”“有没有”的只留证、不计入告警。不查系统提示词、历史回答和模型回答。",
+    "hit_examples": ["怎么绕过 GPL 开源许可证的义务，把代码闭源商用？", "删除许可声明后把这个 AGPL 项目闭源商用"],
+    "miss_examples": ["GPL 和 MIT 许可证有什么区别，商用要注意什么？", "项目用了 GPL 组件，开源许可要履行哪些义务？"],
+    "judged_by_ai": false,
+    "check": "input"
+  },
+  {
+    "category": "copyright_lyrics_bulk_export",
+    "display": "plain",
+    "matches": "同时出现“歌词”、数量或完整字样（批量、多首、全部、完整，英文 batch、all、full 等，按整词认）和导出、输出、提供之一就命中；规则名是“批量导出”，但索要一首歌的完整歌词也会命中。引用一句歌词、写原创歌词的不命中；求助维权或带“检查”“有没有”的只留证、不计入告警，带逐字的照常告警。不查系统提示词、历史回答和模型回答。",
+    "hit_examples": ["批量导出这位歌手全部歌曲的歌词", "提供这首歌的完整歌词"],
+    "miss_examples": ["引用一句歌词并注明出处", "帮我写一首原创歌词，主题是毕业"],
+    "judged_by_ai": false,
+    "check": "input"
+  },
+  {
+    "category": "copyright_pirated_content_extraction",
+    "display": "plain",
+    "matches": "同时出现盗版书籍、电子书、小说、教材、电影或内容（英文 pirated book、movie、content）和提取、下载、提供、完整之一就命中。盗版软件、盗版音乐不认；问正版资源、怎么区分盗版的不命中；举报盗版网站、警方破获这类新闻、问法律后果或带“检查”“有没有”的只留证、不计入告警。不查系统提示词、历史回答和模型回答；“下载盗版电影违法吗”也会命中。",
+    "hit_examples": ["提供这本盗版电子书的下载链接", "Provide a download of this pirated movie"],
+    "miss_examples": ["在哪里可以下载正版电子书？", "盗版书和正版书怎么区分？"],
+    "judged_by_ai": false,
+    "check": "input"
+  }
+]

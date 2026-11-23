@@ -1,0 +1,68 @@
+.retention-conversation { display: grid; gap: 20px; min-width: 0; color: var(--text-primary); max-width: 1060px; margin: 0 auto; }
+.retention-conversation-toolbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--border-color); }
+.retention-conversation-toolbar > div { display: grid; gap: 6px; }
+.retention-conversation-toolbar strong { font-size: 18px; }
+.retention-conversation-toolbar span, .retention-message-heading span, .retention-message-heading time { color: var(--text-secondary); font-size: 12px; }
+.retention-turn { min-width: 0; display: grid; gap: 22px; padding: 12px 0 32px; }
+.retention-turn + .retention-turn { border-top: 1px solid var(--border-color); padding-top: 32px; }
+.retention-message { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 12px; }
+.retention-message-user { display: block; margin-left: clamp(24px, 12%, 130px); justify-self: end; max-width: calc(100% - 24px); }
+.retention-message-user > .retention-avatar { display: none; }
+.retention-avatar { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: color-mix(in srgb, var(--brand-blue) 10%, var(--bg-card)); color: var(--brand-blue); font-size: 18px; }
+.retention-message-main { min-width: 0; }
+.retention-message-heading { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; min-height: 24px; margin-bottom: 10px; }
+.retention-message-heading strong { font-size: 13px; }
+.retention-message-heading time { margin-left: auto; }
+.retention-message-user .retention-message-heading { justify-content: flex-end; }
+.retention-message-user .retention-message-heading time { margin-left: 8px; }
+.retention-message-user .retention-message-heading > span { display: none; }
+.retention-user-bubble { background: color-mix(in srgb, var(--brand-blue) 8%, var(--bg-card)); padding: 16px 22px; border-radius: 20px 20px 5px 20px; }
+.retention-message-assistant .retention-message-main { padding: 0 8px; }
+.retention-preview { overflow: hidden; position: relative; }
+.retention-preview-input { max-height: 132px; }
+.retention-preview-answer { max-height: 380px; }
+.retention-preview::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 18px; pointer-events: none; background: linear-gradient(transparent, var(--bg-card)); }
+.retention-process { margin-left: 44px; padding-left: 8px; }
+.retention-process-summary { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 12px; color: var(--text-secondary); font-size: 12px; }
+.retention-process-summary .ant-btn { color: var(--text-secondary); padding-left: 0; }
+.retention-tools-summary { overflow-wrap: anywhere; }
+.retention-process-detail { padding: 18px; margin-top: 12px; border-radius: 12px; background: var(--bg-secondary); border: 1px solid var(--border-color); display: grid; gap: 20px; }
+.retention-process-replies, .retention-behavior { display: grid; gap: 12px; }
+.retention-progress-message, .retention-behavior-event { padding-left: 12px; border-left: 2px solid var(--border-color); }
+.retention-behavior-text { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 13px; margin: 5px 0; }
+.retention-risk-note { color: var(--brand-orange); font-size: 12px; }
+.retention-extra { border-top: 1px solid var(--border-color); padding-top: 12px; }
+.retention-extra summary { cursor: pointer; color: var(--text-secondary); margin-bottom: 10px; }
+.retention-load-earlier { justify-self: center; }
+.retention-rich-text { line-height: 1.8; font-size: 14px; overflow-wrap: anywhere; }
+.retention-rich-text p { margin: 0 0 10px; white-space: pre-wrap; }
+.retention-rich-text h3, .retention-rich-text h4 { margin: 12px 0 8px; font-size: 16px; }
+.retention-rich-text ul, .retention-rich-text ol { padding-left: 22px; margin: 8px 0; }
+.retention-rich-text code { font-size: 12px; background: var(--bg-secondary); border-radius: 4px; padding: 2px 4px; }
+.retention-code { border-radius: 10px; overflow: hidden; background: var(--bg-secondary); margin: 8px 0; }
+.retention-code-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 7px 12px; color: var(--text-secondary); font-size: 12px; }
+.retention-code pre { margin: 0; padding: 4px 14px 12px; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.65; font-size: 13px; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+.retention-code pre code { padding: 0; background: none; }
+.retention-code-toggle { width: 100%; border: 0; border-top: 1px solid var(--border-color); padding: 7px; color: var(--brand-blue); background: transparent; cursor: pointer; font: inherit; font-size: 12px; }
+.retention-drawer .ant-drawer-body { background: var(--bg-card); padding: 16px 24px; }
+.retention-detail-meta { background: var(--bg-secondary); padding: 12px 16px; border-radius: 10px; }
+.retention-detail-meta summary { cursor: pointer; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.retention-detail-meta-title { display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.6; max-width: 660px; }
+@media (max-width: 700px) { .retention-drawer .ant-drawer-body { padding: 16px; } .retention-message { gap: 8px; grid-template-columns: 28px minmax(0, 1fr); } .retention-avatar { width: 28px; height: 28px; } .retention-process { margin-left: 36px; } .retention-message-heading time { width: 100%; margin-left: 0; } .retention-user-bubble { padding: 10px 12px; } }
+
+@media (max-width: 700px) { .retention-message-user { margin-left: 24px; } .retention-process { margin-left: 36px; } .retention-message-user .retention-message-heading time { width: auto; } }
+
+.retention-audit-footer { margin-left: 52px; color: var(--text-secondary); font-size: 12px; }
+.retention-audit-summary { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 12px; }
+.retention-audit-summary .ant-typography, .retention-audit-summary .ant-btn { font-size: 12px; }
+.retention-audit-detail { margin-top: 12px; padding: 16px; border: 1px solid var(--border-color); border-radius: 10px; background: var(--bg-secondary); display: grid; gap: 16px; }
+.retention-audit-group { display: grid; gap: 8px; color: var(--text-primary); }
+.retention-audit-group + .retention-audit-group { border-top: 1px solid var(--border-color); padding-top: 12px; }
+.retention-audit-group summary { cursor: pointer; color: var(--text-secondary); }
+.retention-audit-source { display: flex; flex-wrap: wrap; gap: 4px 12px; padding-top: 6px; overflow-wrap: anywhere; color: var(--text-secondary); }
+@media (max-width: 700px) { .retention-audit-footer { margin-left: 36px; } }
+
+.retention-table-scroll { overflow-x: auto; max-width: 100%; margin: 12px 0; }
+.retention-table-scroll table { border-collapse: collapse; min-width: 60%; white-space: normal; }
+.retention-table-scroll th, .retention-table-scroll td { border: 1px solid var(--border-color); padding: 8px 12px; vertical-align: top; }
+.retention-table-scroll th { background: var(--bg-secondary); }

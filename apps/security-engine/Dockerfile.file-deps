@@ -1,0 +1,7 @@
+# Build-time dependency seed, never the customer service image.
+FROM docker.1ms.run/library/python:3.11-slim@sha256:ae52c5bef62a6bdd42cd1e8dffef86b9cd284bde9427da79839de7a4b983e7ca
+COPY apps/security-engine/requirements.offline.lock /tmp/requirements.offline.lock
+RUN python -m pip install --only-binary=:all: --no-cache-dir -r /tmp/requirements.offline.lock && python -m pip check
+COPY apps/security-engine/ocr-resources.lock.json /tmp/ocr-resources.lock.json
+COPY deploy/docker-compose/prepare-security-ocr-resources.py /tmp/prepare-ocr.py
+RUN python /tmp/prepare-ocr.py --lock /tmp/ocr-resources.lock.json --output /usr/local/lib/python3.11/site-packages/jjdguard_ocr_data --download

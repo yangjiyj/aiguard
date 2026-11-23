@@ -1,0 +1,2 @@
+# 暂存的 llama.cpp 二进制（构建期由 build-judge-image.sh 注入；镜像才是交付物，二进制不进 git）
+bin/

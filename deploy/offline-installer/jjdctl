@@ -1,0 +1,458 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+# 经 /usr/local/bin/jjdctl 软链调用时必须先解析到真实路径，
+# 否则 ROOT 会落在 /usr/local/bin 而定位不到 deploy/docker-compose
+ROOT="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")" && pwd)"
+DC="$ROOT/deploy/docker-compose"
+ENV="$DC/.env"
+COMPOSE="$DC/docker-compose.offline.yml"
+STATE=/etc/jjdguard/install.env
+LAST_UPGRADE=/etc/jjdguard/last-upgrade.env
+BACKUP_ROOT=/var/backups/jjdguard
+
+die() { printf '[错误] %s\n' "$*" >&2; exit 1; }
+# 读 .env 不能用 source：未加引号且含空格的值（客户现场 REDIS_EXTRA_ARGS=--no-appendfsync-on-rewrite yes）
+# 会被当成命令执行，jjdctl status / rollback 因此卡死刷屏。统一经 deploy/lib/jjd-env.sh 按字面读取；
+# jjdctl 原本只设 shell 变量不 export，这里保持（noexport）。库缺失时直接报错，绝不回退到 source。
+JJD_ENV_LIB="$ROOT/deploy/lib/jjd-env.sh"
+if [[ -r "$JJD_ENV_LIB" ]]; then
+  # shellcheck source=../lib/jjd-env.sh
+  . "$JJD_ENV_LIB"
+fi
+load_env_file() {
+  declare -F jjd_load_env_file >/dev/null ||
+    die "缺少 $JJD_ENV_LIB：安装不完整，无法安全读取 .env"
+  jjd_load_env_file "$1" noexport
+}
+need_root() { [[ "$EUID" -eq 0 ]] || die '请使用 sudo 执行此命令'; }
+require_root_state_file() {
+  local path="$1" label="$2" owner mode
+  [[ -f "$path" && ! -L "$path" ]] || die "$label 不是受信任的普通文件"
+  owner="$(stat -Lc %u -- "$path")" || die "无法读取 $label 属主"
+  mode="$(stat -Lc %a -- "$path")" || die "无法读取 $label 权限"
+  [[ "$owner" == 0 && "$mode" == 600 ]] || die "$label 属主或权限不安全"
+}
+# 启动链条目校验（与 chat/set-public-sso-url.sh 的 is_active_chain_path 语义一致）：
+# 条目必须是绝对路径、普通文件且自身不是软链；两边先规范化为真实路径再比较，
+# 真实路径必须落在真实 $DC/active-config/ 树内，active-config 本身也不能软链逃逸。
+# 成功时输出规范化后的真实路径。
+active_chain_entry_real() {
+  local entry="$1" real_entry real_dc real_active
+  [[ "$entry" == /* && -f "$entry" && ! -L "$entry" ]] || return 1
+  real_entry="$(readlink -f -- "$entry")" || return 1
+  real_dc="$(readlink -f -- "$DC")" || return 1
+  real_active="$(readlink -f -- "$DC/active-config")" || return 1
+  [[ "$real_active" == "$real_dc/active-config" ]] || return 1
+  [[ "$real_entry" == "$real_active/"* && -f "$real_entry" && ! -L "$real_entry" ]] || return 1
+  printf '%s\n' "$real_entry"
+}
+compose() {
+  local -a files=(-f "$COMPOSE")
+  local chain="$DC/.upgrade/compose-files" entry owner mode project_name="" project_directory="$DC" project_directory_real
+  if [[ -e "$chain" || -L "$chain" ]]; then
+    require_root_state_file "$chain" '活动 Compose 链'
+    while IFS= read -r entry || [[ -n "$entry" ]]; do
+      [[ -n "$entry" ]] || die '活动 Compose 链包含非法路径'
+      entry="$(active_chain_entry_real "$entry")" || die '活动 Compose 链包含非法路径'
+      owner="$(stat -Lc %u -- "$entry")" || die '无法读取活动 Compose 文件属主'
+      mode="$(stat -Lc %a -- "$entry")" || die '无法读取活动 Compose 文件权限'
+      [[ "$owner" == 0 && "$mode" == 600 ]] || die '活动 Compose 文件属主或权限不安全'
+      files+=(-f "$entry")
+    done <"$chain"
+  elif [[ -r "$DC/.upgrade/compose.upgrade.yml" ]]; then
+    files+=(-f "$DC/.upgrade/compose.upgrade.yml")
+  fi
+  if [[ -e "$DC/.upgrade/project-name" || -L "$DC/.upgrade/project-name" ]]; then
+    require_root_state_file "$DC/.upgrade/project-name" '活动 Compose 项目名文件'
+    project_name="$(tr -d '[:space:]' <"$DC/.upgrade/project-name")"
+    [[ "$project_name" =~ ^[a-z0-9][a-z0-9_-]*$ ]] || die '活动 Compose 项目名非法'
+  fi
+  if [[ -e "$DC/.upgrade/project-directory" || -L "$DC/.upgrade/project-directory" ]]; then
+    require_root_state_file "$DC/.upgrade/project-directory" '活动 Compose project directory 文件'
+    project_directory="$(tr -d '\r\n' <"$DC/.upgrade/project-directory")"
+    # 原要求：绝对路径、目录、自身不是软链。现允许路径经过软链（含中间目录或末级）：
+    # 凡路径解析后与字面不同，真实路径必须等于真实的 $DC，不得逃逸到其它目录；一律改用真实路径。
+    [[ "$project_directory" == /* && -d "$project_directory" ]] || die '活动 Compose project directory 非法'
+    project_directory_real="$(readlink -f -- "$project_directory")" || die '活动 Compose project directory 非法'
+    if [[ -L "$project_directory" || "$project_directory_real" != "$project_directory" ]]; then
+      [[ "$project_directory_real" == "$(readlink -f -- "$DC")" ]] || die '活动 Compose project directory 非法'
+    fi
+    project_directory="$project_directory_real"
+  fi
+  if [[ -n "$project_name" ]]; then
+    (cd "$DC" && sh ./compose-wrapper.sh --project-name "$project_name" --project-directory "$project_directory" --env-file "$ENV" "${files[@]}" "$@")
+  else
+    (cd "$DC" && sh ./compose-wrapper.sh "${files[@]}" "$@")
+  fi
+}
+
+usage() {
+  cat <<'EOF'
+JJDGuard 管理命令
+  sudo jjdctl status
+  sudo jjdctl start | stop | restart
+  sudo jjdctl backup
+  sudo jjdctl rollback
+  sudo jjdctl disaster-restore --confirm-data-loss <主库备份> [门户库备份]
+  sudo jjdctl diagnose
+  sudo jjdctl backfill status
+  sudo jjdctl backfill pause|resume|retry|cancel <task>
+  sudo jjdctl backfill run-once
+  sudo jjdctl cert import <证书文件> <私钥文件>
+  sudo jjdctl sso set-public-url <https://新地址> [--apply] [--drop-old]   # 默认 dry-run
+  sudo jjdctl sso rollback <备份目录> [--apply]                            # 回滚一次地址变更
+EOF
+}
+
+status_cmd() {
+  compose ps
+  (cd "$DC" && sh ./smoke-test.sh)
+  [[ -r "$DC/.deploy-result" ]] && { echo; cat "$DC/.deploy-result"; }
+  return 0
+}
+
+backup_cmd() {
+  install -d -m 700 "$BACKUP_ROOT"
+  (cd "$DC" && BACKUP_DIR="$BACKUP_ROOT" sh ./backup-db.sh)
+}
+
+diagnose_cmd() {
+  (cd "$DC" && sh ./diagnose.sh --output-dir /var/log/jjdguard)
+}
+
+backfill_task_name() {
+  local task="${1:-}"
+  [[ "$task" =~ ^[a-z0-9][a-z0-9_]{0,127}$ ]] || die '后台任务名称非法'
+  printf '%s\n' "$task"
+}
+
+backfill_cmd() {
+  local action="${1:-status}" task
+  case "$action" in
+    status)
+      compose exec -T postgres psql -X -U "${POSTGRES_USER:-jjdguard}" -d "${POSTGRES_DB:-jjdguard}" -P pager=off -c "
+SELECT task_name,task_version,state,validation_status,scanned,updated,skipped,failed,
+       round(current_rate::numeric,1) AS rows_per_second,eta_seconds,
+       heartbeat_at,lease_owner,lease_expires_at,error_summary
+FROM migration_backfill_tasks ORDER BY priority,task_name,task_version;"
+      ;;
+    run-once)
+      compose exec -T worker ./worker backfill-once
+      ;;
+    pause|resume|retry|cancel)
+      task="$(backfill_task_name "${2:-}")"
+      case "$action" in
+        pause)
+          compose exec -T postgres psql -X -v ON_ERROR_STOP=1 -U "${POSTGRES_USER:-jjdguard}" -d "${POSTGRES_DB:-jjdguard}" -c "
+UPDATE migration_backfill_tasks SET pause_requested=true,
+ state=CASE WHEN state IN ('pending','running') THEN 'paused' ELSE state END,
+ lease_owner=NULL,lease_expires_at=NULL,updated_at=NOW()
+WHERE task_name='$task' AND state NOT IN ('completed','cancelled');"
+          ;;
+        resume)
+          compose exec -T postgres psql -X -v ON_ERROR_STOP=1 -U "${POSTGRES_USER:-jjdguard}" -d "${POSTGRES_DB:-jjdguard}" -c "
+UPDATE migration_backfill_tasks SET pause_requested=false,cancel_requested=false,
+ state=CASE WHEN state='paused' THEN 'pending' ELSE state END,updated_at=NOW()
+WHERE task_name='$task';"
+          ;;
+        retry)
+          compose exec -T postgres psql -X -v ON_ERROR_STOP=1 -U "${POSTGRES_USER:-jjdguard}" -d "${POSTGRES_DB:-jjdguard}" -c "
+UPDATE migration_backfill_tasks SET state='pending',retry_count=0,error_summary='',
+ pause_requested=false,cancel_requested=false,lease_owner=NULL,lease_expires_at=NULL,updated_at=NOW()
+WHERE task_name='$task' AND state='failed';"
+          ;;
+        cancel)
+          compose exec -T postgres psql -X -v ON_ERROR_STOP=1 -U "${POSTGRES_USER:-jjdguard}" -d "${POSTGRES_DB:-jjdguard}" -c "
+UPDATE migration_backfill_tasks SET cancel_requested=true,state='cancelled',
+ lease_owner=NULL,lease_expires_at=NULL,updated_at=NOW()
+WHERE task_name='$task' AND state NOT IN ('completed','cancelled');"
+          ;;
+      esac
+      ;;
+    *) die '用法：jjdctl backfill status|run-once|pause|resume|retry|cancel [task]' ;;
+  esac
+}
+
+public_key_digest() {
+  if [[ "$1" == cert ]]; then
+    openssl x509 -in "$2" -pubkey -noout | openssl pkey -pubin -outform DER 2>/dev/null | sha256sum | awk '{print $1}'
+  else
+    openssl pkey -in "$2" -pubout -outform DER 2>/dev/null | sha256sum | awk '{print $1}'
+  fi
+}
+
+cert_import() {
+  local cert="$1" key="$2" cert_digest key_digest tls backup
+  [[ -r "$cert" && -r "$key" ]] || die '证书文件或私钥文件不可读'
+  command -v openssl >/dev/null 2>&1 || die '导入正式证书需要 openssl'
+  openssl x509 -in "$cert" -noout -checkend 0 >/dev/null 2>&1 || die '证书格式错误或已经过期'
+  openssl pkey -in "$key" -noout >/dev/null 2>&1 || die '私钥格式错误'
+  cert_digest="$(public_key_digest cert "$cert")"
+  key_digest="$(public_key_digest key "$key")"
+  [[ "$cert_digest" == "$key_digest" ]] || die '证书与私钥不匹配'
+  tls="$DC/tls"
+  backup="$tls/backup-$(date -u +%Y%m%dT%H%M%SZ)"
+  install -d -m 700 "$tls" "$backup"
+  [[ -r "$tls/web-console.crt" ]] && install -m 644 "$tls/web-console.crt" "$backup/"
+  [[ -r "$tls/web-console.key" ]] && install -m 600 "$tls/web-console.key" "$backup/"
+  install -m 644 "$cert" "$tls/web-console.crt.new"
+  install -m 600 "$key" "$tls/web-console.key.new"
+  mv -f "$tls/web-console.crt.new" "$tls/web-console.crt"
+  mv -f "$tls/web-console.key.new" "$tls/web-console.key"
+  compose up -d --force-recreate web-console
+  echo 'HTTPS 正式证书已导入并生效。'
+}
+
+restore_database() {
+  local backup="$1"
+  [[ -s "$backup" ]] || die "数据库备份不存在：$backup"
+  compose stop gateway-core control-plane security-engine proxy-server web-console worker
+  compose exec -T postgres dropdb --if-exists --force -U "${POSTGRES_USER:-jjdguard}" "${POSTGRES_DB:-jjdguard}"
+  compose exec -T postgres createdb -U "${POSTGRES_USER:-jjdguard}" -O "${POSTGRES_USER:-jjdguard}" "${POSTGRES_DB:-jjdguard}"
+  if compose exec -T postgres pg_restore --list <"$backup" >/dev/null 2>&1; then
+    compose exec -T postgres pg_restore --no-owner --no-privileges -U "${POSTGRES_USER:-jjdguard}" -d "${POSTGRES_DB:-jjdguard}" <"$backup"
+  else
+    compose exec -T postgres psql -U "${POSTGRES_USER:-jjdguard}" -d "${POSTGRES_DB:-jjdguard}" <"$backup"
+  fi
+  echo 'database restore completed'
+}
+
+restore_chat_database() {
+  local backup="$1" database="${CHAT_POSTGRES_DB:-enterprise_ai_portal}"
+  [[ -n "$backup" ]] || return 0
+  [[ -s "$backup" ]] || die "门户数据库备份不存在：$backup"
+  compose stop chat-portal-ui chat-portal-proxy chat-idp || true
+  compose exec -T chat-postgres dropdb --if-exists --force -U postgres "$database"
+  compose exec -T chat-postgres createdb -U postgres -O postgres "$database"
+  if compose exec -T chat-postgres pg_restore --list <"$backup" >/dev/null 2>&1; then
+    compose exec -T chat-postgres pg_restore --no-owner --no-privileges -U postgres -d "$database" <"$backup"
+  else
+    compose exec -T chat-postgres psql -U postgres -d "$database" <"$backup"
+  fi
+  echo 'chat database restore completed'
+}
+
+write_rollback_state() {
+  local previous_release="$1"
+  local current_release="$2"
+  local previous_dc="$previous_release/deploy/docker-compose"
+  local current_dc="$current_release/deploy/docker-compose"
+  local version state_file state_tmp
+
+  [[ "$previous_release" != "$current_release" ]] || die '回滚前后 release 不能相同'
+  [[ -r "$previous_dc/.env" ]] || die '回滚目标配置不存在'
+  [[ -d "$current_dc" ]] || die '当前 release 目录不存在'
+  install -d -m 700 "$current_dc/.upgrade"
+
+  version="$(sed -n 's/^JJD_VERSION=//p' "$previous_dc/.env" | tail -n 1)"
+  [[ -n "$version" ]] || die '回滚目标版本号不存在'
+  state_file="$current_dc/.upgrade/current-digests.env"
+  state_tmp="$state_file.$$"
+  {
+    printf 'VERSION=%q\n' "$version"
+    printf 'FROM_VERSION=%q\n' "$version"
+    printf 'TO_VERSION=%q\n' "$version"
+    printf 'GATEWAY_CORE_IMAGE=%q\n' "$GATEWAY_CORE_IMAGE"
+    printf 'CONTROL_PLANE_IMAGE=%q\n' "$CONTROL_PLANE_IMAGE"
+    printf 'SECURITY_ENGINE_IMAGE=%q\n' "$SECURITY_ENGINE_IMAGE"
+    printf 'PROXY_SERVER_IMAGE=%q\n' "$PROXY_SERVER_IMAGE"
+    printf 'WEB_CONSOLE_IMAGE=%q\n' "$WEB_CONSOLE_IMAGE"
+    printf 'WORKER_IMAGE=%q\n' "$WORKER_IMAGE"
+    printf 'LLM_JUDGE_IMAGE=%q\n' "$LLM_JUDGE_IMAGE"
+    printf 'TIER1_CLASSIFIER_IMAGE=%q\n' "$TIER1_CLASSIFIER_IMAGE"
+    printf 'CHAT_PORTAL_UI_IMAGE=%q\n' "$CHAT_PORTAL_UI_IMAGE"
+    printf 'CHAT_PORTAL_PROXY_IMAGE=%q\n' "$CHAT_PORTAL_PROXY_IMAGE"
+    printf 'UPDATED_AT=%q\n' "$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+  } >"$state_tmp"
+  chmod 600 "$state_tmp"
+  mv -Tf "$state_tmp" "$state_file"
+}
+
+write_rollback_install_state() {
+  local previous_release="$1"
+  local previous_dc="$previous_release/deploy/docker-compose"
+  local version arch state_tmp
+
+  version="$(sed -n 's/^JJD_VERSION=//p' "$previous_dc/.env" | tail -n 1)"
+  [[ -n "$version" ]] || die '回滚目标版本号不存在'
+  arch="$(sed -n 's/^ARCH=//p' "$STATE" 2>/dev/null | tail -n 1)"
+  [[ -n "$arch" ]] || arch='amd64'
+  state_tmp="$STATE.$$"
+  {
+    printf 'VERSION=%q\n' "$version"
+    printf 'ARCH=%q\n' "$arch"
+    printf 'RELEASE=%q\n' "$previous_release"
+    printf 'MODE=rollback\n'
+    printf 'UPDATED_AT=%q\n' "$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+  } >"$state_tmp"
+  chmod 600 "$state_tmp"
+  mv -Tf "$state_tmp" "$STATE"
+}
+
+start_rollback_release() (
+  local previous_release="$1"
+  local timeout="${ROLLBACK_START_TIMEOUT:-1200}"
+  local interval="${ROLLBACK_START_INTERVAL:-5}"
+  local deadline status
+
+  [[ "$timeout" =~ ^[0-9]+$ ]] && (( timeout >= 1 && timeout <= 1800 )) ||
+    die '回滚服务启动超时配置非法'
+  [[ "$interval" =~ ^[0-9]+([.][0-9]+)?$ ]] ||
+    die '回滚服务启动轮询间隔非法'
+  # Resolve the rollback chain with the current trusted implementation. An old
+  # helper may leave unchanged stateful containers owned by the newer release.
+  ROOT="$(readlink -f -- "$previous_release")" || die '回滚目标 release 路径无法解析'
+  DC="$ROOT/deploy/docker-compose"
+  ENV="$DC/.env"
+  COMPOSE="$DC/docker-compose.offline.yml"
+  [[ -r "$ENV" && -r "$COMPOSE" ]] || die 'JJDGuard 安装状态不完整'
+  load_env_file "$ENV"
+  deadline=$((SECONDS + timeout))
+  while :; do
+    if compose up -d --remove-orphans --force-recreate; then
+      return 0
+    else
+      status=$?
+    fi
+    (( SECONDS < deadline )) ||
+      die "旧版本服务在回滚窗口内未恢复（最后状态：$status）"
+    echo '[回滚] 旧版本 Compose 依赖尚未收敛，继续启动……'
+    sleep "$interval"
+  done
+)
+
+current_judge_model_path() {
+  local cid value
+  cid="$(compose ps -q llm-judge 2>/dev/null | head -1)" || return 1
+  [[ -n "$cid" ]] || return 1
+  value="$(docker inspect --format '{{range .Config.Env}}{{println .}}{{end}}' "$cid" 2>/dev/null |
+    sed -n 's/^JUDGE_MODEL_PATH=//p' | tail -n 1)" || return 1
+  [[ "$value" =~ ^/models/[A-Za-z0-9][A-Za-z0-9._-]*\.gguf$ ]] || return 1
+  printf '%s\n' "$value"
+}
+
+write_rollback_image_override() {
+  local previous_dc="$1" judge_model_path="${2:-}"
+  local base_services proxy_service
+  if [[ -n "$judge_model_path" ]]; then
+    [[ "$judge_model_path" =~ ^/models/[A-Za-z0-9][A-Za-z0-9._-]*\.gguf$ ]] || die '回滚 judge 模型路径非法'
+  fi
+  # Query only the previous release base, so a prior generated override cannot
+  # authorize creating a service that the rollback base never declared.
+  base_services="$(cd "$previous_dc" && sh ./compose-wrapper.sh --env-file "$previous_dc/.env" --profile '*' -f "$previous_dc/docker-compose.offline.yml" config --services)" || {
+    die 'cannot read rollback base Compose services'; return 1;
+  }
+  {
+    printf 'services:\n'
+    printf '  gateway-core:\n    image: %s\n' "$GATEWAY_CORE_IMAGE"
+    printf '  control-plane:\n    image: %s\n' "$CONTROL_PLANE_IMAGE"
+    printf '  security-engine:\n    image: %s\n' "$SECURITY_ENGINE_IMAGE"
+    for proxy_service in proxy-server proxy-server-vm; do
+      if grep -Fxq "$proxy_service" <<<"$base_services"; then
+        printf '  %s:\n    image: %s\n' "$proxy_service" "$PROXY_SERVER_IMAGE"
+      fi
+    done
+    printf '  web-console:\n    image: %s\n' "$WEB_CONSOLE_IMAGE"
+    printf '  worker:\n    image: %s\n' "$WORKER_IMAGE"
+    if [[ -n "${LLM_JUDGE_IMAGE:-}" ]]; then
+      printf '  llm-judge:\n    image: %s\n' "$LLM_JUDGE_IMAGE"
+      if [[ -n "$judge_model_path" ]]; then
+        printf '    environment:\n      JUDGE_MODEL_PATH: %s\n' "$judge_model_path"
+      fi
+    fi
+    if [[ -n "${TIER1_CLASSIFIER_IMAGE:-}" ]]; then printf '  tier1-classifier:\n    image: %s\n' "$TIER1_CLASSIFIER_IMAGE"; fi
+    if [[ -n "${CHAT_PORTAL_UI_IMAGE:-}" ]]; then printf '  chat-portal-ui:\n    image: %s\n' "$CHAT_PORTAL_UI_IMAGE"; fi
+    if [[ -n "${CHAT_PORTAL_PROXY_IMAGE:-}" ]]; then printf '  chat-portal-proxy:\n    image: %s\n' "$CHAT_PORTAL_PROXY_IMAGE"; fi
+  } >"$previous_dc/.upgrade/compose.upgrade.yml"
+  chmod 600 "$previous_dc/.upgrade/compose.upgrade.yml"
+}
+
+rollback_cmd() {
+  [[ -e "$LAST_UPGRADE" || -L "$LAST_UPGRADE" ]] || die '没有可回滚的升级记录'
+  require_root_state_file "$LAST_UPGRADE" '升级回滚记录'
+  # shellcheck disable=SC1090
+  source "$LAST_UPGRADE"
+  [[ -d "$PREVIOUS_RELEASE" && -s "$BACKUP_FILE" ]] || die '回滚材料不完整'
+  # 状态文件里可能是软链形式的路径：先规范化，后续比较、写状态、切 current 都用真实路径
+  PREVIOUS_RELEASE="$(readlink -f -- "$PREVIOUS_RELEASE")" || die '回滚目标 release 路径无法解析'
+  local previous_dc="$PREVIOUS_RELEASE/deploy/docker-compose" judge_model_path=""
+  [[ -r "$previous_dc/.env" ]] || install -m 600 "$ENV" "$previous_dc/.env"
+  # Upgrades retire non-commercial legacy judge models from the shared volume,
+  # so the previous release must keep the model the current release runs.
+  if [[ -n "${LLM_JUDGE_IMAGE:-}" ]]; then
+    judge_model_path="$(current_judge_model_path)" || judge_model_path=""
+  fi
+  write_rollback_image_override "$previous_dc" "$judge_model_path"
+  # The legacy release may retain a compose-files chain that contains only
+  # the historical rollback override. Move it aside so both old and new
+  # jjdctl versions fall back to the base compose file plus compose.upgrade.yml
+  # on the next start; keeping the chain as-is would hide the base file from
+  # Docker Compose labels and block a later re-upgrade.
+  local rollback_chain="$previous_dc/.upgrade/compose-files"
+  if [[ -e "$rollback_chain" || -L "$rollback_chain" ]]; then
+    require_root_state_file "$rollback_chain" '旧版本活动 Compose 链'
+    local rollback_history="$rollback_chain.rollback-$(date -u +%Y%m%dT%H%M%SZ)"
+    [[ ! -e "$rollback_history" && ! -L "$rollback_history" ]] || die '回滚 Compose 链历史文件已存在'
+    mv -f -- "$rollback_chain" "$rollback_history"
+  fi
+  load_env_file "$ENV"
+  echo '[回滚] 仅回退应用与镜像，保留升级后已接受的业务写入；未自动覆盖数据库。'
+  write_rollback_state "$PREVIOUS_RELEASE" "$CURRENT_RELEASE"
+  write_rollback_install_state "$PREVIOUS_RELEASE"
+  local tmp=/opt/jjdguard/.current.rollback.$$
+  ln -s "$PREVIOUS_RELEASE" "$tmp"
+  mv -Tf "$tmp" /opt/jjdguard/current
+  start_rollback_release "$PREVIOUS_RELEASE"
+}
+
+disaster_restore_cmd() {
+  [[ "${1:-}" == --confirm-data-loss && -n "${2:-}" ]] ||
+    die '用法：jjdctl disaster-restore --confirm-data-loss <主库备份> [门户库备份]'
+  local main_backup="$2" chat_backup="${3:-}"
+  echo '[灾难恢复] 将以指定旧备份覆盖当前数据库；升级后新增写入会丢失。'
+  restore_database "$main_backup"
+  restore_chat_database "$chat_backup"
+  compose up -d --remove-orphans
+}
+
+sso_cmd() {
+  local sub="${1:-}" script="$DC/chat/set-public-sso-url.sh"
+  [[ -f "$script" ]] || die "缺少 $script：当前安装不含 chat/SSO 载荷（只有 -chat 离线包才带内置 SSO），无需变更 SSO 地址"
+  case "$sub" in
+    set-public-url) bash "$script" "${@:2}" ;;
+    rollback)
+      [[ -n "${2:-}" ]] || die '用法：jjdctl sso rollback <备份目录> [--apply]'
+      bash "$script" --rollback "${@:2}"
+      ;;
+    -h | --help | help) bash "$script" --help ;;
+    *) die '用法：jjdctl sso set-public-url <新地址> [--apply] | jjdctl sso rollback <备份目录> [--apply]' ;;
+  esac
+}
+
+main() {
+  local command="${1:-help}"
+  case "$command" in help | -h | --help) usage; return ;; esac
+  need_root
+  [[ -r "$ENV" && -r "$COMPOSE" ]] || die 'JJDGuard 安装状态不完整'
+  load_env_file "$ENV"
+  case "$command" in
+    status) status_cmd ;;
+    start) compose up -d --remove-orphans ;;
+    stop) compose stop --timeout 60 ;;
+    restart) compose stop --timeout 60; compose up -d --remove-orphans ;;
+    backup) backup_cmd ;;
+    rollback) rollback_cmd ;;
+    disaster-restore) disaster_restore_cmd "${2:-}" "${3:-}" "${4:-}" ;;
+    diagnose) diagnose_cmd ;;
+    backfill) backfill_cmd "${2:-status}" "${3:-}" ;;
+    cert)
+      [[ "${2:-}" == import && "$#" -eq 4 ]] || die '用法：jjdctl cert import <证书文件> <私钥文件>'
+      cert_import "$3" "$4"
+      ;;
+    sso) sso_cmd "${@:2}" ;;
+    *) usage >&2; exit 2 ;;
+  esac
+}
+
+main "$@"

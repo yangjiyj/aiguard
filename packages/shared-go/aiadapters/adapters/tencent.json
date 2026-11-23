@@ -1,0 +1,272 @@
+{
+  "id": "provider-tencent",
+  "name": "腾讯",
+  "vendor": "腾讯",
+  "catalog_entries": [
+    {
+      "id": "yuanbao_upload",
+      "provider": "tencent",
+      "provider_cn": "腾讯",
+      "product": "yuanbao",
+      "product_cn": "腾讯元宝",
+      "category": "chat",
+      "region": "cn",
+      "domains": [
+        "yuanbao.tencent.com"
+      ],
+      "path_rules": [
+        "contains:/file",
+        "contains:/upload",
+        "contains:/attachment",
+        "contains:/document"
+      ],
+      "request_decoder": "yuanbao_web",
+      "response_decoder": "yuanbao_web",
+      "retain_level": "content",
+      "risk_profile": "llm_web",
+      "enabled": true,
+      "priority": 102,
+      "source_url": "https://yuanbao.tencent.com/"
+    },
+    {
+      "id": "yuanbao_meta",
+      "provider": "tencent",
+      "provider_cn": "腾讯",
+      "product": "yuanbao",
+      "product_cn": "腾讯元宝",
+      "category": "chat",
+      "region": "cn",
+      "domains": [
+        "yuanbao.tencent.com",
+        "*.yuanbao.tencent.com"
+      ],
+      "path_rules": [
+        "/",
+        "/chat",
+        "contains:/conversation/list",
+        "contains:/conversation/promptsug",
+        "contains:/conversation/promptSug",
+        "contains:/conversation/create",
+        "contains:/conversation/updatemodel",
+        "contains:/conversation/updateModel",
+        "contains:/conversation/info"
+      ],
+      "retain_level": "summary",
+      "risk_profile": "llm_web",
+      "enabled": true,
+      "priority": 101,
+      "source_url": "https://yuanbao.tencent.com/"
+    },
+    {
+      "id": "yuanbao",
+      "provider": "tencent",
+      "provider_cn": "腾讯",
+      "product": "yuanbao",
+      "product_cn": "腾讯元宝",
+      "category": "chat",
+      "region": "cn",
+      "domains": [
+        "yuanbao.tencent.com",
+        "*.yuanbao.tencent.com"
+      ],
+      "path_rules": [
+        "contains:/api/chat",
+        "contains:/conversation/v1/detail",
+        "contains:/message",
+        "contains:/completion"
+      ],
+      "request_decoder": "yuanbao_web",
+      "response_decoder": "yuanbao_web",
+      "retain_level": "content",
+      "risk_profile": "llm_web",
+      "enabled": true,
+      "priority": 100,
+      "source_url": "https://yuanbao.tencent.com/"
+    },
+    {
+      "id": "codebuddy",
+      "provider": "tencent",
+      "provider_cn": "腾讯",
+      "product": "codebuddy",
+      "product_cn": "腾讯 CodeBuddy / WorkBuddy",
+      "category": "coding",
+      "region": "cn",
+      "domains": [
+        "copilot.tencent.com"
+      ],
+      "path_rules": [
+        "/v2/chat/completions",
+        "/v1/chat/completions",
+        "contains:/chat/completions"
+      ],
+      "request_decoder": "openai_compatible",
+      "response_decoder": "openai_compatible",
+      "retain_level": "content",
+      "risk_profile": "ai_ide_agent",
+      "enabled": true,
+      "priority": 94,
+      "source_url": "https://copilot.tencent.com/"
+    },
+    {
+      "id": "codebuddy_workbuddy_invoke",
+      "provider": "tencent",
+      "provider_cn": "腾讯",
+      "product": "codebuddy",
+      "product_cn": "腾讯 CodeBuddy / WorkBuddy",
+      "category": "coding",
+      "region": "cn",
+      "domains": [
+        "ride-3-live-webapp.azurewebsites.net"
+      ],
+      "path_rules": [
+        "/api/invoke",
+        "contains:/api/invoke"
+      ],
+      "request_decoder": "workbuddy_invoke",
+      "response_decoder": "workbuddy_invoke",
+      "retain_level": "content",
+      "risk_profile": "ai_ide_agent",
+      "enabled": true,
+      "priority": 94,
+      "source_url": "https://copilot.tencent.com/"
+    },
+    {
+      "id": "codebuddy_workbuddy_stream",
+      "provider": "tencent",
+      "provider_cn": "腾讯",
+      "product": "codebuddy",
+      "product_cn": "腾讯 CodeBuddy / WorkBuddy",
+      "category": "coding",
+      "region": "cn",
+      "domains": [
+        "ride-3-live-webapp.azurewebsites.net"
+      ],
+      "path_rules": [
+        "/api/stream",
+        "contains:/api/stream"
+      ],
+      "request_decoder": "codebuddy_web",
+      "response_decoder": "codebuddy_web",
+      "retain_level": "content",
+      "risk_profile": "ai_ide_agent",
+      "enabled": true,
+      "priority": 94,
+      "source_url": "https://copilot.tencent.com/"
+    },
+    {
+      "id": "hunyuan_api",
+      "provider": "tencent",
+      "provider_cn": "腾讯",
+      "product": "hunyuan_api",
+      "product_cn": "腾讯混元 API",
+      "category": "api",
+      "region": "cn",
+      "domains": [
+        "hunyuan.tencentcloudapi.com",
+        "*.hunyuan.tencent.com"
+      ],
+      "path_rules": [
+        "/"
+      ],
+      "request_decoder": "hunyuan",
+      "response_decoder": "hunyuan",
+      "retain_level": "content",
+      "risk_profile": "llm_api",
+      "enabled": true,
+      "priority": 90,
+      "source_url": "https://cloud.tencent.com/product/hunyuan"
+    },
+    {
+      "id": "codebuddy_prediction_support",
+      "provider": "tencent",
+      "provider_cn": "腾讯",
+      "product": "codebuddy",
+      "product_cn": "腾讯 CodeBuddy / WorkBuddy",
+      "category": "coding",
+      "region": "cn",
+      "domains": [
+        "copilot.tencent.com"
+      ],
+      "path_rules": [
+        "/v2/chat/prediction",
+        "/v1/traces",
+        "glob:/portal/*/message/summary"
+      ],
+      "request_decoder": "coding_ai",
+      "response_decoder": "coding_ai",
+      "retain_level": "summary",
+      "risk_profile": "ai_ide_agent",
+      "enabled": true,
+      "priority": 83,
+      "source_url": "https://copilot.tencent.com/"
+    },
+    {
+      "id": "codebuddy_support",
+      "provider": "tencent",
+      "provider_cn": "腾讯",
+      "product": "codebuddy",
+      "product_cn": "腾讯 CodeBuddy / WorkBuddy",
+      "category": "coding",
+      "region": "cn",
+      "domains": [
+        "copilot.tencent.com"
+      ],
+      "path_rules": [
+        "/v2/update",
+        "/v3/config",
+        "/v2/activity/",
+        "/v2/report",
+        "/v2/plugin/"
+      ],
+      "request_decoder": "coding_ai",
+      "response_decoder": "coding_ai",
+      "retain_level": "summary",
+      "risk_profile": "ai_ide_agent",
+      "enabled": true,
+      "priority": 80,
+      "source_url": "https://copilot.tencent.com/"
+    },
+    {
+      "id": "codebuddy_host_fallback",
+      "provider": "tencent",
+      "provider_cn": "腾讯",
+      "product": "codebuddy",
+      "product_cn": "腾讯 CodeBuddy / WorkBuddy",
+      "category": "coding",
+      "region": "cn",
+      "domains": [
+        "copilot.tencent.com",
+        "download.codebuddy.cn"
+      ],
+      "path_rules": [],
+      "request_decoder": "coding_ai",
+      "response_decoder": "coding_ai",
+      "retain_level": "summary",
+      "risk_profile": "ai_ide_agent",
+      "enabled": true,
+      "priority": 40,
+      "source_url": "https://copilot.tencent.com/"
+    },
+    {
+      "id": "codebuddy_workbuddy_host_fallback",
+      "provider": "tencent",
+      "provider_cn": "腾讯",
+      "product": "codebuddy",
+      "product_cn": "腾讯 CodeBuddy / WorkBuddy",
+      "category": "coding",
+      "region": "cn",
+      "domains": [
+        "ride-3-live-webapp.azurewebsites.net"
+      ],
+      "path_rules": [],
+      "request_decoder": "coding_ai",
+      "response_decoder": "coding_ai",
+      "retain_level": "summary",
+      "risk_profile": "ai_ide_agent",
+      "enabled": true,
+      "priority": 39,
+      "source_url": "https://copilot.tencent.com/"
+    }
+  ],
+  "agent_definitions": []
+}

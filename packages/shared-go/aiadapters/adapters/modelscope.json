@@ -1,0 +1,30 @@
+{
+  "id": "provider-modelscope",
+  "name": "魔搭",
+  "vendor": "魔搭",
+  "catalog_entries": [
+    {
+      "id": "modelscope",
+      "provider": "modelscope",
+      "provider_cn": "魔搭",
+      "product": "modelscope",
+      "product_cn": "ModelScope 魔搭",
+      "category": "model-platform",
+      "region": "cn",
+      "domains": [
+        "modelscope.cn"
+      ],
+      "path_rules": [
+        "/"
+      ],
+      "request_decoder": "model_platform",
+      "response_decoder": "model_platform",
+      "retain_level": "summary",
+      "risk_profile": "model_platform",
+      "enabled": true,
+      "priority": 60,
+      "source_url": "https://modelscope.cn/"
+    }
+  ],
+  "agent_definitions": []
+}

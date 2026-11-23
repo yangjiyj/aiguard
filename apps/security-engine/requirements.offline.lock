@@ -1,0 +1,10 @@
+fastapi==0.141.1
+uvicorn==0.52.1
+pydantic==2.13.4
+httpx==0.28.1
+regex==2026.7.19
+
+pypdf==6.17.0
+Pillow==12.1.1
+tesserocr==2.11.0
+cysignals==1.12.5

@@ -1,0 +1,41 @@
+{
+  "name": "agent_claude_code_trusted_principal",
+  "note": "operator named this principal as trusted, so a non-machine hit still routes.",
+  "config": {
+    "principals": [
+      "user_trusted_dev_42"
+    ]
+  },
+  "event": {
+    "event_type": "prompt_injection",
+    "severity": "high",
+    "action_taken": "audit",
+    "principal_key": "user_trusted_dev_42",
+    "matched_summary": {
+      "agent_type": "agent_claude_code",
+      "findings": [
+        {
+          "rule_type": "agent_detect",
+          "type": "agent_behavior",
+          "category": "agent_claude_code",
+          "severity": "low",
+          "confidence": 0.9,
+          "counts_as_security_finding": false
+        },
+        {
+          "category": "keyword_classic_injection",
+          "severity": "high",
+          "confidence": 0.9,
+          "counts_as_security_finding": true,
+          "type": "prompt_injection",
+          "content_source": "assistant_history",
+          "message_role": "assistant"
+        }
+      ]
+    }
+  },
+  "expect": {
+    "routed": true,
+    "reason": "trusted_principal_of_agent_claude_code"
+  }
+}

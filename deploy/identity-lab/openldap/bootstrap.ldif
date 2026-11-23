@@ -1,0 +1,84 @@
+# OpenLDAP bootstrap LDIF — identity-lab（仅隔离测试，不可用于生产）
+# 域：ldap.jjdguard-lab.test (dc=jjdguard-lab,dc=test)
+# 覆盖：嵌套 OU（People/Disabled/Groups，Groups 下再嵌 service-teams）、
+# 多用户、组迁移目标、禁用 OU；口令仅占位、明文标识 "lab-only"。
+# 真实口令由 deploy/identity-lab/.env.example 注入（绝不入库）。
+
+dn: ou=People,dc=jjdguard-lab,dc=test
+objectClass: organizationalUnit
+ou: People
+description: 在职员工账号
+
+dn: ou=Disabled,dc=jjdguard-lab,dc=test
+objectClass: organizationalUnit
+ou: Disabled
+description: 已禁用账号（验收点 9：禁用目录用户登录失败）
+
+dn: ou=Groups,dc=jjdguard-lab,dc=test
+objectClass: organizationalUnit
+ou: Groups
+
+dn: ou=service-teams,ou=Groups,dc=jjdguard-lab,dc=test
+objectClass: organizationalUnit
+ou: service-teams
+description: 嵌套 OU — 验证层级解析正确（嵌套 OU 不应破坏稳定身份解析）
+
+# === 在职用户（People） ===
+dn: uid=ldap-alice,ou=People,dc=jjdguard-lab,dc=test
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: LDAP Alice
+sn: Alice
+uid: ldap-alice
+uid: alice.operator
+mail: ldap-alice@jjdguard-lab.test
+userPassword:: __LDAP_ALICE_PASSWORD_B64__
+
+dn: uid=ldap-bob,ou=People,dc=jjdguard-lab,dc=test
+objectClass: inetOrgPerson
+cn: LDAP Bob
+sn: Bob
+uid: ldap-bob
+mail: ldap-bob@jjdguard-lab.test
+userPassword:: __LDAP_BOB_PASSWORD_B64__
+
+# 同邮箱不同 subject（验收点 5）：与 enterprise-realm 的 oidc-carol@jjdguard-lab.test
+# 邮箱相同但身份源不同——稳定键 (issuer, source_type, subject) 必须不合并。
+dn: uid=ldap-carol,ou=People,dc=jjdguard-lab,dc=test
+objectClass: inetOrgPerson
+cn: LDAP Carol
+sn: Carol
+uid: ldap-carol
+mail: oidc-carol@jjdguard-lab.test
+userPassword:: __LDAP_CAROL_PASSWORD_B64__
+
+# === 禁用用户（Disabled） — 验收点 9 ===
+dn: uid=ldap-dave,ou=Disabled,dc=jjdguard-lab,dc=test
+objectClass: inetOrgPerson
+cn: LDAP Dave (Disabled)
+sn: Dave
+uid: ldap-dave
+mail: ldap-dave@jjdguard-lab.test
+userPassword:: __LDAP_DAVE_PASSWORD_B64__
+
+# === 组（含迁移源/目标 — 验收点 7/8） ===
+dn: cn=dept-research,ou=Groups,dc=jjdguard-lab,dc=test
+objectClass: groupOfNames
+cn: dept-research
+description: 研究部（映射模型 lab-research-model）
+member: uid=ldap-alice,ou=People,dc=jjdguard-lab,dc=test
+
+dn: cn=dept-ops,ou=Groups,dc=jjdguard-lab,dc=test
+objectClass: groupOfNames
+cn: dept-ops
+description: 运维部（映射模型 lab-ops-model）
+member: uid=ldap-bob,ou=People,dc=jjdguard-lab,dc=test
+
+# 迁移目标组（验收点 8：迁移部门后旧模型权限立即撤销）。
+dn: cn=dept-marketing,ou=Groups,dc=jjdguard-lab,dc=test
+objectClass: groupOfNames
+cn: dept-marketing
+description: 市场部（迁移目标，验证旧权限撤销）
+member: uid=ldap-bob,ou=People,dc=jjdguard-lab,dc=test

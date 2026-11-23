@@ -1,0 +1,34 @@
+{
+  "id": "provider-huawei",
+  "name": "华为云",
+  "vendor": "华为云",
+  "catalog_entries": [
+    {
+      "id": "huawei_pangu",
+      "provider": "huawei",
+      "provider_cn": "华为云",
+      "product": "huawei_pangu",
+      "product_cn": "盘古 / ModelArts",
+      "category": "api",
+      "region": "cn",
+      "domains": [
+        "pangu.huaweicloud.com",
+        "*.modelarts-maas.com",
+        "modelarts.cn-north-4.myhuaweicloud.com"
+      ],
+      "path_rules": [
+        "/",
+        "/v1/",
+        "/v2/"
+      ],
+      "request_decoder": "pangu",
+      "response_decoder": "pangu",
+      "retain_level": "content",
+      "risk_profile": "llm_api",
+      "enabled": true,
+      "priority": 70,
+      "source_url": "https://www.huaweicloud.com/product/modelarts.html"
+    }
+  ],
+  "agent_definitions": []
+}

@@ -1,0 +1,34 @@
+{
+  "id": "provider-duckduckgo",
+  "name": "DuckDuckGo",
+  "vendor": "DuckDuckGo",
+  "catalog_entries": [
+    {
+      "id": "duck_ai",
+      "provider": "duckduckgo",
+      "provider_cn": "DuckDuckGo",
+      "product": "duck_ai",
+      "product_cn": "Duck.ai",
+      "category": "chat",
+      "region": "global",
+      "domains": [
+        "duck.ai",
+        "duckduckgo.com"
+      ],
+      "path_rules": [
+        "/",
+        "/duckchat/",
+        "contains:/chat",
+        "contains:/message"
+      ],
+      "request_decoder": "duck_web",
+      "response_decoder": "duck_web",
+      "retain_level": "content",
+      "risk_profile": "llm_web",
+      "enabled": true,
+      "priority": 60,
+      "source_url": "https://duck.ai/"
+    }
+  ],
+  "agent_definitions": []
+}

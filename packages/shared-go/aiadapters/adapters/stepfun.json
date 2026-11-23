@@ -1,0 +1,32 @@
+{
+  "id": "provider-stepfun",
+  "name": "阶跃星辰",
+  "vendor": "阶跃星辰",
+  "catalog_entries": [
+    {
+      "id": "stepfun",
+      "provider": "stepfun",
+      "provider_cn": "阶跃星辰",
+      "product": "stepfun",
+      "product_cn": "阶跃星辰",
+      "category": "api",
+      "region": "cn",
+      "domains": [
+        "stepfun.com",
+        "platform.stepfun.com"
+      ],
+      "path_rules": [
+        "/",
+        "/v1/"
+      ],
+      "request_decoder": "openai_compatible",
+      "response_decoder": "openai_compatible",
+      "retain_level": "content",
+      "risk_profile": "llm_api",
+      "enabled": true,
+      "priority": 70,
+      "source_url": "https://platform.stepfun.com/"
+    }
+  ],
+  "agent_definitions": []
+}

@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "license.v2",
+  "payload": {
+    "schemaVersion": "license.v2",
+    "licenseId": "lic_e2e_jjdguard",
+    "customer": {
+      "id": "cust_e2e_jjdguard",
+      "displayName": "JJDGuard E2E验签夹具"
+    },
+    "subject": {
+      "displayName": "JJDGuard Enterprise License",
+      "products": [
+        "jjdguard-enterprise"
+      ]
+    },
+    "edition": "enterprise",
+    "issuedAt": "2026-07-18T00:00:00Z",
+    "notBefore": "2026-07-18T00:00:00Z",
+    "expiresAt": "2036-07-15T00:00:00Z",
+    "maxUsers": 100000,
+    "features": [
+      "agent_audit",
+      "content_retention",
+      "ide_proxy",
+      "sensitive_data_guard",
+      "web_ai"
+    ],
+    "deploymentBinding": {
+      "mode": "required",
+      "bindingId": "dep_jjdguard_e2e_fixture",
+      "fingerprints": [
+        {
+          "scope": "deployment",
+          "algorithm": "sha256",
+          "value": "0d5864e8e718f6fda027266ae2bc1aa132035e0c816251882a4c11e20db90fc9"
+        }
+      ]
+    },
+    "gracePolicy": {
+      "expiryGraceDays": 30,
+      "clockRollbackGraceHours": 24,
+      "offlineRevocationStaleDays": 30
+    },
+    "revocationInfo": {
+      "mode": "none"
+    },
+    "issuer": "huoxianbao-license-authority-prod"
+  },
+  "signatureAlgorithm": "Ed25519-JCS-B64URL",
+  "keyId": "jjdguard-test-lic-2026",
+  "signature": "UgoFWjUPXC-jNSJbFJvTCAb0MJ-NyY_1Pr-NoZN58ol49H3PrJND03Et_dNguEIBO9ngm2jkMyzNl8nWinXiCg"
+}

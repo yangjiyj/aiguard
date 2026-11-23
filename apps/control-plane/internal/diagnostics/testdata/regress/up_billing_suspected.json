@@ -1,0 +1,93 @@
+{
+  "name": "up_billing_suspected",
+  "description": "某渠道全部 429 且 code 为 insufficient_quota：只能判疑似欠费，不能确定",
+  "fixture": {
+    "license": {
+      "state": "valid"
+    },
+    "providers": [
+      {
+        "key": "p1",
+        "name": "OpenAI官方",
+        "type": "openai",
+        "base_url": "https://api.openai.example.com"
+      }
+    ],
+    "models": [
+      {
+        "key": "m1",
+        "provider": "p1",
+        "name": "gpt-6.1-sol"
+      }
+    ],
+    "users": [
+      {
+        "key": "u1",
+        "username": "alice"
+      }
+    ],
+    "internal_keys": [
+      {
+        "key": "k1",
+        "user": "u1"
+      }
+    ],
+    "request_logs": [
+      {
+        "label": "bill",
+        "count": 9,
+        "user": "u1",
+        "key": "k1",
+        "provider": "p1",
+        "model": "m1",
+        "endpoint_type": "chat",
+        "status": "provider_error",
+        "upstream_status": 429,
+        "from": "-50m",
+        "to": "-5m",
+        "hint": "You exceeded your current quota, please check your plan and billing details.",
+        "upstream_error_code": "insufficient_quota",
+        "error_message": "You exceeded your current quota, please check your plan and billing details."
+      }
+    ]
+  },
+  "input": {
+    "kind": "health",
+    "scope": "admin"
+  },
+  "expect": {
+    "tier": "L2",
+    "must_check_ids_any": [
+      "up_billing"
+    ],
+    "must_keywords": [
+      "额度"
+    ],
+    "must_level": {
+      "up_billing": "suspected"
+    },
+    "forbid_confirmed": [
+      "up_billing"
+    ],
+    "l3": {
+      "must_keywords_any": [
+        "额度",
+        "欠费"
+      ],
+      "level_by_kw": [
+        {
+          "kw": [
+            "欠费",
+            "额度"
+          ],
+          "level": "suspected"
+        }
+      ],
+      "forbid_confirmed_kw": [
+        "欠费",
+        "额度不足",
+        "额度耗尽"
+      ]
+    }
+  }
+}

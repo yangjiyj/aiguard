@@ -1,0 +1,81 @@
+node_modules/
+dist/
+build/
+coverage/
+*.out
+cover.out
+*.log
+.env
+.env.*
+.env*
+deploy/docker-compose/identity-runtime.env
+!deploy/identity-lab/.env.example
+*.key
+*.pem
+vendor/
+.DS_Store
+
+.pytest_cache/
+__pycache__/
+*.py[cod]
+.coverage
+htmlcov/
+
+*.bak
+*.bak-*
+
+/deploy/docker-compose/backups/
+/deploy/docker-compose/.deploy-result
+/deploy/docker-compose/offline-artifacts/
+/deploy/docker-compose/offline-release/
+
+/apps/*/main
+/apps/*/server
+/apps/*/control-plane
+/apps/*/gateway-core
+/apps/*/proxy-server
+/apps/*/*.test
+
+reports/
+
+# 本地证书与私钥（运行时/安装时生成，严禁入库）
+/deploy/docker-compose/tls/
+# 备份与本地补丁临时文件
+*.bak.*
+*.p0bak
+patch_*.py
+
+# 现场排障诊断输出（不入库）
+/deploy/docker-compose/diagnostics/
+/deploy/docker-compose/jjdguard-diagnostics-*.tar.gz
+
+# Harness 运行证据（摘要入 docs，原始运行记录不入库）
+/.harness/runs/
+
+# 本地 compose override（home GPU judge / Tier-1 sidecar 等，每机不同，不入库）
+/deploy/docker-compose/docker-compose.override.yml
+
+# 源码文件编辑备份（*.stego-bak / *.bak 等，本地保险用）
+*.stego-bak
+deploy/docker-compose/models/*.gguf
+apps/*/gateway-core
+apps/*/control-plane
+apps/*/proxy-server
+apps/*/worker
+
+# identity-lab 隔离测试环境（任务 13）：所有真实密钥在 deploy/identity-lab/.env，
+# 由上面 .env* / *.key 规则覆盖，永不入库。.env.example 是 lab 占位模板，可入库。
+
+# Web Console TypeScript project build outputs.
+*.tsbuildinfo
+/apps/web-console/vite.config.js
+/apps/web-console/vite.config.d.ts
+
+# Retired tracked Go build outputs; governed releases build from source.
+/apps/control-plane/Dockerfile.local
+/apps/gateway-core/Dockerfile.local
+/apps/proxy-server/Dockerfile.local
+/apps/worker/Dockerfile.local
+
+# 本次门户整改的临时测试数据库证据及缓存，不进入发布输入。
+/work/chat-portal-self-service/

@@ -1,0 +1,29 @@
+.billing-employee-identity {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.billing-employee-name {
+  display: block;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.billing-employee-identity .ant-btn {
+  flex: 0 0 auto;
+}
+
+.billing-employee-details {
+  width: min(340px, calc(100vw - 64px));
+}
+
+.billing-employee-details .ant-descriptions-item-content {
+  overflow-wrap: anywhere;
+}

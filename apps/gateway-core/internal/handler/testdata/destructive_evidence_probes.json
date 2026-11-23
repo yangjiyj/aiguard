@@ -1,0 +1,2200 @@
+[
+  {
+    "id": "01",
+    "tool": "Bash",
+    "arguments": {
+      "command": "mysql -uroot -pS3cretP01 db -e 'drop table t'"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP01"
+    ],
+    "must_contain": [
+      "mysql -uroot",
+      "drop table t"
+    ],
+    "note": "对照，当前已遮住：mysql -p 连写"
+  },
+  {
+    "id": "02",
+    "tool": "Bash",
+    "arguments": {
+      "command": "mysql -u root --password S3cretP02 -e 'DROP DATABASE x'"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP02"
+    ],
+    "must_contain": [
+      "mysql -u root",
+      "DROP DATABASE x"
+    ],
+    "note": "对照，当前已遮住：--password 空格分隔"
+  },
+  {
+    "id": "03",
+    "tool": "Bash",
+    "arguments": {
+      "command": "mysql -uroot -p'S3cret P03' -e 'drop database x'"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cret",
+      "P03"
+    ],
+    "must_contain": [
+      "mysql -uroot",
+      "drop database x"
+    ],
+    "note": "当前漏出：-p 后引号值含空格，只遮到空格前"
+  },
+  {
+    "id": "04",
+    "tool": "Bash",
+    "arguments": {
+      "command": "mysql -uroot \\\n  -pS3cretP04 -e 'drop database x'"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP04"
+    ],
+    "must_contain": [
+      "mysql -uroot",
+      "drop database x"
+    ],
+    "note": "当前漏出：反斜杠续行，mysql 分段规则遇换行即停"
+  },
+  {
+    "id": "05",
+    "tool": "Bash",
+    "arguments": {
+      "command": "cd /srv\nmysql -h 10.0.0.5 -uroot -pS3cretP05 -e 'drop database x'"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP05"
+    ],
+    "must_contain": [
+      "cd /srv",
+      "10.0.0.5",
+      "drop database x"
+    ],
+    "note": "对照，当前已遮住：mysql 在第二行"
+  },
+  {
+    "id": "06",
+    "tool": "Bash",
+    "arguments": {
+      "command": "PGPASSWORD=S3cretP06 psql -h 10.0.0.5 -c \"drop table t\""
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP06"
+    ],
+    "must_contain": [
+      "psql -h 10.0.0.5",
+      "drop table t"
+    ],
+    "note": "对照，当前已遮住：PGPASSWORD 环境变量"
+  },
+  {
+    "id": "07",
+    "tool": "Bash",
+    "arguments": {
+      "command": "sshpass -p 'S3cretP07' ssh ops@10.1.2.3 'rm -rf /srv/x'"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP07"
+    ],
+    "must_contain": [
+      "ssh ops@10.1.2.3",
+      "rm -rf /srv/x"
+    ],
+    "note": "对照，当前已遮住：sshpass -p 引号值"
+  },
+  {
+    "id": "08",
+    "tool": "Bash",
+    "arguments": {
+      "command": "sshpass -pS3cretP08 ssh root@10.1.2.3 rm -rf /srv/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP08"
+    ],
+    "must_contain": [
+      "ssh root@10.1.2.3 rm -rf /srv/x"
+    ],
+    "note": "对照，当前已遮住：sshpass -p 连写"
+  },
+  {
+    "id": "09",
+    "tool": "Bash",
+    "arguments": {
+      "command": "sshpass \\\n  -p S3cretP09 ssh root@10.1.2.3 rm -rf /x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP09"
+    ],
+    "must_contain": [
+      "ssh root@10.1.2.3 rm -rf /x"
+    ],
+    "note": "当前漏出：反斜杠续行，sshpass 规则遇换行即停"
+  },
+  {
+    "id": "10",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl -u user:S3cretP10 https://f.corp/a -o ./a"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP10"
+    ],
+    "must_contain": [
+      "https://f.corp/a -o ./a"
+    ],
+    "note": "对照，当前已遮住：curl -u 空格分隔"
+  },
+  {
+    "id": "11",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl -uadmin:S3cretP11 https://f.corp/a -o ./a"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP11"
+    ],
+    "must_contain": [
+      "https://f.corp/a -o ./a"
+    ],
+    "note": "当前漏出：curl -u 连写不认"
+  },
+  {
+    "id": "12",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl --user=admin:S3cretP12 https://f.corp/a -o a"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP12"
+    ],
+    "must_contain": [
+      "https://f.corp/a -o a"
+    ],
+    "note": "对照，当前已遮住：curl --user="
+  },
+  {
+    "id": "13",
+    "tool": "Bash",
+    "arguments": {
+      "command": "git clone https://user:S3cretP13@git.corp/repo && rm -rf repo/.git"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP13"
+    ],
+    "must_contain": [
+      "@git.corp/repo",
+      "rm -rf repo/.git"
+    ],
+    "note": "对照，当前已遮住：URL userinfo"
+  },
+  {
+    "id": "14",
+    "tool": "Bash",
+    "arguments": {
+      "command": "git remote set-url origin https://oauth2:glpat-{{JOIN}}AbCdEf1234567890xYz1@gitlab.corp/g/r.git && git push -f"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "glpat-{{JOIN}}AbCdEf1234567890xYz1"
+    ],
+    "must_contain": [
+      "@gitlab.corp/g/r.git",
+      "git push -f"
+    ],
+    "note": "对照，当前已遮住：URL 里的 oauth2 令牌"
+  },
+  {
+    "id": "15",
+    "tool": "Bash",
+    "arguments": {
+      "command": "export AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYP15KEY; aws s3 rm s3://b --recursive"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "wJalrXUtnFEMI",
+      "P15KEY"
+    ],
+    "must_contain": [
+      "aws s3 rm s3://b --recursive"
+    ],
+    "note": "对照，当前已遮住：export AWS 密钥"
+  },
+  {
+    "id": "16",
+    "tool": "Bash",
+    "arguments": {
+      "command": "tool --password=S3cretP16 wipe"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP16"
+    ],
+    "must_contain": [
+      "--password=",
+      "wipe"
+    ],
+    "note": "对照，当前已遮住：--password="
+  },
+  {
+    "id": "17",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQMTcifQ.c2lnUDE3c2lnUDE3c2ln\" -X DELETE https://api.corp/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "eyJzdWIiOiJQMTcifQ",
+      "c2lnUDE3"
+    ],
+    "must_contain": [
+      "Authorization: Bearer",
+      "https://api.corp/x"
+    ],
+    "note": "对照，当前已遮住：Bearer JWT"
+  },
+  {
+    "id": "18",
+    "tool": "Bash",
+    "arguments": {
+      "command": "DB_PASS=S3cretP18 ./migrate.sh && rm -rf data"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP18"
+    ],
+    "must_contain": [
+      "./migrate.sh",
+      "rm -rf data"
+    ],
+    "note": "当前漏出：变量名 _PASS 结尾不在名单"
+  },
+  {
+    "id": "19",
+    "tool": "Bash",
+    "arguments": {
+      "command": "DB_PWD=S3cretP19 ./migrate.sh && rm -rf data"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP19"
+    ],
+    "must_contain": [
+      "./migrate.sh",
+      "rm -rf data"
+    ],
+    "note": "当前漏出：变量名 _PWD 结尾不在名单（只有 MYSQL_PWD）"
+  },
+  {
+    "id": "20",
+    "tool": "Bash",
+    "arguments": {
+      "command": "PASS=S3cretP20 ./deploy.sh > out.log"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP20"
+    ],
+    "must_contain": [
+      "./deploy.sh > out.log"
+    ],
+    "note": "当前漏出：变量名 PASS 不在名单"
+  },
+  {
+    "id": "21",
+    "tool": "Bash",
+    "arguments": {
+      "command": "cat > config.yaml <<EOF\ndb:\n  host: 10.0.0.5\n  password: S3cretP21\nEOF"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP21"
+    ],
+    "must_contain": [
+      "cat > config.yaml"
+    ],
+    "note": "当前漏出：heredoc 里 YAML 的 password: 值"
+  },
+  {
+    "id": "22",
+    "tool": "Bash",
+    "arguments": {
+      "command": "cat > config.yaml <<EOF\npassword: \"S3cretP22\"\nEOF"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP22"
+    ],
+    "must_contain": [
+      "cat > config.yaml"
+    ],
+    "note": "当前漏出：heredoc 里 YAML 的 password: 加引号值"
+  },
+  {
+    "id": "23",
+    "tool": "Bash",
+    "arguments": {
+      "command": "cat > .env <<EOF\nDB_PASSWORD=S3cretP23\nEOF"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP23"
+    ],
+    "must_contain": [
+      "cat > .env"
+    ],
+    "note": "对照，当前已遮住：heredoc 里 .env 赋值"
+  },
+  {
+    "id": "24",
+    "tool": "Bash",
+    "arguments": {
+      "command": "echo 'TOKEN=S3cretP24' >> .env"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP24"
+    ],
+    "must_contain": [
+      ">> .env"
+    ],
+    "note": "对照，当前已遮住：echo TOKEN= 追加 .env（收尾引号被吞，外观瑕疵）"
+  },
+  {
+    "id": "25",
+    "tool": "Bash",
+    "arguments": {
+      "command": "kubectl create secret generic s --from-literal=password=S3cretP25 -o yaml > s.yaml"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP25"
+    ],
+    "must_contain": [
+      "kubectl create secret generic s",
+      "> s.yaml"
+    ],
+    "note": "对照，当前已遮住：--from-literal=password="
+  },
+  {
+    "id": "26",
+    "tool": "Bash",
+    "arguments": {
+      "command": "kubectl create secret generic s --from-literal=db-pass=S3cretP26 -o yaml > s.yaml"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP26"
+    ],
+    "must_contain": [
+      "kubectl create secret generic s",
+      "> s.yaml"
+    ],
+    "note": "当前漏出：--from-literal=db-pass= 的键名不在名单"
+  },
+  {
+    "id": "27",
+    "tool": "Bash",
+    "arguments": {
+      "command": "docker run -e POSTGRES_PASSWORD=S3cretP27 -v /data:/var/lib/postgresql/data postgres"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP27"
+    ],
+    "must_contain": [
+      "docker run",
+      "postgres"
+    ],
+    "note": "对照，当前已遮住：docker run -e 赋值"
+  },
+  {
+    "id": "28",
+    "tool": "Bash",
+    "arguments": {
+      "command": "aws configure set aws_secret_access_key S3cretP28KeyValue && rm -rf ~/.aws/cli/cache"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP28"
+    ],
+    "must_contain": [
+      "aws configure set aws_secret_access_key",
+      "rm -rf ~/.aws/cli/cache"
+    ],
+    "note": "当前漏出：aws configure set 键值用空格分隔"
+  },
+  {
+    "id": "29",
+    "tool": "Bash",
+    "arguments": {
+      "command": "ssh-keygen -t ed25519 -N 'S3cretP29' -f ~/.ssh/id_ed25519 <<< y"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP29"
+    ],
+    "must_contain": [
+      "ssh-keygen -t ed25519",
+      "~/.ssh/id_ed25519"
+    ],
+    "note": "当前漏出：ssh-keygen -N 口令"
+  },
+  {
+    "id": "30",
+    "tool": "Bash",
+    "arguments": {
+      "command": "openssl enc -aes-256-cbc -k S3cretP30 -in db.sql -out db.enc && rm -f db.sql"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP30"
+    ],
+    "must_contain": [
+      "openssl enc -aes-256-cbc",
+      "rm -f db.sql"
+    ],
+    "note": "当前漏出：openssl -k 口令"
+  },
+  {
+    "id": "31",
+    "tool": "Bash",
+    "arguments": {
+      "command": "openssl enc -aes-256-cbc -pass pass:S3cretP31 -in a -out b && rm a"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP31"
+    ],
+    "must_contain": [
+      "-in a -out b && rm a"
+    ],
+    "note": "对照，当前已遮住：openssl -pass pass:"
+  },
+  {
+    "id": "32",
+    "tool": "Bash",
+    "arguments": {
+      "command": "zip -P S3cretP32 backup.zip db.sql && rm -f db.sql"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP32"
+    ],
+    "must_contain": [
+      "backup.zip db.sql",
+      "rm -f db.sql"
+    ],
+    "note": "当前漏出：zip -P 口令"
+  },
+  {
+    "id": "33",
+    "tool": "Bash",
+    "arguments": {
+      "command": "7z a -pS3cretP33 backup.7z db.sql && rm -f db.sql"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP33"
+    ],
+    "must_contain": [
+      "backup.7z db.sql",
+      "rm -f db.sql"
+    ],
+    "note": "当前漏出：7z -p 连写口令"
+  },
+  {
+    "id": "34",
+    "tool": "Bash",
+    "arguments": {
+      "command": "mysqldump -uroot --password \"S3cret P34\" db > /data/db.sql"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cret",
+      "P34"
+    ],
+    "must_contain": [
+      "mysqldump -uroot",
+      "> /data/db.sql"
+    ],
+    "note": "对照，当前已遮住：--password 引号值含空格"
+  },
+  {
+    "id": "35",
+    "tool": "Bash",
+    "arguments": {
+      "command": "psql \"postgresql://u:S3cretP35@10.0.0.5/db\" -c \"drop table t\""
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP35"
+    ],
+    "must_contain": [
+      "@10.0.0.5/db",
+      "drop table t"
+    ],
+    "note": "对照，当前已遮住：postgresql URL"
+  },
+  {
+    "id": "36",
+    "tool": "Bash",
+    "arguments": {
+      "command": "redis-cli -u redis://:S3cretP36@10.0.0.6:6379 FLUSHALL"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP36"
+    ],
+    "must_contain": [
+      "@10.0.0.6:6379 FLUSHALL"
+    ],
+    "note": "对照，当前已遮住：redis URL 只有口令"
+  },
+  {
+    "id": "37",
+    "tool": "Bash",
+    "arguments": {
+      "command": "mongosh \"mongodb+srv://u:S3cretP37@c0.x.mongodb.net/db\" --eval 'db.dropDatabase()'"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP37"
+    ],
+    "must_contain": [
+      "@c0.x.mongodb.net/db",
+      "db.dropDatabase()"
+    ],
+    "note": "对照，当前已遮住：mongodb+srv URL"
+  },
+  {
+    "id": "38",
+    "tool": "Bash",
+    "arguments": {
+      "command": "mongo -u admin -p S3cretP38 --eval 'db.dropDatabase()'"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP38"
+    ],
+    "must_contain": [
+      "mongo -u admin",
+      "db.dropDatabase()"
+    ],
+    "note": "当前漏出：mongo -p 口令"
+  },
+  {
+    "id": "39",
+    "tool": "Bash",
+    "arguments": {
+      "command": "az login -u ops@corp.com -p S3cretP39 && az group delete -n rg -y"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP39",
+      "ops@corp.com"
+    ],
+    "must_contain": [
+      "az group delete -n rg -y"
+    ],
+    "note": "当前漏出：az login -p 口令（邮箱已遮）"
+  },
+  {
+    "id": "40",
+    "tool": "Bash",
+    "arguments": {
+      "command": "sqlcmd -S 10.0.0.7 -U sa -P S3cretP40 -Q \"DROP DATABASE x\""
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP40"
+    ],
+    "must_contain": [
+      "sqlcmd -S 10.0.0.7 -U sa",
+      "DROP DATABASE x"
+    ],
+    "note": "当前漏出：sqlcmd -P 口令"
+  },
+  {
+    "id": "41",
+    "tool": "Bash",
+    "arguments": {
+      "command": "net user bob S3cretP41 /add && del /s /q C:\\data"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP41"
+    ],
+    "must_contain": [
+      "net user bob",
+      "del /s /q C:\\data"
+    ],
+    "note": "当前漏出：net user 位置参数口令"
+  },
+  {
+    "id": "42",
+    "tool": "Bash",
+    "arguments": {
+      "command": "$pw = ConvertTo-SecureString 'S3cretP42' -AsPlainText -Force; Remove-Item C:\\data -Recurse"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP42"
+    ],
+    "must_contain": [
+      "Remove-Item C:\\data -Recurse"
+    ],
+    "note": "当前漏出：PowerShell ConvertTo-SecureString 明文"
+  },
+  {
+    "id": "43",
+    "tool": "Bash",
+    "arguments": {
+      "command": "Remove-Item \\\\srv\\share\\x -Recurse -Credential (New-Object PSCredential('corp\\bob', (ConvertTo-SecureString 'S3cretP43' -AsPlainText -Force)))"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP43"
+    ],
+    "must_contain": [
+      "Remove-Item \\\\srv\\share\\x -Recurse"
+    ],
+    "note": "当前漏出：PowerShell -Credential 内联明文"
+  },
+  {
+    "id": "44",
+    "tool": "Bash",
+    "arguments": {
+      "command": "$Password = 'S3cretP44'; Remove-Item C:\\x -Recurse"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP44"
+    ],
+    "must_contain": [
+      "Remove-Item C:\\x -Recurse"
+    ],
+    "note": "对照，当前已遮住：PowerShell $Password = 赋值"
+  },
+  {
+    "id": "45",
+    "tool": "Bash",
+    "arguments": {
+      "command": "echo sk-proj-AbCdEf1234567890P45xyzQ > ~/.key"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "AbCdEf1234567890P45"
+    ],
+    "must_contain": [
+      "> ~/.key"
+    ],
+    "note": "对照，当前已遮住：sk- 前缀"
+  },
+  {
+    "id": "46",
+    "tool": "Bash",
+    "arguments": {
+      "command": "echo xoxb-{{JOIN}}1234567890-0987654321-P46AbCdEfGhIjKl > slack.txt"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "P46AbCdEfGhIjKl"
+    ],
+    "must_contain": [
+      "> slack.txt"
+    ],
+    "note": "当前漏出：Slack xoxb- 前缀不认"
+  },
+  {
+    "id": "47",
+    "tool": "Bash",
+    "arguments": {
+      "command": "echo AKIAP47ABCDEFGHIJKLM > id.txt"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "AKIAP47ABCDEFGHIJKLM"
+    ],
+    "must_contain": [
+      "> id.txt"
+    ],
+    "note": "对照，当前已遮住：AKIA 前缀"
+  },
+  {
+    "id": "48",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl \"https://maps.googleapis.com/x?key=AIzaSyP48AbCdEfGhIjKlMnOpQrStUvWxYz01\" -o out.json"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "AIzaSyP48AbCdEf"
+    ],
+    "must_contain": [
+      "https://maps.googleapis.com/x",
+      "-o out.json"
+    ],
+    "note": "当前漏出：查询参数 key= 和 AIza 前缀都不认"
+  },
+  {
+    "id": "48b",
+    "tool": "Bash",
+    "arguments": {
+      "command": "echo AIzaSyP48AbCdEfGhIjKlMnOpQrStUvWxYz01 > k.txt"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "AIzaSyP48AbCdEf"
+    ],
+    "must_contain": [
+      "> k.txt"
+    ],
+    "note": "当前漏出：Google AIza 前缀不认"
+  },
+  {
+    "id": "49",
+    "tool": "Bash",
+    "arguments": {
+      "command": "echo glpat-P49AbCdEfGhIjKlMnOp > t.txt"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "glpat-P49AbCdEf"
+    ],
+    "must_contain": [
+      "> t.txt"
+    ],
+    "note": "当前漏出：GitLab glpat- 前缀不认"
+  },
+  {
+    "id": "50",
+    "tool": "Bash",
+    "arguments": {
+      "command": "echo ghp_P50AbCdEfGhIjKlMnOpQrStUvWxYz0123456 > t.txt"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "P50AbCdEf"
+    ],
+    "must_contain": [
+      "> t.txt"
+    ],
+    "note": "对照，当前已遮住：ghp_ 前缀"
+  },
+  {
+    "id": "51",
+    "tool": "Bash",
+    "arguments": {
+      "command": "echo github_pat_11AAP51BBCCDDEEFFGG_hhIIjjKKllMMnnOOppQQrrSStt > t"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "P51BBCC"
+    ],
+    "must_contain": [
+      "> t"
+    ],
+    "note": "对照，当前已遮住：github_pat_ 前缀"
+  },
+  {
+    "id": "52",
+    "tool": "Bash",
+    "arguments": {
+      "command": "echo hf_P52AbCdEfGhIjKlMnOpQrStUvWxYz0123 > ~/.cache/huggingface/token"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "P52AbCdEf"
+    ],
+    "must_contain": [
+      "> ~/.cache/huggingface/token"
+    ],
+    "note": "当前漏出：HuggingFace hf_ 前缀不认"
+  },
+  {
+    "id": "53",
+    "tool": "Bash",
+    "arguments": {
+      "command": "echo 'root:S3cretP53' | chpasswd && rm -f /etc/nologin"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP53"
+    ],
+    "must_contain": [
+      "chpasswd",
+      "rm -f /etc/nologin"
+    ],
+    "note": "当前漏出：经管道喂给 chpasswd"
+  },
+  {
+    "id": "54",
+    "tool": "Bash",
+    "arguments": {
+      "command": "htpasswd -b -c /etc/nginx/.htpasswd admin S3cretP54"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP54"
+    ],
+    "must_contain": [
+      "htpasswd -b -c /etc/nginx/.htpasswd admin"
+    ],
+    "note": "当前漏出：htpasswd -b 位置参数口令"
+  },
+  {
+    "id": "55",
+    "tool": "Bash",
+    "arguments": {
+      "command": "net use \\\\srv\\share /user:corp\\bob S3cretP55 && del /q \\\\srv\\share\\x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP55"
+    ],
+    "must_contain": [
+      "net use \\\\srv\\share",
+      "del /q \\\\srv\\share\\x"
+    ],
+    "note": "当前漏出：net use 位置参数口令"
+  },
+  {
+    "id": "56",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl -X DELETE -d \"{\\\"password\\\":\\\"S3cretP56\\\"}\" https://api.corp/u"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP56"
+    ],
+    "must_contain": [
+      "curl -X DELETE",
+      "https://api.corp/u"
+    ],
+    "note": "当前漏出：转义 JSON 体"
+  },
+  {
+    "id": "57",
+    "tool": "Bash",
+    "arguments": {
+      "command": "echo 'S3cretP57' | sudo -S rm -rf /opt/app"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP57"
+    ],
+    "must_contain": [
+      "sudo -S rm -rf /opt/app"
+    ],
+    "note": "当前漏出：echo 管道喂 sudo -S"
+  },
+  {
+    "id": "58",
+    "tool": "Bash",
+    "arguments": {
+      "command": "sudo -S rm -rf /opt/app <<< 'S3cretP58'"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP58"
+    ],
+    "must_contain": [
+      "sudo -S rm -rf /opt/app"
+    ],
+    "note": "当前漏出：here-string 喂 sudo -S"
+  },
+  {
+    "id": "59",
+    "tool": "Bash",
+    "arguments": {
+      "command": "echo S3cretP59 | docker login -u bob --password-stdin reg.corp && docker rmi -f img"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP59"
+    ],
+    "must_contain": [
+      "docker login -u bob --password-stdin",
+      "reg.corp",
+      "docker rmi -f img"
+    ],
+    "note": "当前漏出：echo 管道喂 --password-stdin，反而把仓库名 reg.corp 遮成 ***"
+  },
+  {
+    "id": "60",
+    "tool": "Bash",
+    "arguments": {
+      "command": "podman login -u bob -p S3cretP60 reg.corp && podman rm -f c1"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP60"
+    ],
+    "must_contain": [
+      "podman login -u bob",
+      "reg.corp",
+      "podman rm -f c1"
+    ],
+    "note": "当前漏出：podman login -p（只覆盖了 docker）"
+  },
+  {
+    "id": "61",
+    "tool": "Bash",
+    "arguments": {
+      "command": "redis-cli -h 10.0.0.6 --pass S3cretP61 FLUSHALL"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP61"
+    ],
+    "must_contain": [
+      "redis-cli -h 10.0.0.6",
+      "FLUSHALL"
+    ],
+    "note": "当前漏出：redis-cli --pass（PASS 不在名单）"
+  },
+  {
+    "id": "62",
+    "tool": "Bash",
+    "arguments": {
+      "command": "redis-cli -h 10.0.0.6 -a S3cretP62 FLUSHALL"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP62"
+    ],
+    "must_contain": [
+      "redis-cli -h 10.0.0.6",
+      "FLUSHALL"
+    ],
+    "note": "对照，当前已遮住：redis-cli -a"
+  },
+  {
+    "id": "63",
+    "tool": "Bash",
+    "arguments": {
+      "command": "influx -username admin -password S3cretP63 -execute 'DROP DATABASE x'"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP63"
+    ],
+    "must_contain": [
+      "influx -username admin",
+      "DROP DATABASE x"
+    ],
+    "note": "当前漏出：单横线 -password 空格分隔"
+  },
+  {
+    "id": "64",
+    "tool": "Bash",
+    "arguments": {
+      "command": "consul kv delete -recurse -token S3cretP64 app/"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP64"
+    ],
+    "must_contain": [
+      "consul kv delete -recurse",
+      "app/"
+    ],
+    "note": "当前漏出：单横线 -token 空格分隔"
+  },
+  {
+    "id": "65",
+    "tool": "Bash",
+    "arguments": {
+      "command": "mysql -e \"SET PASSWORD FOR root = PASSWORD('S3cretP65')\""
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP65"
+    ],
+    "must_contain": [
+      "SET PASSWORD FOR root"
+    ],
+    "note": "当前漏出：SQL PASSWORD('…') 函数形态"
+  },
+  {
+    "id": "66",
+    "tool": "Bash",
+    "arguments": {
+      "command": "smbclient //10.0.0.8/share -U bob%S3cretP66 -c 'deltree x'"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP66"
+    ],
+    "must_contain": [
+      "smbclient //10.0.0.8/share",
+      "deltree x"
+    ],
+    "note": "当前漏出：smbclient -U user%pass"
+  },
+  {
+    "id": "67",
+    "tool": "Bash",
+    "arguments": {
+      "command": "lftp -u bob,S3cretP67 sftp://10.0.0.9 -e 'rm -r /x; bye'"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP67"
+    ],
+    "must_contain": [
+      "lftp",
+      "sftp://10.0.0.9",
+      "rm -r /x"
+    ],
+    "note": "当前漏出：lftp -u user,pass"
+  },
+  {
+    "id": "68",
+    "tool": "Bash",
+    "arguments": {
+      "command": "azcopy rm \"https://acct.blob.core.windows.net/c/x?sv=2022-11-02&sp=rwdl&se=2026-12-01&sig=P68AbCdEfGhIjKlMnOpQr%2F0123%3D\" --recursive"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "P68AbCdEf"
+    ],
+    "must_contain": [
+      "azcopy rm",
+      "https://acct.blob.core.windows.net/c/x",
+      "--recursive"
+    ],
+    "note": "当前漏出：Azure SAS 的 sig= 签名"
+  },
+  {
+    "id": "69",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl -X DELETE -H \"api-key: S3cretP69\" https://x.openai.azure.com/openai/files/f"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP69"
+    ],
+    "must_contain": [
+      "https://x.openai.azure.com/openai/files/f"
+    ],
+    "note": "当前漏出：api-key 请求头（Azure OpenAI）"
+  },
+  {
+    "id": "70",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl -X DELETE -H \"PRIVATE-TOKEN: glpat-P70AbCdEfGhIjKlMn\" https://gitlab.corp/api/v4/projects/1"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "P70AbCdEf"
+    ],
+    "must_contain": [
+      "https://gitlab.corp/api/v4/projects/1"
+    ],
+    "note": "当前漏出：PRIVATE-TOKEN 请求头（GitLab）"
+  },
+  {
+    "id": "71",
+    "tool": "Bash",
+    "arguments": {
+      "command": "Invoke-RestMethod -Method Delete -Headers @{Authorization=\"Basic dXNlcjpTM2NyZXRQNzE=\"} -Uri https://x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "dXNlcjpTM2NyZXRQNzE"
+    ],
+    "must_contain": [
+      "Invoke-RestMethod -Method Delete",
+      "-Uri https://x"
+    ],
+    "note": "当前漏出：PowerShell 哈希表里 Authorization=\"Basic …\"，规则不认引号开头的值"
+  },
+  {
+    "id": "72",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl -H \"Authorization: Basic dXNlcjpTM2NyZXRQNzI=\" -X DELETE https://x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "dXNlcjpTM2NyZXRQNzI"
+    ],
+    "must_contain": [
+      "Authorization: Basic",
+      "-X DELETE https://x"
+    ],
+    "note": "对照，当前已遮住：Authorization: Basic"
+  },
+  {
+    "id": "73",
+    "tool": "Bash",
+    "arguments": {
+      "command": "java -jar wipe.jar --url \"jdbc:mysql://10.0.0.5:3306/db?user=root&password=S3cretP73\""
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP73"
+    ],
+    "must_contain": [
+      "java -jar wipe.jar",
+      "jdbc:mysql://10.0.0.5:3306/db"
+    ],
+    "note": "对照，当前已遮住：jdbc URL 的 password= 参数（收尾引号被吞）"
+  },
+  {
+    "id": "74",
+    "tool": "Bash",
+    "arguments": {
+      "command": "powershell -EncodedCommand JABlAG4AdgA6AEQAQgBfAFAAQQBTAFMAVwBPAFIARAA9ACcAUwAzAGMAcgBlAHQAUAA3ADQAJwA7ACAAUgBlAG0AbwB2AGUALQBJAHQAZQBtACAAQwA6AFwAZABhAHQAYQAgAC0AUgBlAGMAdQByAHMAZQA="
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "JABlAG4AdgA6AEQAQgBfAFAA",
+      "S3cretP74"
+    ],
+    "must_contain": [
+      "powershell"
+    ],
+    "note": "当前漏出：字符串形态的 -EncodedCommand 原样展示 base64，解码即得口令"
+  },
+  {
+    "id": "75",
+    "tool": "Bash",
+    "arguments": {
+      "command": "python -c \"import pymysql; c=pymysql.connect(host='10.0.0.5',user='root',password='S3cretP75'); c.cursor().execute('drop database x')\""
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP75"
+    ],
+    "must_contain": [
+      "host='10.0.0.5'",
+      "drop database x"
+    ],
+    "note": "对照，当前已遮住：Python 内联 password="
+  },
+  {
+    "id": "76",
+    "tool": "Bash",
+    "arguments": {
+      "command": "cat > ~/.ssh/id_rsa <<'EOF'\n-----BEGIN OPENSSH PRIVATE KEY-----\nb3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwP76\n-----END OPENSSH PRIVATE KEY-----\nEOF"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "b3BlbnNzaC1rZXktdjEAAAAABG5vbmU"
+    ],
+    "must_contain": [
+      "cat > ~/.ssh/id_rsa"
+    ],
+    "note": "对照，当前已遮住：heredoc 私钥块"
+  },
+  {
+    "id": "78",
+    "tool": "Bash",
+    "arguments": {
+      "command": "expect -c 'spawn ssh root@10.0.0.5 \"rm -rf /x\"; expect \"password:\"; send \"S3cretP78\\r\"; interact'"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP78"
+    ],
+    "must_contain": [
+      "spawn ssh root@10.0.0.5",
+      "rm -rf /x"
+    ],
+    "note": "当前漏出：expect 脚本 send 口令"
+  },
+  {
+    "id": "79",
+    "tool": "shell",
+    "arguments": {
+      "command": [
+        "bash",
+        "-lc",
+        "PGPASSWORD=S3cretP79 psql -h 10.0.0.5 -c 'drop table t'"
+      ]
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP79"
+    ],
+    "must_contain": [
+      "psql -h 10.0.0.5",
+      "drop table t"
+    ],
+    "note": "对照，当前已遮住：Codex bash -lc 数组"
+  },
+  {
+    "id": "80",
+    "tool": "exec",
+    "arguments": {
+      "argv": [
+        "sshpass",
+        "-p",
+        "S3cret P80",
+        "ssh",
+        "root@10.0.0.5",
+        "rm -rf /x"
+      ]
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cret",
+      "P80"
+    ],
+    "must_contain": [
+      "ssh",
+      "root@10.0.0.5",
+      "rm -rf /x"
+    ],
+    "note": "当前漏出：argv 直接空格拼接，含空格的口令只遮前半"
+  },
+  {
+    "id": "80b",
+    "tool": "exec",
+    "arguments": {
+      "argv": [
+        "curl",
+        "-u",
+        "admin:S3cret P80b",
+        "-X",
+        "DELETE",
+        "https://x"
+      ]
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cret",
+      "P80b"
+    ],
+    "must_contain": [
+      "-X DELETE",
+      "https://x"
+    ],
+    "note": "当前漏出：argv 直接空格拼接，curl -u 值只遮前半"
+  },
+  {
+    "id": "81",
+    "tool": "shell",
+    "arguments": {
+      "command": [
+        "mysql",
+        "-uroot",
+        "-pS3cretP81",
+        "-e",
+        "drop database x"
+      ]
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP81"
+    ],
+    "must_contain": [
+      "mysql -uroot",
+      "drop database x"
+    ],
+    "note": "对照，当前已遮住：Codex 非 shell 的 argv 数组"
+  },
+  {
+    "id": "81b",
+    "tool": "exec",
+    "arguments": {
+      "argv": [
+        "env",
+        "DB_PASSWORD=my S3cret P81b",
+        "./wipe.sh"
+      ]
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cret",
+      "P81b"
+    ],
+    "must_contain": [
+      "./wipe.sh"
+    ],
+    "note": "当前漏出：argv 直接空格拼接，赋值值含空格只遮第一个词"
+  },
+  {
+    "id": "82",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "CREATE USER a IDENTIFIED BY 'S3cretP82'; DROP TABLE t"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP82"
+    ],
+    "must_contain": [
+      "CREATE USER a IDENTIFIED BY",
+      "DROP TABLE t"
+    ],
+    "note": "对照，当前已遮住：SQL IDENTIFIED BY"
+  },
+  {
+    "id": "83",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "ALTER USER root WITH PASSWORD 'S3cretP83'; DROP TABLE t"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP83"
+    ],
+    "must_contain": [
+      "ALTER USER root WITH PASSWORD",
+      "DROP TABLE t"
+    ],
+    "note": "对照，当前已遮住：SQL WITH PASSWORD '…'"
+  },
+  {
+    "id": "83b",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "ALTER ROLE root PASSWORD $$S3cretP83b$$; DROP TABLE t"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP83b"
+    ],
+    "must_contain": [
+      "ALTER ROLE root PASSWORD",
+      "DROP TABLE t"
+    ],
+    "note": "当前漏出：PostgreSQL $$…$$ 引用的口令"
+  },
+  {
+    "id": "83c",
+    "tool": "shell",
+    "arguments": {
+      "command": [
+        "cmd",
+        "/c",
+        "mysql -uroot -pS3cretP83c -e \"drop database x\""
+      ]
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP83c"
+    ],
+    "must_contain": [
+      "mysql -uroot",
+      "drop database x"
+    ],
+    "note": "对照，当前已遮住：cmd /c 数组"
+  },
+  {
+    "id": "84",
+    "tool": "Bash",
+    "arguments": {
+      "command": "echo aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa && PGPASSWORD=S3cretP84Value psql -c 'drop table t'"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP84",
+      "S3cr"
+    ],
+    "must_contain": [
+      "echo aaaa",
+      "PGPASSWORD="
+    ],
+    "note": "对照，当前已遮住：凭据跨 200 字截断点，须先脱敏后截断"
+  },
+  {
+    "id": "84b",
+    "tool": "Bash",
+    "arguments": {
+      "command": "echo aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ghp_P84bAbCdEfGhIjKlMnOpQrStUvWxYz01234 > t"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "P84b"
+    ],
+    "must_contain": [
+      "echo aaaa"
+    ],
+    "note": "对照，当前已遮住：令牌跨 200 字截断点，须先脱敏后截断"
+  },
+  {
+    "id": "86",
+    "tool": "Bash",
+    "arguments": {
+      "command": "set DB_PASSWORD=S3cretP86 && del /s /q C:\\data"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP86"
+    ],
+    "must_contain": [
+      "set DB_PASSWORD=",
+      "del /s /q C:\\data"
+    ],
+    "note": "对照，当前已遮住：cmd set 赋值"
+  },
+  {
+    "id": "87",
+    "tool": "Bash",
+    "arguments": {
+      "command": "setx API_KEY S3cretP87 && del x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP87"
+    ],
+    "must_contain": [
+      "setx API_KEY",
+      "del x"
+    ],
+    "note": "当前漏出：setx 名值用空格分隔"
+  },
+  {
+    "id": "89",
+    "tool": "Bash",
+    "arguments": {
+      "command": "wget --http-user=u --http-password=S3cretP89 https://x/a -O /etc/a"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP89"
+    ],
+    "must_contain": [
+      "wget --http-user=u",
+      "https://x/a -O /etc/a"
+    ],
+    "note": "对照，当前已遮住：wget --http-password="
+  },
+  {
+    "id": "90",
+    "tool": "Bash",
+    "arguments": {
+      "command": "helm repo add x https://c --username u --password S3cretP90 && helm uninstall app"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP90"
+    ],
+    "must_contain": [
+      "helm repo add x https://c",
+      "helm uninstall app"
+    ],
+    "note": "对照，当前已遮住：helm --password"
+  },
+  {
+    "id": "91",
+    "tool": "Bash",
+    "arguments": {
+      "command": "vault login -method=userpass username=bob password=S3cretP91 && vault kv delete secret/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP91"
+    ],
+    "must_contain": [
+      "vault login -method=userpass",
+      "vault kv delete secret/x"
+    ],
+    "note": "对照，当前已遮住：vault password="
+  },
+  {
+    "id": "92",
+    "tool": "Bash",
+    "arguments": {
+      "command": "docker login -u bob -pS3cretP92 reg && docker rm -f c"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP92"
+    ],
+    "must_contain": [
+      "docker login -u bob",
+      "docker rm -f c"
+    ],
+    "note": "对照，当前已遮住：docker login -p 连写"
+  },
+  {
+    "id": "93",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl -H \"Cookie: SESSION=S3cretP93\" -X DELETE https://x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP93"
+    ],
+    "must_contain": [
+      "Cookie:",
+      "-X DELETE https://x"
+    ],
+    "note": "对照，当前已遮住：Cookie 头"
+  },
+  {
+    "id": "94",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl --proxy-user u:S3cretP94 -X DELETE https://x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP94"
+    ],
+    "must_contain": [
+      "--proxy-user",
+      "-X DELETE https://x"
+    ],
+    "note": "对照，当前已遮住：curl --proxy-user"
+  },
+  {
+    "id": "95",
+    "tool": "Bash",
+    "arguments": {
+      "command": "git config user.email zhangsan@acme-tech.com && git reset --hard HEAD~3"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "zhangsan@acme-tech.com",
+      "zhangsan"
+    ],
+    "must_contain": [
+      "git config user.email",
+      "git reset --hard HEAD~3"
+    ],
+    "note": "对照，当前已遮住：邮箱按 <redacted:email> 口径"
+  },
+  {
+    "id": "96",
+    "tool": "Bash",
+    "arguments": {
+      "command": "MYSQL_PWD=S3cretP96 mysql -e 'drop database x'"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP96"
+    ],
+    "must_contain": [
+      "mysql -e 'drop database x'"
+    ],
+    "note": "对照，当前已遮住：MYSQL_PWD"
+  },
+  {
+    "id": "98",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl -X DELETE \"https://api.corp/x?access_token=S3cretP98&x=1\""
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP98"
+    ],
+    "must_contain": [
+      "https://api.corp/x?access_token=",
+      "x=1"
+    ],
+    "note": "对照，当前已遮住：查询参数 access_token="
+  },
+  {
+    "id": "99",
+    "tool": "Bash",
+    "arguments": {
+      "command": "rsync -e \"sshpass -p S3cretP99 ssh\" -a --delete src/ root@10.0.0.5:/dst/"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP99"
+    ],
+    "must_contain": [
+      "rsync",
+      "--delete src/ root@10.0.0.5:/dst/"
+    ],
+    "note": "对照，当前已遮住：rsync -e 里嵌 sshpass"
+  },
+  {
+    "id": "100",
+    "tool": "Bash",
+    "arguments": {
+      "command": "git -c http.extraHeader=\"Authorization: Basic UDEwMEFiQ2Q=\" push -f origin main"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "UDEwMEFiQ2Q"
+    ],
+    "must_contain": [
+      "git -c http.extraHeader=",
+      "push -f origin main"
+    ],
+    "note": "对照，当前已遮住：git extraHeader Basic"
+  },
+  {
+    "id": "101",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl -X DELETE \\\n  -u admin:S3cretP101 \\\n  https://x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP101"
+    ],
+    "must_contain": [
+      "curl -X DELETE",
+      "https://x"
+    ],
+    "note": "当前漏出：反斜杠续行，curl 规则遇换行即停"
+  },
+  {
+    "id": "103",
+    "tool": "Bash",
+    "arguments": {
+      "command": "ftp -n 10.0.0.9 <<EOF\nuser bob S3cretP103\ndelete x\nEOF"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP103"
+    ],
+    "must_contain": [
+      "ftp -n 10.0.0.9"
+    ],
+    "note": "当前漏出：ftp heredoc 里的 user 名 口令"
+  },
+  {
+    "id": "104",
+    "tool": "Bash",
+    "arguments": {
+      "command": "$env:DB_PASSWORD=\"S3cretP104\"; Remove-Item C:\\x -Recurse"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP104"
+    ],
+    "must_contain": [
+      "$env:DB_PASSWORD=",
+      "Remove-Item C:\\x -Recurse"
+    ],
+    "note": "对照，当前已遮住：PowerShell $env: 赋值"
+  },
+  {
+    "id": "105",
+    "tool": "Bash",
+    "arguments": {
+      "command": "bash -c \"PGPASSWORD='S3cret P105' psql -c 'drop table t'\""
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cret",
+      "P105"
+    ],
+    "must_contain": [
+      "bash -c",
+      "drop table t"
+    ],
+    "note": "对照，当前已遮住：嵌套引号、值含空格"
+  },
+  {
+    "id": "106",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl -H 'authorization:bearer S3cretP106xyz' -X DELETE https://x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP106"
+    ],
+    "must_contain": [
+      "-X DELETE https://x"
+    ],
+    "note": "对照，当前已遮住：小写 authorization 无空格"
+  },
+  {
+    "id": "107",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl -H \"X-API-Key: S3cretP107\" -X DELETE https://x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP107"
+    ],
+    "must_contain": [
+      "X-API-Key:",
+      "-X DELETE https://x"
+    ],
+    "note": "对照，当前已遮住：X-API-Key 头"
+  },
+  {
+    "id": "108",
+    "tool": "Bash",
+    "arguments": {
+      "command": "mysql -pS3cretP108 -h 10.0.0.5 -e 'drop database x'"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP108"
+    ],
+    "must_contain": [
+      "-h 10.0.0.5",
+      "drop database x"
+    ],
+    "note": "对照，当前已遮住：mysql -p 在最前"
+  },
+  {
+    "id": "109",
+    "tool": "Bash",
+    "arguments": {
+      "command": "echo $(mysql -uroot -pS3cretP109 -e 'drop database x')"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP109"
+    ],
+    "must_contain": [
+      "drop database x"
+    ],
+    "note": "对照，当前已遮住：命令替换里的 mysql"
+  },
+  {
+    "id": "110",
+    "tool": "Bash",
+    "arguments": {
+      "command": "SSHPASS=S3cretP110 sshpass -e ssh root@10.0.0.5 rm -rf /x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP110"
+    ],
+    "must_contain": [
+      "sshpass -e ssh root@10.0.0.5 rm -rf /x"
+    ],
+    "note": "当前漏出：SSHPASS 变量名不在名单"
+  },
+  {
+    "id": "111",
+    "tool": "Bash",
+    "arguments": {
+      "command": "ldapdelete -x -D cn=admin,dc=corp -w S3cretP111 uid=bob,dc=corp"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP111"
+    ],
+    "must_contain": [
+      "ldapdelete -x -D cn=admin,dc=corp",
+      "uid=bob,dc=corp"
+    ],
+    "note": "当前漏出：ldap* -w 口令"
+  },
+  {
+    "id": "112",
+    "tool": "Bash",
+    "arguments": {
+      "command": "RCLONE_CONFIG_S3_SECRET_ACCESS_KEY=S3cretP112 rclone purge s3:bucket"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP112"
+    ],
+    "must_contain": [
+      "rclone purge s3:bucket"
+    ],
+    "note": "对照，当前已遮住：rclone SECRET 变量"
+  },
+  {
+    "id": "113",
+    "tool": "Bash",
+    "arguments": {
+      "command": "printf 'S3cretP113\\nS3cretP113\\n' | passwd bob && rm -rf /home/bob/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP113"
+    ],
+    "must_contain": [
+      "passwd bob",
+      "rm -rf /home/bob/x"
+    ],
+    "note": "当前漏出：printf 管道喂给 passwd"
+  },
+  {
+    "id": "114",
+    "tool": "Bash",
+    "arguments": {
+      "command": "sshpass -p\"S3cretP114\" ssh root@h rm -rf /x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretP114"
+    ],
+    "must_contain": [
+      "ssh root@h rm -rf /x"
+    ],
+    "note": "对照，当前已遮住：sshpass -p 连写双引号值"
+  },
+  {
+    "id": "M01",
+    "tool": "Bash",
+    "arguments": {
+      "command": "git reset --hard 3f2a9c1e4b5d6a7f8e9d0c1b2a3f4e5d6c7b8a9f"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "3f2a9c1e4b5d6a7f8e9d0c1b2a3f4e5d6c7b8a9f"
+    ],
+    "note": "对照，当前不误遮：git sha"
+  },
+  {
+    "id": "M02",
+    "tool": "Bash",
+    "arguments": {
+      "command": "rm -rf /tmp/550e8400-e29b-41d4-a716-446655440000"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "/tmp/550e8400-e29b-41d4-a716-446655440000"
+    ],
+    "note": "对照，当前不误遮：UUID 路径"
+  },
+  {
+    "id": "M03",
+    "tool": "Bash",
+    "arguments": {
+      "command": "docker rmi -f sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    ],
+    "note": "对照，当前不误遮：sha256 镜像摘要"
+  },
+  {
+    "id": "M04",
+    "tool": "Bash",
+    "arguments": {
+      "command": "rm -rf ./checkpoints/run_20261113_lr3e-4_bs256_warmup2000_seed42_ckpt"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "./checkpoints/run_20261113_lr3e-4_bs256_warmup2000_seed42_ckpt"
+    ],
+    "note": "当前误遮：长 checkpoint 名命中高熵兜底，删除目标整词变 ***"
+  },
+  {
+    "id": "M05",
+    "tool": "Bash",
+    "arguments": {
+      "command": "rm -rf Qwen2-72B-Instruct-GPTQ-Int4-calibration-dataset-shard-0001-of-0030"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "Qwen2-72B-Instruct-GPTQ-Int4-calibration-dataset-shard-0001-of-0030"
+    ],
+    "note": "当前误遮：长模型文件名命中高熵兜底，删除目标整词变 ***"
+  },
+  {
+    "id": "M06",
+    "tool": "Bash",
+    "arguments": {
+      "command": "rm -rf outputs/Qwen2-72B-Instruct-GPTQ-Int4-calibration-dataset-shard-0001"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "outputs/Qwen2-72B-Instruct-GPTQ-Int4-calibration-dataset-shard-0001"
+    ],
+    "note": "当前误遮：带目录的长模型名，连同目录整词变 ***"
+  },
+  {
+    "id": "M07",
+    "tool": "Bash",
+    "arguments": {
+      "command": "rm -f logs/app-1731484800123.log"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "logs/app-1731484800123.log"
+    ],
+    "note": "当前误遮：13 位毫秒时间戳被当银行卡（未做 Luhn 校验）"
+  },
+  {
+    "id": "M08",
+    "tool": "Bash",
+    "arguments": {
+      "command": "rm -rf /data/user/13812345678"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "rm -rf /data/user/"
+    ],
+    "note": "当前误遮：手机号形态的目录名被遮，按 PII 口径可接受，只要求路径前缀保留"
+  },
+  {
+    "id": "M09",
+    "tool": "Bash",
+    "arguments": {
+      "command": "rm -rf /data/export/6222021234567890123"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "rm -rf /data/export/"
+    ],
+    "note": "路径段里的 13–19 位数字与时间戳、编号无法区分，不再按银行卡遮；只要求路径前缀保留"
+  },
+  {
+    "id": "M10",
+    "tool": "Bash",
+    "arguments": {
+      "command": "kubectl delete pod api-7d9f8b6c5d-x2x9z -n prod"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "api-7d9f8b6c5d-x2x9z"
+    ],
+    "note": "对照，当前不误遮：k8s pod 名"
+  },
+  {
+    "id": "M11",
+    "tool": "Bash",
+    "arguments": {
+      "command": "rm -rf ~/.cache/huggingface/hub/models--meta-llama--Llama-3.1-70B-Instruct"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "~/.cache/huggingface/hub/models--meta-llama--Llama-3.1-70B-Instruct"
+    ],
+    "note": "对照，当前不误遮：多段路径"
+  },
+  {
+    "id": "M12",
+    "tool": "Bash",
+    "arguments": {
+      "command": "echo password reset done > notes.txt"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "password reset done",
+      "notes.txt"
+    ],
+    "note": "对照，当前不误遮：普通文字里的 password"
+  },
+  {
+    "id": "M13",
+    "tool": "Bash",
+    "arguments": {
+      "command": "PASSWORD_FILE=/run/secrets/db ./wipe.sh"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "/run/secrets/db",
+      "./wipe.sh"
+    ],
+    "note": "当前误遮：_FILE 结尾的变量是路径，不是口令"
+  },
+  {
+    "id": "M14",
+    "tool": "Bash",
+    "arguments": {
+      "command": "tool --token-file /var/run/token --force wipe"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "/var/run/token",
+      "--force wipe"
+    ],
+    "note": "当前误遮：--token-file 的值是路径"
+  },
+  {
+    "id": "M15",
+    "tool": "Bash",
+    "arguments": {
+      "command": "aws secretsmanager delete-secret --secret-id prod/db/main --force-delete-without-recovery"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "--secret-id prod/db/main"
+    ],
+    "note": "当前误遮：--secret-id 是删除目标，不是口令"
+  },
+  {
+    "id": "M16",
+    "tool": "Bash",
+    "arguments": {
+      "command": "TOKENIZERS_PARALLELISM=false python train.py && rm -rf ckpt"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "TOKENIZERS_PARALLELISM=false",
+      "rm -rf ckpt"
+    ],
+    "note": "当前误遮：TOKENIZERS_ 变量含 TOKEN 被误遮"
+  },
+  {
+    "id": "M17",
+    "tool": "Bash",
+    "arguments": {
+      "command": "sshpass -f /etc/pw ssh -p 2222 root@10.0.0.5 rm -rf /x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "ssh -p 2222",
+      "/etc/pw",
+      "rm -rf /x"
+    ],
+    "note": "当前误遮：sshpass 规则误把 ssh 的端口 -p 2222 遮掉"
+  },
+  {
+    "id": "M18",
+    "tool": "Bash",
+    "arguments": {
+      "command": "ssh root@10.0.0.5 'rm -rf /srv/x'"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "root@10.0.0.5",
+      "rm -rf /srv/x"
+    ],
+    "note": "对照，当前不误遮：user@内网 IP 不当邮箱"
+  },
+  {
+    "id": "M19",
+    "tool": "Bash",
+    "arguments": {
+      "command": "rm -rf /home/dev/wt/site-alert-severity-20261113/apps/gateway-core/bin"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "/home/dev/wt/site-alert-severity-20261113/apps/gateway-core/bin"
+    ],
+    "note": "对照，当前不误遮：长路径（3 个以上斜杠跳过兜底）"
+  },
+  {
+    "id": "M20",
+    "tool": "Bash",
+    "arguments": {
+      "command": "gh secret delete DEPLOY_TOKEN && rm -rf .github"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "gh secret delete DEPLOY_TOKEN",
+      "rm -rf .github"
+    ],
+    "note": "对照，当前不误遮：secret 名不是口令"
+  },
+  {
+    "id": "M21",
+    "tool": "Bash",
+    "arguments": {
+      "command": "kubectl delete secret db-password -n prod"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "kubectl delete secret db-password -n prod"
+    ],
+    "note": "对照，当前不误遮：secret 资源名"
+  },
+  {
+    "id": "M22",
+    "tool": "Bash",
+    "arguments": {
+      "command": "mysql -h 10.0.0.5 -P 3306 -uroot -p -e 'drop database x'"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "-P 3306",
+      "-uroot -p -e",
+      "drop database x"
+    ],
+    "note": "对照，当前不误遮：mysql -P 端口和交互式 -p"
+  },
+  {
+    "id": "M23",
+    "tool": "Bash",
+    "arguments": {
+      "command": "docker run -p 8080:80 --rm -v /data:/data img rm -rf /data/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "-p 8080:80",
+      "rm -rf /data/x"
+    ],
+    "note": "对照，当前不误遮：docker -p 端口映射"
+  },
+  {
+    "id": "M24",
+    "tool": "Bash",
+    "arguments": {
+      "command": "git push --force origin feature/token-refresh"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "feature/token-refresh"
+    ],
+    "note": "对照，当前不误遮：分支名含 token"
+  },
+  {
+    "id": "M25",
+    "tool": "Bash",
+    "arguments": {
+      "command": "rm -rf dist && echo QmFzZTY0RW5jb2RlZFN0cmluZ1RoYXRJc0xvbmdFbm91Z2hUb1RyaWdnZXI= > a"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "rm -rf dist",
+      "> a"
+    ],
+    "note": "可接受的遮挡：当前把高熵 base64 遮成 ***=，属于合理遮挡，只要求 rm -rf dist 和 > a 保留"
+  },
+  {
+    "id": "M26",
+    "tool": "Bash",
+    "arguments": {
+      "command": "cp a.bin b.bin && rm -rf build/AbCdEfGh12345678ijklMNOP90qrstUVWX_yz-0123456789ab"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "build/AbCdEfGh12345678ijklMNOP90qrstUVWX_yz-0123456789ab"
+    ],
+    "note": "当前误遮：带目录的随机名删除目标被整词遮（可商榷，建议带 / 的词放行）"
+  }
+]

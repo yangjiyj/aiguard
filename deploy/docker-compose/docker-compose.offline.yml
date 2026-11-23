@@ -1,0 +1,920 @@
+services:
+  gateway-core:
+    image: docker-compose-gateway-core:latest
+    restart: unless-stopped
+    # 关停预算：HTTP 优雅关停最多 30 秒 + 原文留证队列排空最多 10 秒；docker 默认 10 秒就 SIGKILL。
+    stop_grace_period: 45s
+    ports:
+      - "${GATEWAY_BIND:-0.0.0.0}:${GATEWAY_PORT:-8080}:8080"
+      - "${PROXY_BIND:-0.0.0.0}:${PROXY_PORT:-8082}:8082"
+    environment:
+      - LISTEN_ADDR=:8080
+      # drift-audit: 两服务的产品档位与品牌环境键保持相同声明，离线包必须同步。
+      - PRODUCT_PROFILE=${PRODUCT_PROFILE:-gateway}
+      - PRODUCT_NAME=${PRODUCT_NAME:-}
+      - PRODUCT_VERSION=${PRODUCT_VERSION:-}
+      - JJD_VERSION=${JJD_VERSION:-unknown}
+      - JJD_COMMIT=${JJD_COMMIT:-}
+      - JJD_BUILT_AT=${JJD_BUILT_AT:-}
+      - RETENTION_STORE_PATH=${RETENTION_STORE_PATH:-/var/lib/jjdguard/retention}
+      - GATEWAY_HTTP_READ_HEADER_TIMEOUT=${GATEWAY_HTTP_READ_HEADER_TIMEOUT:-10s}
+      - GATEWAY_HTTP_READ_TIMEOUT=${GATEWAY_HTTP_READ_TIMEOUT:-5m}
+      - GATEWAY_API_BODY_LIMIT_MB=${GATEWAY_API_BODY_LIMIT_MB:-200}
+      - GATEWAY_ENVIRONMENT_SCOPE=${GATEWAY_ENVIRONMENT_SCOPE:-customer}
+      - TRUSTED_PROXY_CIDRS=${TRUSTED_PROXY_CIDRS:-}
+      - DATABASE_URL=postgres://${POSTGRES_USER:-jjdguard}:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}@postgres:5432/${POSTGRES_DB:-jjdguard}?sslmode=disable
+      # 数据库连接池（留空=使用内置默认值；各服务默认值与总预算见 packages/shared-go/dbhelpers）
+      - GATEWAY_DB_POOL_MAX_CONNS=${GATEWAY_DB_POOL_MAX_CONNS:-}
+      - GATEWAY_DB_POOL_MIN_CONNS=${GATEWAY_DB_POOL_MIN_CONNS:-}
+      - GATEWAY_DB_POOL_MAX_CONN_IDLE_TIME=${GATEWAY_DB_POOL_MAX_CONN_IDLE_TIME:-}
+      - GATEWAY_DB_POOL_MAX_CONN_LIFETIME=${GATEWAY_DB_POOL_MAX_CONN_LIFETIME:-}
+      - GATEWAY_DB_POOL_CONNECT_TIMEOUT=${GATEWAY_DB_POOL_CONNECT_TIMEOUT:-}
+      - REDIS_URL=redis://:${REDIS_PASSWORD:?REDIS_PASSWORD is required}@redis:6379/0
+      # 响应缓存走独立 redis-cache（不落盘、LRU 淘汰）；连不上只按未命中处理，不影响启动和 /health。
+      - RESPONSE_CACHE_REDIS_URL=redis://:${REDIS_PASSWORD:?REDIS_PASSWORD is required}@redis-cache:6379/0
+      - SECURITY_ENGINE_URL=${SECURITY_ENGINE_URL:-http://security-engine:8000}
+      - GATEWAY_INPUT_SECURITY_REQUEST_TIMEOUT=${GATEWAY_INPUT_SECURITY_REQUEST_TIMEOUT:-45s}
+      - SECURITY_ENGINE_TIMEOUT=${SECURITY_ENGINE_TIMEOUT:-40s}
+      # batch 未完成条目的单条重试首次退避（Go duration，留空=200ms）。
+      - GATEWAY_SECURITY_RETRY_BACKOFF=${GATEWAY_SECURITY_RETRY_BACKOFF:-}
+      - SECURITY_AUDIT_ONLY=${SECURITY_AUDIT_ONLY:-false}
+      - SECURITY_FILE_CONTENT_DLP_ENABLED=${SECURITY_FILE_CONTENT_DLP_ENABLED:-false}
+      # P1-B 已检指纹缓存（安全三视图重构 模块 2a）：交付默认开，回归证据不减量、命中重放仍照写事件
+      - SECURITY_SCAN_FP_ENABLED=${SECURITY_SCAN_FP_ENABLED:-true}
+      # P1-A 默认翻转：source 感知——gateway-core 反代分组送检（P1-C）读本 env；引擎侧同名开关见 security-engine 段
+      - SECURITY_SOURCE_AWARE_ENABLED=${SECURITY_SOURCE_AWARE_ENABLED:-true}
+      - SECURITY_ACTION_HEADER_ENABLED=${SECURITY_ACTION_HEADER_ENABLED:-}
+      # P3 Agent 工具调用语义裁判门控：full 包免配置开启，安全动作仍保持 audit-only。
+      - SECURITY_SEMANTIC_AGENT_ENABLED=${SECURITY_SEMANTIC_AGENT_ENABLED:-true}
+      - CONTROL_PLANE_URL=http://control-plane:8081
+      - BILLING_ENABLED=${BILLING_ENABLED:-true}
+      - BILLING_MODE=${BILLING_MODE:-metering}
+      - BILLING_CUSTOMER_GROUP=${BILLING_CUSTOMER_GROUP:-default}
+      - JJD_PROVIDER_SECRET_KEY=${JJD_PROVIDER_SECRET_KEY:?JJD_PROVIDER_SECRET_KEY is required}
+      # 数据加密算法与 SM4 密钥环：网关与控制面必须一致（脱敏原文留证由网关加密、控制面解密）。
+      # 默认空 = AES-256-GCM；国密部署设 JJD_SECRETS_CIPHER=sm4-gcm 并给出 JJD_SM4_KEYRING / JJD_SM4_ACTIVE_KEY_ID。
+      - JJD_SECRETS_CIPHER=${JJD_SECRETS_CIPHER:-}
+      - JJD_SM4_KEYRING=${JJD_SM4_KEYRING:-}
+      - JJD_SM4_ACTIVE_KEY_ID=${JJD_SM4_ACTIVE_KEY_ID:-}
+      - JJD_INTERNAL_API_SECRET=${JJD_INTERNAL_API_SECRET:?JJD_INTERNAL_API_SECRET is required}
+      - JJD_SEMANTIC_GATEWAY_ATTESTATION_KEY=${JJD_SEMANTIC_GATEWAY_ATTESTATION_KEY:?JJD_SEMANTIC_GATEWAY_ATTESTATION_KEY is required}
+      - MCP_CONFIRMATION_SCOPE_SECRET=${MCP_CONFIRMATION_SCOPE_SECRET:-}
+      - LSE_CORRELATION_HMAC_KEYS=${LSE_CORRELATION_HMAC_KEYS:-}
+      - LSE_CORRELATION_HMAC_MODE=${LSE_CORRELATION_HMAC_MODE:-off}
+      - LSE_CORRELATION_HMAC_MAX_SKEW_SECONDS=${LSE_CORRELATION_HMAC_MAX_SKEW_SECONDS:-300}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - PROXY_ENABLED=${PROXY_ENABLED:-true}
+      - GATEWAY_FORWARD_PROXY_MODE=${GATEWAY_FORWARD_PROXY_MODE:-deny_unlisted}
+      - PROXY_WHITELIST_FAIL_MODE=${PROXY_WHITELIST_FAIL_MODE:-closed}
+      - SECURITY_CAPACITY_FAIL_CLOSED=${SECURITY_CAPACITY_FAIL_CLOSED:-false}
+      - PROXY_DEFAULT_TENANT_ID=${PROXY_DEFAULT_TENANT_ID:-tenant_default}
+      - PROXY_DEFAULT_PROJECT_ID=${PROXY_DEFAULT_PROJECT_ID:-project_default}
+      - PROXY_DEFAULT_USER_ID=${PROXY_DEFAULT_USER_ID:-system_proxy}
+      - PROXY_LISTEN_ADDR=:8082
+      - GATEWAY_UPSTREAM_STREAMING=${GATEWAY_UPSTREAM_STREAMING:-false}
+      - GATEWAY_STREAM_KEEPALIVE_INTERVAL=${GATEWAY_STREAM_KEEPALIVE_INTERVAL:-15s}
+      # 不可信来源（tool_result / rag / web_content）的历史段默认按任务重检；true 才跨任务复用指纹结果。
+      - GATEWAY_FP_HISTORY_TASK_AGNOSTIC=${GATEWAY_FP_HISTORY_TASK_AGNOSTIC:-false}
+      - GATEWAY_OUTPUT_SECURITY_MODE=${GATEWAY_OUTPUT_SECURITY_MODE:-stream_enforce}
+      - GATEWAY_OUTPUT_STREAM_HOLDBACK_BYTES=${GATEWAY_OUTPUT_STREAM_HOLDBACK_BYTES:-256}
+      - GATEWAY_OUTPUT_STREAM_SCAN_BATCH_BYTES=${GATEWAY_OUTPUT_STREAM_SCAN_BATCH_BYTES:-1024}
+      - GATEWAY_OUTPUT_STREAM_PENDING_BYTES=${GATEWAY_OUTPUT_STREAM_PENDING_BYTES:-4194304}
+      - GATEWAY_OUTPUT_STRICT_MAX_BYTES=${GATEWAY_OUTPUT_STRICT_MAX_BYTES:-4194304}
+      # Responses 协议诊断：默认关闭；仅临时设目录和 1 才会保存一个受限响应样本。
+      - GATEWAY_RAW_DUMP_DIR=${GATEWAY_RAW_DUMP_DIR:-}
+      - GATEWAY_RAW_DUMP_MAX_SAMPLES=${GATEWAY_RAW_DUMP_MAX_SAMPLES:-0}
+      # 误报压制门控（默认关）：开启后 gateway-core 异步路径才调 security-engine /check-triage 做 LLM 仲裁标注
+      - SECURITY_FP_SUPPRESSION_ENABLED=${SECURITY_FP_SUPPRESSION_ENABLED:-false}
+      # MCP 安全网关（默认关，与 dev compose 对齐）：开启后 :8080 注册 /mcp/{serverID} 代理 + tools/call 权限管控；audit-only 下只审计不阻断
+      - MCP_GATEWAY_ENABLED=${MCP_GATEWAY_ENABLED:-false}
+      # 未配置时留空，由 PRODUCT_PROFILE 决定默认值；显式 false 优先。
+      - AGENT_ENDPOINT_ENABLED=${AGENT_ENDPOINT_ENABLED-}
+      - AGENT_EVENT_BODY_LIMIT=${AGENT_EVENT_BODY_LIMIT:-8388608}
+      - AGENT_DECIDE_TIMEOUT_MS=${AGENT_DECIDE_TIMEOUT_MS:-300}
+      - MCP_ALLOWED_ORIGINS=${MCP_ALLOWED_ORIGINS:-}
+      - SKILL_ADMISSION_FAIL_MODE=${SKILL_ADMISSION_FAIL_MODE:-closed}
+      - MCP_POLICY_FAIL_MODE=${MCP_POLICY_FAIL_MODE:-open}
+      # MCP Streamable 会话登记表：默认进程内存（单副本）；多副本部署须设为 redis（见 docs/operations/mcp-upstream-integration-guide.md 第 10 节）
+      - MCP_SESSION_STORE=${MCP_SESSION_STORE:-memory}
+      # record 模式下重复的纯红线 security_events 折叠窗口（Go duration；默认 10m；0 关闭折叠）
+      - MCP_REDLINE_EVENT_DEDUPE_WINDOW=${MCP_REDLINE_EVENT_DEDUPE_WINDOW:-10m}
+      - MCP_TOOL_RESULT_GUARD_ENABLED=${MCP_TOOL_RESULT_GUARD_ENABLED:-true}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      # 缓存不可用按未命中处理：只要求容器已创建，不等健康；required: false 允许现场用 override 停用它。
+      # 离线包原地升级只重建旧版在跑的服务（不带 --no-deps），靠这条依赖把新增的 redis-cache 一并创建。
+      redis-cache:
+        condition: service_started
+        required: false
+      control-plane:
+        condition: service_healthy
+      security-engine:
+        condition: service_healthy
+    networks:
+      - jjdguard-net
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    read_only: true
+    volumes:
+      - retention-data:/var/lib/jjdguard/retention
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=64m
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  control-plane:
+    image: docker-compose-control-plane:latest
+    restart: unless-stopped
+    # 关停预算：HTTP 优雅关停最多 30 秒 + 原文留证队列排空最多 10 秒；docker 默认 10 秒就 SIGKILL。
+    stop_grace_period: 45s
+    ports:
+      - "${CONTROL_BIND:-127.0.0.1}:${CONTROL_PORT:-8081}:8081"
+    env_file:
+      - path: ./identity-runtime.env
+        required: false
+    environment:
+      - LISTEN_ADDR=:8081
+      - GATEWAY_ENVIRONMENT_SCOPE=${GATEWAY_ENVIRONMENT_SCOPE:-customer}
+      - GATEWAY_FORWARD_PROXY_MODE=${GATEWAY_FORWARD_PROXY_MODE:-deny_unlisted}
+      - PROXY_WHITELIST_FAIL_MODE=${PROXY_WHITELIST_FAIL_MODE:-closed}
+      # drift-audit: 与 gateway-core 产品档位、品牌声明一致。
+      - PRODUCT_PROFILE=${PRODUCT_PROFILE:-gateway}
+      - PRODUCT_NAME=${PRODUCT_NAME:-}
+      - PRODUCT_VERSION=${PRODUCT_VERSION:-}
+      - JJD_VERSION=${JJD_VERSION:-unknown}
+      - AGENT_ENDPOINT_ENABLED=${AGENT_ENDPOINT_ENABLED-}
+      - JJD_COMMIT=${JJD_COMMIT:-}
+      - JJD_BUILT_AT=${JJD_BUILT_AT:-}
+      - UAG_AUDIT_HMAC_KEY=${UAG_AUDIT_HMAC_KEY:?UAG_AUDIT_HMAC_KEY is required for audit chain integrity}
+      - DATABASE_URL=postgres://${POSTGRES_USER:-jjdguard}:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}@postgres:5432/${POSTGRES_DB:-jjdguard}?sslmode=disable
+      # 数据库连接池（留空=使用内置默认值；各服务默认值与总预算见 packages/shared-go/dbhelpers）
+      - CONTROL_PLANE_DB_POOL_MAX_CONNS=${CONTROL_PLANE_DB_POOL_MAX_CONNS:-}
+      - CONTROL_PLANE_DB_POOL_MIN_CONNS=${CONTROL_PLANE_DB_POOL_MIN_CONNS:-}
+      - CONTROL_PLANE_DB_POOL_MAX_CONN_IDLE_TIME=${CONTROL_PLANE_DB_POOL_MAX_CONN_IDLE_TIME:-}
+      - CONTROL_PLANE_DB_POOL_MAX_CONN_LIFETIME=${CONTROL_PLANE_DB_POOL_MAX_CONN_LIFETIME:-}
+      - CONTROL_PLANE_DB_POOL_CONNECT_TIMEOUT=${CONTROL_PLANE_DB_POOL_CONNECT_TIMEOUT:-}
+      - REDIS_URL=redis://:${REDIS_PASSWORD:?REDIS_PASSWORD is required}@redis:6379/0
+      - SECURITY_ENGINE_URL=${SECURITY_ENGINE_URL:-http://security-engine:8000}
+      - GATEWAY_CORE_URL=http://gateway-core:8080
+      # 运维诊断采集器：HMAC 密钥与宿主机采集器共用，留空=未安装采集器
+      - DIAG_AGENT_HMAC_KEY=${DIAG_AGENT_HMAC_KEY:-}
+      # AgentShield 联动的出口清单接口 /admin/v1/integration/upstreams 只读这两个变量：
+      # 主地址必须是 https://，留空或写 http:// 时该接口返回 503 gateway_public_url_unavailable。
+      - GATEWAY_PUBLIC_BASE_URL=${GATEWAY_PUBLIC_BASE_URL:-}
+      - GATEWAY_PUBLIC_ALIASES=${GATEWAY_PUBLIC_ALIASES:-}
+      # 目录 LDAPS 的共享信任根目录：与 chat-idp 的 KC_TRUSTSTORE_PATHS 指向同一份挂载。
+      # 只补可信根、不放宽校验；目录为空即无额外可信根（不是跳过校验）。
+      - DIRECTORY_TRUST_DIR=/etc/jjdguard/directory-truststore
+      # 目录运行态凭据只从 0600 的 identity-runtime.env（上面的 env_file）注入。
+      # 这里如果再写 ${DIRECTORY_RUNTIME_*:-}，environment 优先级高于 env_file，
+      # 宿主未导出时会展开成空串把凭据覆盖掉，导致激活/同步永远拿不到凭据。
+      - JJD_PROVIDER_SECRET_KEY=${JJD_PROVIDER_SECRET_KEY:?JJD_PROVIDER_SECRET_KEY is required}
+      # 数据加密算法与 SM4 密钥环：网关与控制面必须一致（脱敏原文留证由网关加密、控制面解密）。
+      # 默认空 = AES-256-GCM；国密部署设 JJD_SECRETS_CIPHER=sm4-gcm 并给出 JJD_SM4_KEYRING / JJD_SM4_ACTIVE_KEY_ID。
+      - JJD_SECRETS_CIPHER=${JJD_SECRETS_CIPHER:-}
+      - JJD_SM4_KEYRING=${JJD_SM4_KEYRING:-}
+      - JJD_SM4_ACTIVE_KEY_ID=${JJD_SM4_ACTIVE_KEY_ID:-}
+      - JJD_INTERNAL_API_SECRET=${JJD_INTERNAL_API_SECRET:?JJD_INTERNAL_API_SECRET is required}
+      - JJD_SEMANTIC_GATEWAY_ATTESTATION_KEY=${JJD_SEMANTIC_GATEWAY_ATTESTATION_KEY:?JJD_SEMANTIC_GATEWAY_ATTESTATION_KEY is required}
+      - MCP_CONFIRMATION_SCOPE_SECRET=${MCP_CONFIRMATION_SCOPE_SECRET:-}
+      # 规则包独立证明密钥：不得复用内部 API 密钥；JSON 映射仅供多租户覆盖。
+      - JJD_RULE_PACK_ATTESTATION_TENANT=${JJD_RULE_PACK_ATTESTATION_TENANT:-tenant_default}
+      - JJD_RULE_PACK_ATTESTATION_TOKEN=${JJD_RULE_PACK_ATTESTATION_TOKEN:?JJD_RULE_PACK_ATTESTATION_TOKEN is required}
+      - JJD_RULE_PACK_ATTESTATION_TOKENS_JSON=${JJD_RULE_PACK_ATTESTATION_TOKENS_JSON:-}
+      # chat-portal 门户集成通道密钥（可选，与 docker-compose.yml 对齐）：留空=通道关闭（portal-integration 组 503）
+      - JJD_PORTAL_API_SECRET=${JJD_PORTAL_API_SECRET:-}
+      - JJD_CHAT_LOGIN_TRUSTED_PROXY_IPS=${JJD_CHAT_LOGIN_TRUSTED_PROXY_IPS:-}
+      - JJD_CHAT_LOGIN_TRUSTED_PROXY_HOSTS=chat-portal-ui,web-console
+      - BILLING_ENABLED=${BILLING_ENABLED:-true}
+      - BILLING_MODE=${BILLING_MODE:-metering}
+      - BILLING_DEFAULT_CURRENCY=${BILLING_DEFAULT_CURRENCY:-CNY}
+      - BILLING_TIMEZONE=${BILLING_TIMEZONE:-Asia/Shanghai}
+      - BILLING_REQUEST_LEASE_TTL=${BILLING_REQUEST_LEASE_TTL:-35m}
+      - BILLING_REDEMPTION_PREFIX=${BILLING_REDEMPTION_PREFIX:-JJD}
+      - BOOTSTRAP_ADMIN_USERNAME=${BOOTSTRAP_ADMIN_USERNAME:-admin}
+      - BOOTSTRAP_ADMIN_EMAIL=${BOOTSTRAP_ADMIN_EMAIL:-admin@local}
+      - BOOTSTRAP_ADMIN_PASSWORD=${BOOTSTRAP_ADMIN_PASSWORD:?BOOTSTRAP_ADMIN_PASSWORD is required}
+      - JJD_LICENSE_ENFORCE=${JJD_LICENSE_ENFORCE:-true}
+      - JJD_LICENSE_PUBLIC_KEY=${JJD_LICENSE_PUBLIC_KEY:-}
+      - JJD_LICENSE_PUBLIC_KEYS=${JJD_LICENSE_PUBLIC_KEYS:-}
+      # 受控开关(默认关)：开启后 eval-integration 才向 LSE 返回对话原文，供智能体风险分析；关闭时只发元数据。
+      - EVAL_INTEGRATION_RAW_CONTENT=${EVAL_INTEGRATION_RAW_CONTENT:-false}
+      - UAG_RBAC_ENFORCE=${UAG_RBAC_ENFORCE:-false}
+      - LSE_BASE_URL_ALLOWLIST=${LSE_BASE_URL_ALLOWLIST:-}
+      - SECURITY_AUDIT_ONLY=${SECURITY_AUDIT_ONLY:-false}
+      - SECURITY_FILE_CONTENT_DLP_ENABLED=${SECURITY_FILE_CONTENT_DLP_ENABLED:-false}
+      - SECEVENT_INBOX_SUPPRESS_SOURCES=${SECEVENT_INBOX_SUPPRESS_SOURCES:-}
+      # 告警收件箱按 finding 类别抑制编程场景常规误报（仍留 security_events 留证，确定性密钥/PII 命中始终进入收件箱）
+      - SECEVENT_INBOX_SUPPRESS_CATEGORIES=${SECEVENT_INBOX_SUPPRESS_CATEGORIES:-}
+      # 语义攻击(semantic_attack)专用收件箱阈值:让 medium 语义命中也进告警而不放宽全局 floor(默认空=回退全局,零回归)
+      - SECEVENT_INBOX_SEMANTIC_MIN_SEVERITY=${SECEVENT_INBOX_SEMANTIC_MIN_SEVERITY:-}
+      - SECEVENT_INBOX_MIN_SEVERITY=${SECEVENT_INBOX_MIN_SEVERITY:-medium}
+      # 误报治理P1/P2 告警桥开关（与 docker-compose.yml 对齐）：FP处置静默天数/单规则日聚合阈值(0=关)/提升grace秒(0=关)/secret首见告警
+      - SECEVENT_FP_DISPOSITION_SUPPRESS_DAYS=${SECEVENT_FP_DISPOSITION_SUPPRESS_DAYS:-30}
+      - SECEVENT_RULE_DAILY_LIMIT=${SECEVENT_RULE_DAILY_LIMIT:-0}
+      - SECEVENT_ALERT_GRACE_SECONDS=${SECEVENT_ALERT_GRACE_SECONDS:-0}
+      - SECEVENT_SECRET_NOVELTY_ENABLED=${SECEVENT_SECRET_NOVELTY_ENABLED:-false}
+      # P0-A 告警组 TTL 自动关闭（默认关，operator 经 .env 显式 opt-in）
+      - ALERT_TTL_ENABLED=${ALERT_TTL_ENABLED:-false}
+      - ALERT_GROUP_TTL_DAYS=${ALERT_GROUP_TTL_DAYS:-14}
+      # 留证图/文件由 control-plane 的 image-proxy 读盘上 blob 发出(access_retention_blob.go);
+      # 必须与 proxy-server 共享同一 retention 卷与同一路径,否则客户环境留证页所有留证图显示不出来(回退取过期外链=破图)。
+      - RETENTION_STORE_PATH=${RETENTION_STORE_PATH:-/var/lib/jjdguard/retention}
+      # 升级兼容开关：默认严格只读 customer；仅经确认的旧环境可显式纳入 legacy-unclassified。
+      - RETENTION_INCLUDE_LEGACY_UNCLASSIFIED=${RETENTION_INCLUDE_LEGACY_UNCLASSIFIED:-false}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      jjdguard-net:
+      jjdguard-portal-control:
+        aliases:
+          - jjdguard-portal-control-plane
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    read_only: true
+    volumes:
+      - retention-data:/var/lib/jjdguard/retention
+      - ${JJD_DIAG_DIR:-/var/lib/jjdguard/diag}/snapshot:/var/lib/jjdguard/diag/snapshot:ro
+      - ${JJD_DIAG_DIR:-/var/lib/jjdguard/diag}/outbox:/var/lib/jjdguard/diag/outbox:ro
+      - ${JJD_DIAG_DIR:-/var/lib/jjdguard/diag}/inbox:/var/lib/jjdguard/diag/inbox
+      # 与 chat-idp 同一份 CA 目录，只读：运维放一次 CA，预览与 FullSync 同时生效。
+      - ./directory-truststore:/etc/jjdguard/directory-truststore:ro
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=64m
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8081/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 2m
+
+  security-engine:
+    image: docker-compose-security-engine:latest
+    restart: unless-stopped
+    ports:
+      - "${SECURITY_BIND:-127.0.0.1}:${SECURITY_PORT:-8000}:8000"
+    environment:
+      - LISTEN_ADDR=:8000
+      - LOG_LEVEL=info
+      - SECURITY_AUDIT_ONLY=${SECURITY_AUDIT_ONLY:-false}
+      - SECURITY_FILE_CONTENT_DLP_ENABLED=${SECURITY_FILE_CONTENT_DLP_ENABLED:-false}
+      # 文件正文 DLP 临时区：tmpfs 不持久化；容量与并发硬限制保护普通文本请求。
+      - SECURITY_SCAN_STORE_DIR=/var/lib/jjdguard/scan-store
+      - SECURITY_SCAN_STORE_DEPLOY_MAX_MB=${SECURITY_SCAN_STORE_DEPLOY_MAX_MB:-100}
+      - SECURITY_SCAN_STORE_HIGH_WATERMARK_MB=${SECURITY_SCAN_STORE_HIGH_WATERMARK_MB:-512}
+      - SECURITY_SCAN_STORE_TTL_SECONDS=${SECURITY_SCAN_STORE_TTL_SECONDS:-1800}
+      - SECURITY_SCAN_ADMIT_TENANT_CONCURRENT=${SECURITY_SCAN_ADMIT_TENANT_CONCURRENT:-2}
+      - SECURITY_SCAN_ADMIT_TENANT_QUEUE=${SECURITY_SCAN_ADMIT_TENANT_QUEUE:-5}
+      - SECURITY_SCAN_ADMIT_GLOBAL_CONCURRENT=${SECURITY_SCAN_ADMIT_GLOBAL_CONCURRENT:-4}
+      - SECURITY_FILE_MAX_CONCURRENT_PARSE=${SECURITY_FILE_MAX_CONCURRENT_PARSE:-4}
+      - SECURITY_OCR_MAX_CONCURRENT_PARSE=${SECURITY_OCR_MAX_CONCURRENT_PARSE:-2}
+      - SECURITY_OCR_TIMEOUT_SEC=${SECURITY_OCR_TIMEOUT_SEC:-15}
+      - SECURITY_OCR_MAX_IMAGE_BYTES=${SECURITY_OCR_MAX_IMAGE_BYTES:-8388608}
+      - SECURITY_OCR_MAX_PIXELS=${SECURITY_OCR_MAX_PIXELS:-25000000}
+      - SECURITY_OCR_MAX_FRAMES=${SECURITY_OCR_MAX_FRAMES:-10}
+      - SECURITY_FILE_ARCHIVE_MAX_DEPTH=${SECURITY_FILE_ARCHIVE_MAX_DEPTH:-3}
+      - SECURITY_FILE_PDF_MAX_PAGES=${SECURITY_FILE_PDF_MAX_PAGES:-100}
+      - SECURITY_FILE_PDF_MAX_IMAGES=${SECURITY_FILE_PDF_MAX_IMAGES:-100}
+      - SECURITY_FILE_PARSE_MEMORY_MB=${SECURITY_FILE_PARSE_MEMORY_MB:-768}
+      - CONTROL_PLANE_URL=http://control-plane:8081
+      # Unset by default: rule_pack_loader derives hostname#pid, unique per worker
+      # and per replica. Set explicitly only for single-instance installs.
+      - SECURITY_NODE_ID=${SECURITY_NODE_ID:-security-engine:primary}
+      # Cross-process state on the existing valkey service, isolated in DB 3 and
+      # namespaced with jjd:se:. Missing valkey is fail-closed and audited.
+      - SECURITY_SHARED_STATE_URL=redis://:${REDIS_PASSWORD:?REDIS_PASSWORD is required}@redis:6379/3
+      - SECURITY_SHARED_STATE_REQUIRED=${SECURITY_SHARED_STATE_REQUIRED:-true}
+      - SECURITY_SHARED_STATE_TIMEOUT=${SECURITY_SHARED_STATE_TIMEOUT:-0.05}
+      # Wider judge windows (~3k tokens) cut judge calls ~3x. The payload
+      # excerpt limit is derived from this value so no window is truncated, and
+      # the system prompt stays byte-identical for the vLLM prefix cache.
+      # 1200/200 is the measured default. Widening it costs hardcase recall:
+      # 4000/300 drops a 4B judge from 49% to 30% on real 4000+ char bodies.
+      - SECURITY_SEMANTIC_WINDOW_CHARS=${SECURITY_SEMANTIC_WINDOW_CHARS:-1200}
+      - SECURITY_SEMANTIC_WINDOW_OVERLAP=${SECURITY_SEMANTIC_WINDOW_OVERLAP:-200}
+      # Cascade guard is OFF: the offline corpus gate proves cue-based skipping
+      # would lose recall. Never enable without a passing replay.
+      - SECURITY_SEMANTIC_CASCADE_FLOOR=${SECURITY_SEMANTIC_CASCADE_FLOOR:-0.2}
+      - SECURITY_SEMANTIC_CASCADE_GUARD=${SECURITY_SEMANTIC_CASCADE_GUARD:-false}
+      - SECURITY_TIER1_ALLOWED_HOSTS=${SECURITY_TIER1_ALLOWED_HOSTS:-tier1-classifier}
+      - SECURITY_TIER1_ALLOWED_PORTS=${SECURITY_TIER1_ALLOWED_PORTS:-8000}
+      - JJD_COMMIT=${JJD_COMMIT:-}
+      - JJD_INTERNAL_API_SECRET=${JJD_INTERNAL_API_SECRET:?JJD_INTERNAL_API_SECRET is required}
+      # 拉取规则包时以同一专用密钥发送 X-Rule-Pack-Attestation。
+      - SECURITY_TENANT_ID=${JJD_RULE_PACK_ATTESTATION_TENANT:-tenant_default}
+      - SECURITY_RULE_PACK_ATTESTATION_TOKEN=${JJD_RULE_PACK_ATTESTATION_TOKEN:?JJD_RULE_PACK_ATTESTATION_TOKEN is required}
+      - SECURITY_PII_CHECKSUM_ENABLED=${SECURITY_PII_CHECKSUM_ENABLED:-true}
+      # 校验位失败的 PII 命中直接丢弃（置 false 恢复旧行为：降置信度 0.3 仍发 finding）
+      - SECURITY_PII_CHECKSUM_DROP_INVALID=${SECURITY_PII_CHECKSUM_DROP_INVALID:-true}
+      # 编码流量（AI IDE/CLI）命中降级层——P1-A 默认翻转为 true（只降低表内规则 severity，不影响确定性凭证/PII 命中），与 docker-compose.yml 对齐
+      - SECURITY_CODING_TRAFFIC_DOWNGRADE_ENABLED=${SECURITY_CODING_TRAFFIC_DOWNGRADE_ENABLED:-true}
+      # P1-A 默认翻转：置信度门控（弱信号降级留审计，减误报拦截）
+      - SECURITY_CONFIDENCE_GATING_ENABLED=${SECURITY_CONFIDENCE_GATING_ENABLED:-true}
+      # source 感知：已知智能体的 system/tool/history/result 只做确定性凭证、敏感数据和配置扫描
+      - SECURITY_SOURCE_AWARE_ENABLED=${SECURITY_SOURCE_AWARE_ENABLED:-true}
+      # 免配置语义级联：Tier-1 先筛，仅灰区请求进入随包 CPU 裁判。
+      - SECURITY_SEMANTIC_ENABLED=${SECURITY_SEMANTIC_ENABLED:-true}
+      - SECURITY_SEMANTIC_INPUT_ENABLED=${SECURITY_SEMANTIC_INPUT_ENABLED:-true}
+      - SECURITY_SEMANTIC_OUTPUT_ENABLED=${SECURITY_SEMANTIC_OUTPUT_ENABLED:-false}
+      - SECURITY_SEMANTIC_TOTAL_TIMEOUT=${SECURITY_SEMANTIC_TOTAL_TIMEOUT:-9}
+      - WEB_CONCURRENCY=${SECURITY_ENGINE_WEB_CONCURRENCY:-1}
+      - SECURITY_INPUT_WORKERS=${SECURITY_INPUT_WORKERS:-2}
+      - SECURITY_INPUT_CAPACITY=${SECURITY_INPUT_CAPACITY:-32}
+      - SECURITY_INPUT_BUDGET_SECONDS=${SECURITY_INPUT_BUDGET_SECONDS:-30}
+      - SECURITY_OUTPUT_WORKERS=${SECURITY_OUTPUT_WORKERS:-2}
+      - SECURITY_OUTPUT_CAPACITY=${SECURITY_OUTPUT_CAPACITY:-32}
+      - SECURITY_OUTPUT_BUDGET_SECONDS=${SECURITY_OUTPUT_BUDGET_SECONDS:-30}
+      # 以下调优项留空即用代码默认值（batch 条目并发 2；正则预算见 app/regex_budget.py）。
+      - SECURITY_BATCH_ITEM_CONCURRENCY=${SECURITY_BATCH_ITEM_CONCURRENCY:-}
+      - SECURITY_CUSTOM_REGEX_RULE_SECONDS=${SECURITY_CUSTOM_REGEX_RULE_SECONDS:-}
+      - SECURITY_CUSTOM_REGEX_PACK_SECONDS=${SECURITY_CUSTOM_REGEX_PACK_SECONDS:-}
+      - SECURITY_CUSTOM_REGEX_RULE_MAX_SECONDS=${SECURITY_CUSTOM_REGEX_RULE_MAX_SECONDS:-}
+      - SECURITY_CUSTOM_REGEX_PACK_MAX_SECONDS=${SECURITY_CUSTOM_REGEX_PACK_MAX_SECONDS:-}
+      - SECURITY_CUSTOM_REGEX_PACK_WALL_MAX_SECONDS=${SECURITY_CUSTOM_REGEX_PACK_WALL_MAX_SECONDS:-}
+      - SECURITY_CATALOG_BUDGET_SECONDS=${SECURITY_CATALOG_BUDGET_SECONDS:-}
+      - SECURITY_CATALOG_REGEX_TIMEOUT_SECONDS=${SECURITY_CATALOG_REGEX_TIMEOUT_SECONDS:-}
+      - SECURITY_REGEX_WALL_SLACK=${SECURITY_REGEX_WALL_SLACK:-}
+      - SECURITY_REGEX_WALL_MAX_SECONDS=${SECURITY_REGEX_WALL_MAX_SECONDS:-}
+      - SECURITY_BATCH_MAX_ITEMS=${SECURITY_BATCH_MAX_ITEMS:-128}
+      - SECURITY_BATCH_BUDGET_SECONDS=${SECURITY_BATCH_BUDGET_SECONDS:-18}
+      # Customer-sized per-process capacity; no fixed product maximum.
+      - SECURITY_SEMANTIC_WINDOW_PARALLELISM=${SECURITY_SEMANTIC_WINDOW_PARALLELISM:-4}
+      - SECURITY_SEMANTIC_REQUEST_PARALLELISM=${SECURITY_SEMANTIC_REQUEST_PARALLELISM:-${SECURITY_SEMANTIC_WINDOW_PARALLELISM:-4}}
+      - SECURITY_JUDGE_WORKERS=${SECURITY_JUDGE_WORKERS:-${SECURITY_SEMANTIC_WINDOW_PARALLELISM:-4}}
+      - SECURITY_JUDGE_CAPACITY=${SECURITY_JUDGE_CAPACITY:-${SECURITY_JUDGE_WORKERS:-${SECURITY_SEMANTIC_WINDOW_PARALLELISM:-4}}}
+      - SECURITY_JUDGE_QUEUE_CAPACITY=${SECURITY_JUDGE_QUEUE_CAPACITY:-8}
+      - SECURITY_JUDGE_QUEUE_WAIT=${SECURITY_JUDGE_QUEUE_WAIT:-3}
+      - SECURITY_JUDGE_REGULAR_QUEUE_WAIT=${SECURITY_JUDGE_REGULAR_QUEUE_WAIT:-3}
+      - SECURITY_JUDGE_QUEUE_CALL_RESERVE=${SECURITY_JUDGE_QUEUE_CALL_RESERVE:-1}
+      - SECURITY_TIER1_MAX_INFLIGHT=${SECURITY_TIER1_MAX_INFLIGHT:-1}
+      - SECURITY_TIER1_CLIENT_WORKERS=${SECURITY_TIER1_CLIENT_WORKERS:-4}
+      - SECURITY_TIER1_CLIENT_CAPACITY=${SECURITY_TIER1_CLIENT_CAPACITY:-32}
+      - SECURITY_SEMANTIC_MAX_WINDOWS=${SECURITY_SEMANTIC_MAX_WINDOWS:-32}
+      - SECURITY_JUDGE_GLOBAL_CONCURRENCY=${SECURITY_JUDGE_GLOBAL_CONCURRENCY:-96}
+      - ENGINE_RESOURCE_PROFILE_RESOLVED=${ENGINE_RESOURCE_PROFILE_RESOLVED:-manual}
+      - ENGINE_RESOURCE_PROFILE=${ENGINE_RESOURCE_PROFILE:-manual}
+      - ENGINE_RESOURCE_DETECTED_CPUS=${ENGINE_RESOURCE_DETECTED_CPUS:-}
+      - ENGINE_RESOURCE_DETECTED_MEM_MB=${ENGINE_RESOURCE_DETECTED_MEM_MB:-}
+      - ENGINE_RESOURCE_DETECTED_CPU_SOURCE=${ENGINE_RESOURCE_DETECTED_CPU_SOURCE:-}
+      - ENGINE_RESOURCE_JUDGE_BUDGET_STATUS=${ENGINE_RESOURCE_JUDGE_BUDGET_STATUS:-}
+      - ENGINE_RESOURCE_EFFECTIVE_WEB_CONCURRENCY=${ENGINE_RESOURCE_EFFECTIVE_WEB_CONCURRENCY:-1}
+      - ENGINE_RESOURCE_EFFECTIVE_INPUT_WORKERS=${ENGINE_RESOURCE_EFFECTIVE_INPUT_WORKERS:-2}
+      - ENGINE_RESOURCE_EFFECTIVE_TIER1_WORKERS=${ENGINE_RESOURCE_EFFECTIVE_TIER1_WORKERS:-1}
+      - ENGINE_RESOURCE_EFFECTIVE_TIER1_THREADS=${ENGINE_RESOURCE_EFFECTIVE_TIER1_THREADS:-1}
+      - ENGINE_RESOURCE_EFFECTIVE_TIER1_INFERENCE_WORKERS=${ENGINE_RESOURCE_EFFECTIVE_TIER1_INFERENCE_WORKERS:-1}
+      - ENGINE_RESOURCE_EFFECTIVE_TIER1_INFERENCE_CAPACITY=${ENGINE_RESOURCE_EFFECTIVE_TIER1_INFERENCE_CAPACITY:-8}
+      - ENGINE_RESOURCE_TIER1_CONCURRENCY_STATUS=${ENGINE_RESOURCE_TIER1_CONCURRENCY_STATUS:-unknown}
+      - ENGINE_RESOURCE_EFFECTIVE_TIER1_MAX_INFLIGHT=${ENGINE_RESOURCE_EFFECTIVE_TIER1_MAX_INFLIGHT:-1}
+      - ENGINE_RESOURCE_EFFECTIVE_JUDGE_WORKERS=${ENGINE_RESOURCE_EFFECTIVE_JUDGE_WORKERS:-4}
+      - ENGINE_RESOURCE_EFFECTIVE_JUDGE_CAPACITY=${ENGINE_RESOURCE_EFFECTIVE_JUDGE_CAPACITY:-4}
+      - ENGINE_RESOURCE_EFFECTIVE_JUDGE_GLOBAL_CONCURRENCY=${ENGINE_RESOURCE_EFFECTIVE_JUDGE_GLOBAL_CONCURRENCY:-96}
+      - SECURITY_LLM_JUDGE_URL=${SECURITY_LLM_JUDGE_URL:-}
+      - SECURITY_LLM_JUDGE_MODEL=${SECURITY_LLM_JUDGE_MODEL:-bundled-judge}
+      - SECURITY_LLM_JUDGE_API_KEY=${SECURITY_LLM_JUDGE_API_KEY:-bundled-judge}
+      - SECURITY_LLM_JUDGE_TIMEOUT=${SECURITY_LLM_JUDGE_TIMEOUT:-8}
+      # 裁判增强：结构化输出约束(消格式错) + 熔断器(治后端宕机时反复打满超时)
+      - SECURITY_SEMANTIC_JUDGE_JSON_SCHEMA=${SECURITY_SEMANTIC_JUDGE_JSON_SCHEMA:-true}
+      - SECURITY_SEMANTIC_BREAKER_THRESHOLD=${SECURITY_SEMANTIC_BREAKER_THRESHOLD:-5}
+      - SECURITY_SEMANTIC_BREAKER_COOLDOWN=${SECURITY_SEMANTIC_BREAKER_COOLDOWN:-30}
+      # Tier-1 攻击概率初筛（默认开，observe-only）：p<low 放行，p>=low 交随包 CPU 裁判；
+      # full 包自带 sidecar，不需要客户填写模型地址或阈值。
+      - SECURITY_TIER1_ENABLED=${SECURITY_TIER1_ENABLED:-true}
+      - SECURITY_TIER1_URL=${SECURITY_TIER1_URL:-http://tier1-classifier:8000/classify}
+      - SECURITY_TIER1_API_TOKEN=${JJD_TIER1_INTERNAL_TOKEN:-}
+      - SECURITY_TIER1_TIMEOUT=${SECURITY_TIER1_TIMEOUT:-1.0}
+      - SECURITY_TIER1_LOW_THRESHOLD=${SECURITY_TIER1_LOW_THRESHOLD:-0.30}
+      - SECURITY_TIER1_HIGH_THRESHOLD=${SECURITY_TIER1_HIGH_THRESHOLD:-0.70}
+      # 误报压制门控（默认关）：异步 /check-triage 仅对意图类规则命中、且 Tier-1 判输入良性(p<low)时调随包 CPU 裁判仲裁
+      - SECURITY_FP_SUPPRESSION_ENABLED=${SECURITY_FP_SUPPRESSION_ENABLED:-false}
+      - PYTHONDONTWRITEBYTECODE=1
+    networks:
+      - jjdguard-net
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=64m
+      - /var/lib/jjdguard/scan-store:rw,noexec,nosuid,size=512m,mode=0700,uid=10001,gid=10001
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10m
+
+  proxy-server:
+    image: docker-compose-proxy-server:latest
+    restart: unless-stopped
+    ports:
+      - "${FORWARD_PROXY_BIND:-0.0.0.0}:${FORWARD_PROXY_PORT:-3128}:3128"
+    environment:
+      # 部署只审计锁：true 时控制台/数据库的防护模式均不生效（与网关、引擎、控制面一致）。
+      - SECURITY_AUDIT_ONLY=${SECURITY_AUDIT_ONLY:-false}
+      - LISTEN_ADDR=:3128
+      - PROXY_WHITELIST_FAIL_MODE=${PROXY_WHITELIST_FAIL_MODE:-closed}
+      - PROXY_DEFAULT_TENANT_ID=${PROXY_DEFAULT_TENANT_ID:-tenant_default}
+      - SECURITY_CAPACITY_FAIL_CLOSED=${SECURITY_CAPACITY_FAIL_CLOSED:-false}
+      - PROXY_DETECTION_FAIL_MODE=${PROXY_DETECTION_FAIL_MODE:-open}
+      - PROXY_MITM_BYPASS_SUFFIXES=${PROXY_MITM_BYPASS_SUFFIXES:-}
+      - PROXY_RAW_DUMP_DIR=${PROXY_RAW_DUMP_DIR:-}
+      - GATEWAY_ENVIRONMENT_SCOPE=${GATEWAY_ENVIRONMENT_SCOPE:-customer}
+      - SECURITY_FILE_CONTENT_DLP_ENABLED=${SECURITY_FILE_CONTENT_DLP_ENABLED:-false}
+      # SP3b 响应流式回写开关：仅在 audit-only 下开启，边流式回写边 tee 审计+留证，修流式 UI 不渲染。默认 false。
+      - PROXY_STREAM_LLM_RESPONSES=${PROXY_STREAM_LLM_RESPONSES:-false}
+      # 遥测类端点（request_decoder=telemetry）免送检，留证照常；置 false 恢复全量送检
+      - PROXY_TELEMETRY_SCAN_EXEMPT=${PROXY_TELEMETRY_SCAN_EXEMPT:-true}
+      # 后台补检消化 worker 数（每 worker 一路 claim→execute；GPU 裁判/高流量建议 4-16，上限 64）
+      - PROXY_INSPECTION_WORKERS=${PROXY_INSPECTION_WORKERS:-2}
+      # MITM 隧道连接复用(keep-alive)开关：默认 false=每隧道一请求(字节等价)。开启=同隧道复用+上游连接池(h1),
+      # 修 CodeBuddy 等多串行调用客户端经 MITM 累计超时。PROXY_MITM_IDLE_TIMEOUT=相邻请求空闲等待秒(默认90)。
+      - PROXY_MITM_KEEPALIVE=${PROXY_MITM_KEEPALIVE:-false}
+      - PROXY_MITM_IDLE_TIMEOUT=${PROXY_MITM_IDLE_TIMEOUT:-90}
+      - JJD_VERSION=${JJD_VERSION:-unknown}
+      - JJD_COMMIT=${JJD_COMMIT:-}
+      - JJD_BUILT_AT=${JJD_BUILT_AT:-}
+      - DATABASE_URL=postgres://${POSTGRES_USER:-jjdguard}:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}@postgres:5432/${POSTGRES_DB:-jjdguard}?sslmode=disable
+      # 数据库连接池（留空=使用内置默认值；各服务默认值与总预算见 packages/shared-go/dbhelpers）
+      - PROXY_DB_POOL_MAX_CONNS=${PROXY_DB_POOL_MAX_CONNS:-}
+      - PROXY_DB_POOL_MIN_CONNS=${PROXY_DB_POOL_MIN_CONNS:-}
+      - PROXY_DB_POOL_MAX_CONN_IDLE_TIME=${PROXY_DB_POOL_MAX_CONN_IDLE_TIME:-}
+      - PROXY_DB_POOL_MAX_CONN_LIFETIME=${PROXY_DB_POOL_MAX_CONN_LIFETIME:-}
+      - PROXY_DB_POOL_CONNECT_TIMEOUT=${PROXY_DB_POOL_CONNECT_TIMEOUT:-}
+      - REDIS_ADDR=redis:6379
+      - SECURITY_ENGINE_URL=${SECURITY_ENGINE_URL:-http://security-engine:8000}
+      # P1-B 已检指纹缓存（安全三视图重构 模块 2a）：交付默认开
+      - SECURITY_SCAN_FP_ENABLED=${SECURITY_SCAN_FP_ENABLED:-true}
+      - CONTROL_PLANE_URL=http://control-plane:8081
+      - JJD_INTERNAL_API_SECRET=${JJD_INTERNAL_API_SECRET:?JJD_INTERNAL_API_SECRET is required}
+      - RETENTION_STORE_PATH=${RETENTION_STORE_PATH:-/var/lib/jjdguard/retention}
+      - JJD_SEMANTIC_GATEWAY_ATTESTATION_KEY=${JJD_SEMANTIC_GATEWAY_ATTESTATION_KEY:?JJD_SEMANTIC_GATEWAY_ATTESTATION_KEY is required}
+      # 双层代理：客户 PC -> 本正向代理 -> 客户出网代理 -> 互联网。
+      # 默认空 = 不启用（直连出网），SSRF 防线维持原样。写成 http://host:port，
+      # 必须带端口：只对这一个 host:port 开精确豁免，不放开整个内网网段。
+      # 配置非法时 proxy-server 直接启动失败——若降级为警告继续跑，客户会
+      # 以为流量经他的出网代理而实际直连出网，那是合规事故。
+      - UPSTREAM_EGRESS_PROXY=${UPSTREAM_EGRESS_PROXY:-}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      control-plane:
+        condition: service_healthy
+      security-engine:
+        condition: service_healthy
+    networks:
+      - jjdguard-net
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    read_only: true
+    volumes:
+      - retention-data:/var/lib/jjdguard/retention
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=64m
+
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    # 报表查询的 JSON 展开会让 JIT 先编译数秒；现场已在库上关闭，部署也默认关闭。
+    command: ["postgres", "-c", "jit=off"]
+    ports:
+      - "${POSTGRES_BIND:-127.0.0.1}:${POSTGRES_PORT:-5432}:5432"
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-jjdguard}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+      - POSTGRES_DB=${POSTGRES_DB:-jjdguard}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ../../deploy/migrations:/migrations:ro
+      # initdb 挂 /bootstrap 而非 /docker-entrypoint-initdb.d：入口点直跑 001_init_enterprise.sql
+      # 会只建到 001 就停(执行方式与 psql -f 不同,实测残缺表)；改由 deploy-offline 起库后手动 psql -f。
+      - ../../deploy/docker-compose/initdb:/bootstrap:ro
+    networks:
+      - jjdguard-net
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-jjdguard} -d ${POSTGRES_DB:-jjdguard}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 15m
+
+  redis:
+    image: valkey/valkey:8.1.10-alpine
+    restart: unless-stopped
+    ports:
+      - "${REDIS_BIND:-127.0.0.1}:${REDIS_PORT:-6379}:6379"
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD:?REDIS_PASSWORD is required}
+      - REDIS_EXTRA_ARGS=${REDIS_EXTRA_ARGS:-}
+    # AOF 重写 / RDB 落盘期间不强制 fsync：磁盘慢时不阻塞写入（客户现场验证码因此超时）。appendfsync 仍为 everysec。
+    command: ["sh", "-c", "exec valkey-server --appendonly yes --no-appendfsync-on-rewrite yes --requirepass \"$${REDIS_PASSWORD}\" $${REDIS_EXTRA_ARGS}"]
+    volumes:
+      - valkey-data:/data
+    networks:
+      - jjdguard-net
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD-SHELL", "valkey-cli -a \"$${REDIS_PASSWORD}\" ping | grep PONG"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # 响应缓存专用实例：与 redis 分开，避免淘汰策略挤掉限流/预算/会话键；不落盘、不挂卷、不发布端口。
+  redis-cache:
+    image: valkey/valkey:8.1.10-alpine
+    restart: unless-stopped
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD:?REDIS_PASSWORD is required}
+      - RESPONSE_CACHE_MAXMEMORY=${RESPONSE_CACHE_MAXMEMORY:-256mb}
+    command: ["sh", "-c", "exec valkey-server --save '' --appendonly no --maxmemory $${RESPONSE_CACHE_MAXMEMORY:-256mb} --maxmemory-policy allkeys-lru --requirepass \"$${REDIS_PASSWORD}\""]
+    networks:
+      - jjdguard-net
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD-SHELL", "valkey-cli -a \"$${REDIS_PASSWORD}\" ping | grep PONG"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  web-console:
+    image: docker-compose-web-console:latest
+    restart: unless-stopped
+    ports:
+      - "${WEB_BIND:-0.0.0.0}:${WEB_PORT:-3000}:3000"
+      - "${WEB_HTTPS_BIND:-0.0.0.0}:${WEB_HTTPS_PORT:-443}:3443"
+    environment:
+      - PORT=3000
+      - HTTPS_PORT=3443
+      - HTTPS_REDIRECT_PORT=${WEB_HTTPS_PORT:-443}
+      - TLS_ENABLED=${TLS_ENABLED:-true}
+      - TLS_CERT_FILE=/certs/web-console.crt
+      - TLS_KEY_FILE=/certs/web-console.key
+      - CHAT_EDGE_URL=http://chat-edge:3100
+      - SSO_EDGE_URL=http://chat-edge:8180
+      - PORTAL_ADMIN_EDGE_URL=http://chat-edge:8280
+    volumes:
+      - ./tls:/certs:ro
+      - ./agent-kit:/app/agent-kit:ro
+    depends_on:
+      gateway-core:
+        condition: service_healthy
+      control-plane:
+        condition: service_healthy
+    networks:
+      - jjdguard-net
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=64m
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  worker:
+    image: docker-compose-worker:latest
+    environment:
+      - LISTEN_ADDR=:8090
+      - GATEWAY_ENVIRONMENT_SCOPE=${GATEWAY_ENVIRONMENT_SCOPE:-customer}
+      - DATABASE_URL=postgres://${POSTGRES_USER:-jjdguard}:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}@postgres:5432/${POSTGRES_DB:-jjdguard}?sslmode=disable
+      # 数据库连接池（留空=使用内置默认值；各服务默认值与总预算见 packages/shared-go/dbhelpers）
+      - WORKER_DB_POOL_MAX_CONNS=${WORKER_DB_POOL_MAX_CONNS:-}
+      - WORKER_DB_POOL_MIN_CONNS=${WORKER_DB_POOL_MIN_CONNS:-}
+      - WORKER_DB_POOL_MAX_CONN_IDLE_TIME=${WORKER_DB_POOL_MAX_CONN_IDLE_TIME:-}
+      - WORKER_DB_POOL_MAX_CONN_LIFETIME=${WORKER_DB_POOL_MAX_CONN_LIFETIME:-}
+      - WORKER_DB_POOL_CONNECT_TIMEOUT=${WORKER_DB_POOL_CONNECT_TIMEOUT:-}
+      - REDIS_URL=redis://:${REDIS_PASSWORD:?REDIS_PASSWORD is required}@redis:6379/0
+      - EVENT_STREAM=${EVENT_STREAM:-jjdguard.events}
+      - EVENT_CONSUMER_GROUP=${EVENT_CONSUMER_GROUP:-jjdguard-worker}
+      - EVENT_CONSUMER_NAME=${EVENT_CONSUMER_NAME:-worker-1}
+      - MIGRATION_BACKFILL_ENABLED=${MIGRATION_BACKFILL_ENABLED:-true}
+      - MIGRATION_BACKFILL_POLL_INTERVAL=${MIGRATION_BACKFILL_POLL_INTERVAL:-5s}
+      - MIGRATION_BACKFILL_LEASE=${MIGRATION_BACKFILL_LEASE:-60s}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - jjdguard-net
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=64m
+    restart: unless-stopped
+
+  # 自带 CPU 语义裁判（llama.cpp server）。仅 full 包：COMPOSE_PROFILES=full 激活。
+  # 模型从命名卷 judge-models 挂载（装机时 deploy-offline.sh 灌入随包 GGUF）。
+  llm-judge:
+    image: docker-compose-llm-judge:latest
+    profiles: ["full"]
+    restart: unless-stopped
+    # Keep the bundled 4B CPU judge inside a predictable envelope. The defaults
+    # leave headroom on the supported 16C/32GiB customer baseline and remain
+    # usable on the 16GiB internal development VM. Larger deployments may
+    # override these values in .env.
+    mem_limit: ${JUDGE_MEMORY_LIMIT:-8g}
+    mem_reservation: ${JUDGE_MEMORY_RESERVATION:-4g}
+    memswap_limit: ${JUDGE_MEMORY_SWAP_LIMIT:-9g}
+    environment:
+      - JUDGE_MODEL_PATH=/models/jjdguard-bundled-judge-4b-v1-Q4_K_M.gguf
+      - JUDGE_ALIAS=${JUDGE_ALIAS:-bundled-judge}
+      - JUDGE_THREADS=${JUDGE_THREADS:-6}
+      - JUDGE_PARALLEL=${JUDGE_PARALLEL:-2}
+      # llama.cpp 会把总上下文按并发槽均分；4096 / 2 保证每槽至少 2048 token。
+      - JUDGE_CTX=${JUDGE_CTX:-4096}
+      # llama.cpp defaults its reusable prompt cache to 8192 MiB, which can
+      # exhaust a small VM after many distinct semantic-review windows.
+      - JUDGE_CACHE_RAM_MB=${JUDGE_CACHE_RAM_MB:-1024}
+      - JUDGE_BATCH_SIZE=${JUDGE_BATCH_SIZE:-512}
+      - JUDGE_UBATCH_SIZE=${JUDGE_UBATCH_SIZE:-128}
+      - JUDGE_API_KEY=${SECURITY_LLM_JUDGE_API_KEY:-bundled-judge}
+    volumes:
+      - judge-models:/models:ro
+    networks:
+      - jjdguard-net
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "/bin/bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/8080"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
+
+  # 自带 CPU 攻击概率初筛分类器（FastAPI + onnxruntime-cpu，自训开源融合分类器：
+  # 多语 embedder + LR 头，许可 MIT/Apache，零 gated、零 Llama 许可传导，可随产品交付客户）。
+  # 仅 full 包：COMPOSE_PROFILES=full 激活。模型已 COPY 进镜像，自包含无需灌卷。
+  # security-engine 内部经 X-JJDGuard-Internal-Token 调 POST /classify；不对宿主发布端口（仅内网）。
+  tier1-classifier:
+    image: docker-compose-tier1-classifier:latest
+    profiles: ["full"]
+    restart: unless-stopped
+    environment:
+      - TIER1_MODEL_DIR=/models/prompt-guard-2
+      - TIER1_PORT=8000
+      - TIER1_WORKERS=${TIER1_WORKERS:-1}
+      - TIER1_EXECUTION_PROVIDER=${TIER1_EXECUTION_PROVIDER:-cpu}
+      # ONNX intra-op 线程数（多核客户机可在 .env 调高提吞吐，单核保持默认 2）
+      # Blank = follow the P1 CPU tier resolved by engine-resource-autotune.sh.
+      - TIER1_THREADS=${TIER1_THREADS:-}
+      - ENGINE_RESOURCE_EFFECTIVE_TIER1_THREADS=${ENGINE_RESOURCE_EFFECTIVE_TIER1_THREADS:-}
+      # Max sliding windows per session.run; blank = the TIER1_MAX_TOKEN_WINDOWS budget.
+      - TIER1_BATCH_WINDOWS=${TIER1_BATCH_WINDOWS:-}
+      - TIER1_INFERENCE_WORKERS=${TIER1_INFERENCE_WORKERS:-1}
+      - TIER1_INFERENCE_CAPACITY=${TIER1_INFERENCE_CAPACITY:-8}
+      - TIER1_INFERENCE_TIMEOUT_SECONDS=${TIER1_INFERENCE_TIMEOUT_SECONDS:-1.0}
+      - TIER1_MAX_TOKEN_WINDOWS=${TIER1_MAX_TOKEN_WINDOWS:-16}
+      - JJD_TIER1_INTERNAL_TOKEN=${JJD_TIER1_INTERNAL_TOKEN:?JJD_TIER1_INTERNAL_TOKEN is required}
+      - PYTHONDONTWRITEBYTECODE=1
+    networks:
+      - jjdguard-net
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=64m
+    healthcheck:
+      # python:3.11-slim 不自带 wget（Dockerfile 仅 pip 装 requirements、未 apt-get install wget），
+      # 故与姊妹服务 security-engine(同 slim 基)对齐用 python urllib，避免容器永不 healthy。
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 15m
+
+  chat-postgres:
+    image: postgres:16-alpine
+    profiles: [chat]
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${CHAT_POSTGRES_PASSWORD:-}
+      - POSTGRES_DB=${CHAT_POSTGRES_DB:-enterprise_ai_portal}
+    volumes:
+      - chat-postgres-data:/var/lib/postgresql/data
+    networks:
+      - jjdguard-net
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d ${CHAT_POSTGRES_DB:-enterprise_ai_portal}"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  chat-portal-proxy:
+    # OIDC issuer 走统一 Web 入口。容器内代码做 issuer 校验/discovery 时需按同一公开 origin
+    # 回访 Web，但容器网络默认无法路由回宿主发布端口 —— 用 host-gateway
+    # 打通宿主 hairpin。home 实测：extra_hosts(/etc/hosts)优先于 chat-edge 的 network alias，主机名档
+    # 与"裸 IP"档均经此 hairpin 命中(裸 IP 无法注册为 network alias，尤需 host-gateway)。
+    # 三个 portal-side 服务(proxy/ui/idp)同理。
+    extra_hosts:
+      - "${CHAT_OIDC_HOST:-chat-edge}:host-gateway"
+    image: chat-portal/portal-proxy:0.1.0
+    profiles: [chat]
+    restart: unless-stopped
+    environment:
+      - PORT=8788
+      - DATABASE_URL=file:/data/portal.db
+      - PORTAL_INTERNAL_TOKEN=${PORTAL_INTERNAL_TOKEN:-}
+      - PORTAL_KEY_ENC_SECRET=${PORTAL_KEY_ENC_SECRET:-}
+      - JJD_PORTAL_API_SECRET=${JJD_PORTAL_API_SECRET:-}
+      # 预构建门户镜像内部按 NEWAPI_PORTAL_API_SECRET 读取门户通道密钥（内部契约，非客户品牌面）；
+      # 统一从干净的 .env 键 JJD_PORTAL_API_SECRET 取值喂入，保证生产/消费同值。
+      - NEWAPI_PORTAL_API_SECRET=${JJD_PORTAL_API_SECRET:-}
+      - LOBE_DATABASE_URL=postgresql://postgres:${CHAT_POSTGRES_PASSWORD:-}@chat-postgres:5432/${CHAT_POSTGRES_DB:-enterprise_ai_portal}
+      - GATEWAY_BASE_URL=http://gateway-core:8080
+      - GATEWAY_CP_URL=http://control-plane:8081
+      - PORTAL_TENANT_ID=${PROXY_DEFAULT_TENANT_ID:-tenant_default}
+      - PORTAL_DEFAULT_PROJECT_ID=${PROXY_DEFAULT_PROJECT_ID:-project_default}
+      - PORTAL_REEVAL_TTL_SEC=300
+      - PORTAL_OIDC_ISSUER=${CHAT_OIDC_ISSUER:-http://chat-edge:8180/sso/realms/jjdguard}
+      - PORTAL_OIDC_CLIENT_ID=chat-portal-admin
+      - PORTAL_OIDC_CLIENT_SECRET=${PORTAL_OIDC_CLIENT_SECRET:-}
+      - PORTAL_OIDC_REDIRECT_URI=${JJD_SSO_PUBLIC_URL:-http://chat-edge:8180}/portal/auth/callback
+      - PORTAL_COOKIE_SECURE=${PORTAL_COOKIE_SECURE:-true}
+      - NODE_EXTRA_CA_CERTS=/certs/web-console.crt
+      - PORTAL_GATEWAY_USER_SYNC_ALLOWED=${PORTAL_GATEWAY_USER_SYNC_ALLOWED:-false}
+    volumes:
+      - chat-portal-proxy-data:/data
+      - ./tls:/certs:ro
+    depends_on:
+      chat-postgres:
+        condition: service_healthy
+    networks:
+      - jjdguard-net
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8788/healthz').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 120s
+
+  chat-portal-ui:
+    # issuer hairpin，见 chat-portal-proxy 注释
+    extra_hosts:
+      - "${CHAT_OIDC_HOST:-chat-edge}:host-gateway"
+    image: enterprise-ai-portal:0.2.0-slim
+    profiles: [chat]
+    restart: unless-stopped
+    environment:
+      - DATABASE_URL=postgresql://postgres:${CHAT_POSTGRES_PASSWORD:-}@chat-postgres:5432/${CHAT_POSTGRES_DB:-enterprise_ai_portal}
+      - AUTH_SECRET=${AUTH_SECRET:-}
+      - AUTH_TRUST_HOST=true
+      - AUTH_URL=${JJD_SSO_PUBLIC_URL:-http://chat-edge:8180}/chat/api/auth
+      - NEXTAUTH_URL=${JJD_SSO_PUBLIC_URL:-http://chat-edge:8180}/chat/api/auth
+      - PORTAL_PUBLIC_URL=${JJD_SSO_PUBLIC_URL:-http://chat-edge:8180}/chat
+      - NODE_EXTRA_CA_CERTS=/certs/web-console.crt
+      - OIDC_ISSUER=${CHAT_OIDC_ISSUER:-http://chat-edge:8180/sso/realms/jjdguard}
+      - OIDC_CLIENT_ID=${CHAT_PORTAL_UI_OIDC_CLIENT_ID:-enterprise-ai-portal}
+      - OIDC_CLIENT_SECRET=${CHAT_PORTAL_UI_OIDC_SECRET:-}
+      - OIDC_ENTERPRISE_IDP_HINT=${CHAT_PORTAL_UI_OIDC_ENTERPRISE_IDP_HINT:-enterprise}
+      - OIDC_ACCOUNT_LOGIN_ENABLED=${CHAT_PORTAL_UI_OIDC_ACCOUNT_LOGIN_ENABLED:-true}
+      - PORTAL_PROXY_URL=http://chat-portal-proxy:8788
+      - PORTAL_INTERNAL_TOKEN=${PORTAL_INTERNAL_TOKEN:-}
+      - JJD_CP_URL=http://jjdguard-portal-control-plane:8081
+      - JJD_PORTAL_API_SECRET=${JJD_PORTAL_API_SECRET:-}
+      - GATEWAY_PUBLIC_URL=${GATEWAY_PUBLIC_URL:-}
+      - NEXT_PUBLIC_BILLING_ENABLED=${BILLING_ENABLED:-true}
+      - BRAND_NAME=${BRAND_NAME:-企业 AI 对话门户}
+      - BRAND_SHORT_NAME=${BRAND_SHORT_NAME:-AI 门户}
+      - BRAND_ACCENT=${BRAND_ACCENT:-#2451eb}
+    volumes:
+      - ./tls:/certs:ro
+    depends_on:
+      chat-postgres:
+        condition: service_healthy
+      chat-portal-proxy:
+        condition: service_started
+    networks:
+      - jjdguard-net
+      - jjdguard-portal-control
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3100/chat/api/me').then(r=>process.exit(r.ok||r.status===401?0:1)).catch(()=>process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 10m
+
+  chat-idp:
+    # issuer hairpin，见 chat-portal-proxy 注释
+    extra_hosts:
+      - "${CHAT_OIDC_HOST:-chat-edge}:host-gateway"
+    # 运行时只用纯标签引用（digest 导出会丢 RepoTags 导致离线 Pull）；digest 由 images.lst expected_digest 字段做构建期校验
+    # digest: sha256:357829ec7c4693397533035092ad13b0644bcc95ded311f33a3738c4d9e9bdba
+    image: docker.1ms.run/keycloak/keycloak:26.3
+    profiles: [chat, chat-idp]
+    # chat-idp 无独立 healthcheck 有意为之：就绪信号由 chat-edge 的 discovery 探活代理
+    restart: unless-stopped
+    command: ["start", "--http-port=8180", "--import-realm"]
+    environment:
+      - KC_BOOTSTRAP_ADMIN_USERNAME=admin
+      - KC_BOOTSTRAP_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD:?KEYCLOAK_ADMIN_PASSWORD is required}
+      - KC_HOSTNAME=${JJD_SSO_PUBLIC_URL:-http://chat-edge:8180}/sso
+      - KC_PROXY_HEADERS=xforwarded
+      - KC_HTTP_ENABLED=true
+      - KC_HTTP_RELATIVE_PATH=/sso
+      - KC_HEALTH_ENABLED=false
+      # Keycloak 26.3 的 LDAPS 信任只认这里（默认 useTruststoreSpi=always）。
+      # 与 control-plane 的 DIRECTORY_TRUST_DIR 是同一份挂载：CA 放一处，两边同时生效。
+      # 实测挂只含占位文件的目录也能正常启动，首装未配 CA 无副作用。
+      - KC_TRUSTSTORE_PATHS=/opt/keycloak/conf/truststores
+      - CHAT_PORTAL_UI_OIDC_SECRET=${CHAT_PORTAL_UI_OIDC_SECRET:-}
+      - PORTAL_OIDC_CLIENT_SECRET=${PORTAL_OIDC_CLIENT_SECRET:-}
+      - PORTAL_UI_ORIGIN=${JJD_SSO_PUBLIC_URL:-http://chat-edge:8180}
+      - PORTAL_ADMIN_ORIGIN=${JJD_SSO_PUBLIC_URL:-http://chat-edge:8180}
+      - PORTAL_UI_ACCOUNT_REDIRECT=${JJD_SSO_PUBLIC_URL:-http://chat-edge:8180}/chat/api/auth/callback/account-login
+      - PORTAL_UI_SSO_REDIRECT=${JJD_SSO_PUBLIC_URL:-http://chat-edge:8180}/chat/api/auth/callback/enterprise-sso
+      - PORTAL_ADMIN_REDIRECT_8280=${JJD_SSO_PUBLIC_URL:-http://chat-edge:8180}/portal/auth/callback
+      - PORTAL_ADMIN_REDIRECT_3100=${JJD_SSO_PUBLIC_URL:-http://chat-edge:8180}/portal/auth/callback
+    expose:
+      - "8180"
+    volumes:
+      - chat-idp-data:/opt/keycloak/data
+      - ./directory-truststore:/opt/keycloak/conf/truststores:ro
+      - ./chat/keycloak-realm:/opt/keycloak/data/import:ro
+      - ./chat/keycloak-themes/jjdguard:/opt/keycloak/themes/jjdguard:ro
+    networks:
+      - jjdguard-net
+    security_opt:
+      - no-new-privileges:true
+
+  chat-edge:
+    # 运行时只用纯标签引用（同上）；digest: sha256:5f5c8640aae01df9654968d946d8f1a56c497f1dd5c5cda4cf95ab7c14d58648
+    image: docker.1ms.run/library/caddy:2-alpine
+    profiles: [chat]
+    restart: unless-stopped
+    expose:
+      - "3100"
+      - "8280"
+      - "8180"
+    volumes:
+      - ./chat/Caddyfile:/etc/caddy/Caddyfile:ro
+    networks:
+      jjdguard-net:
+        aliases:
+          - ${CHAT_OIDC_HOST:-chat-edge}
+    depends_on:
+      chat-portal-proxy:
+        condition: service_started
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8180/healthz"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 25s
+
+volumes:
+  postgres-data:
+  # Rollback anchor: Redis 7.4 data (RDB v12, unreadable by Valkey). No service mounts it;
+  # kept for rollback to the Redis release (compose down -v skips unmounted volumes). Do not remove.
+  redis-data:
+  valkey-data:
+  retention-data:
+  judge-models:
+  chat-postgres-data:
+  chat-portal-proxy-data:
+  chat-idp-data:
+
+networks:
+  jjdguard-net:
+    driver: bridge
+  jjdguard-portal-control:
+    external: true
+    name: ${JJD_PORTAL_CP_NETWORK:-jjdguard-portal-control-net}

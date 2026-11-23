@@ -1,0 +1,28 @@
+{
+  "name": "agent_cursor_system_prompt_dos",
+  "note": "cursor session, system prompt tripped the resource-exhaustion instruction rule.",
+  "event": {
+    "event_type": "dos_resource_exhaustion_instruction",
+    "severity": "high",
+    "action_taken": "audit",
+    "principal_key": "user_7",
+    "matched_summary": {
+      "agent_type": "agent_cursor",
+      "findings": [
+        {
+          "category": "dos_resource_exhaustion_instruction",
+          "severity": "high",
+          "confidence": 0.85,
+          "counts_as_security_finding": true,
+          "type": "prompt_injection",
+          "content_source": "system_prompt",
+          "message_role": "system"
+        }
+      ]
+    }
+  },
+  "expect": {
+    "routed": true,
+    "reason": "system_prompt_of_agent_cursor"
+  }
+}

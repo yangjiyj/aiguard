@@ -1,0 +1,30 @@
+{
+  "id": "provider-vercel",
+  "name": "Vercel",
+  "vendor": "Vercel",
+  "catalog_entries": [
+    {
+      "id": "v0",
+      "provider": "vercel",
+      "provider_cn": "Vercel",
+      "product": "v0",
+      "product_cn": "v0",
+      "category": "coding",
+      "region": "global",
+      "domains": [
+        "v0.dev"
+      ],
+      "path_rules": [
+        "/"
+      ],
+      "request_decoder": "coding_ai",
+      "response_decoder": "coding_ai",
+      "retain_level": "summary",
+      "risk_profile": "coding_ai",
+      "enabled": true,
+      "priority": 60,
+      "source_url": "https://v0.dev/"
+    }
+  ],
+  "agent_definitions": []
+}

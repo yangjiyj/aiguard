@@ -1,0 +1,19 @@
+schema	jjdguard-neutral-manifest/v1
+marker	jjdguard-neutral-baseline-v1
+rename	table	compat_brand_fixture	newapi_system_settings	jjdguard_system_settings
+rename	column	compat_brand_fixture	newapi_system_settings	newapi_code	jjdguard_code
+rename	column	compat_brand_fixture	newapi_system_settings	newapi_generated	jjdguard_generated
+rename	view	compat_brand_fixture	newapi_view	jjdguard_view
+rename	materialized_view	compat_brand_fixture	newapi_matview	jjdguard_matview
+rename	function	compat_brand_fixture	newapi_fn()	jjdguard_fn
+rename	procedure	compat_brand_fixture	newapi_proc()	jjdguard_proc
+rename	type	compat_brand_fixture	newapi_state	jjdguard_state
+rename	enum_value	compat_brand_fixture	newapi_state	newapi_pending	jjdguard_pending
+rename	policy	compat_brand_fixture	newapi_system_settings	newapi_policy	jjdguard_policy
+rename	trigger	compat_brand_fixture	newapi_system_settings	newapi_trigger	jjdguard_trigger
+rewrite	default	compat_brand_fixture	newapi_system_settings	newapi_code	newapi-system	jjdguard-system
+rewrite	function_result	compat_brand_fixture	newapi_fn()	newapi-system	jjdguard-system
+rewrite	comment_table	compat_brand_fixture	newapi_system_settings	newapi system table	JJDGuard system table
+rewrite	comment_column	compat_brand_fixture	newapi_system_settings	newapi_code	newapi system code	JJDGuard system code
+rewrite	comment_extension	plpgsql	newapi fixture extension comment	JJDGuard fixture extension comment
+rewrite	system_value	compat_brand_fixture	newapi_system_settings	kind	system	newapi_code	newapi-system	jjdguard-system

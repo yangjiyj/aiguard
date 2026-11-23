@@ -1,0 +1,3 @@
+{"Type":"ThreadSnapshot","Snapshot":{"Messages":[{"Type":"HumanMessageDto","Content":"历史用户问题"},{"Type":"AIMessageDto","Content":"历史回答不应作为本轮回答"},{"Type":"AIMessageDto","Content":"\u5386\u53f2\u7b2c\u4e8c\u6761\u4e5f\u4e0d\u5e94\u8be5\u8f93\u51fa"}]}}
+{"Type":"ThreadMessageAppended","Message":{"Type":"HumanMessageDto","Content":"用户追问"}}
+{"Type":"ThreadMessageAppended","Message":{"Type":"AIMessageDto","Content":"\u6700\u7ec8\u56de\u7b54\uff1a\u4e2d\u6587\u5df2\u8fd8\u539f\uff0c\u94f6\u884c\u5361\u53f7 6222020202020202020"}}

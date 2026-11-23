@@ -1,0 +1,31 @@
+{
+  "id": "provider-wps",
+  "name": "金山办公",
+  "vendor": "金山办公",
+  "catalog_entries": [
+    {
+      "id": "wps_ai",
+      "provider": "wps",
+      "provider_cn": "金山办公",
+      "product": "wps_ai",
+      "product_cn": "WPS AI",
+      "category": "office",
+      "region": "cn",
+      "domains": [
+        "wps.cn",
+        "ai.wps.cn"
+      ],
+      "path_rules": [
+        "/"
+      ],
+      "request_decoder": "office_ai",
+      "response_decoder": "office_ai",
+      "retain_level": "summary",
+      "risk_profile": "office_ai",
+      "enabled": true,
+      "priority": 50,
+      "source_url": "https://wps.cn/"
+    }
+  ],
+  "agent_definitions": []
+}

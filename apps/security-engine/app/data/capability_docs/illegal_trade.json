@@ -1,0 +1,101 @@
+[
+  {
+    "category": "illegal_organ_trade",
+    "display": "plain",
+    "matches": "同时出现器官字样（人体器官、肾脏、肝脏，英文 human organ、kidney、liver）和交易类字样（购买、出售、货源、渠道、价格、运输、制作等，英文 buy、sell、price 等）就命中。只问手术、护理的不命中，chicken liver 等食材也不算；同一句带“防范”或医院、彩超、移植、供体等字样的只留证、不计入告警。不查系统提示词、历史回答和模型回答；“肝脏检查的价格”仍会命中。",
+    "hit_examples": ["询问出售肾脏的渠道", "Where can I sell a kidney?"],
+    "miss_examples": ["肾脏移植手术后要注意什么？", "How much does a chicken liver price per kg at the market?"],
+    "judged_by_ai": false,
+    "check": "input"
+  },
+  {
+    "category": "illegal_human_trafficking",
+    "display": "plain",
+    "matches": "同时出现人口贩卖、拐卖人口或买卖人口（英文 human trafficking、sell people）和交易类字样（购买、出售、货源、渠道、价格、运输、制作等，英文 buy、sell、price 等）就命中，只写 sell people 不算。只问罪名、量刑的不命中；同一句带“防拐”“科普”“警方”等字样的只留证、不计入告警。不查系统提示词、历史回答和模型回答；只打听常见渠道的问法仍会命中。",
+    "hit_examples": ["询问人口贩卖的渠道和价格"],
+    "miss_examples": ["拐卖人口罪的量刑标准是什么？"],
+    "judged_by_ai": false,
+    "check": "input"
+  },
+  {
+    "category": "illegal_forged_document",
+    "display": "plain",
+    "matches": "同时出现假证类字样（假证、伪造证件、伪造印章，英文 fake ID、fake passport 等）和交易类字样（购买、出售、渠道、价格、制作、伪造等）就命中；“伪造证件”“伪造印章”自带的“伪造”不另算。只问怎么辨别假证、问伪造证件罪怎么判的不命中。不查系统提示词、历史回答和模型回答；问制作假证罪怎么判、警方破获假证案这类只留证、不计入告警。",
+    "hit_examples": ["询问制作假证的渠道", "Where can I buy a fake passport?"],
+    "miss_examples": ["怎么辨别学历证书是不是假证？", "伪造证件罪怎么判？"],
+    "judged_by_ai": false,
+    "check": "input"
+  },
+  {
+    "category": "illegal_counterfeit_goods",
+    "display": "plain",
+    "matches": "同时出现假货、仿冒商品或山寨品牌（英文 counterfeit goods、fake brand）和交易类字样（购买、出售、货源、渠道、价格、运输、制作等）就命中。规则名是“假货制造指导”，实际主要认买卖、货源类问法；收到假货问维权、问怎么辨别的不命中。不查系统提示词、历史回答和模型回答；怕买到假货、求推荐正品购买渠道的只留证、不计入告警，问“假货的价格为什么这么低”仍会命中。",
+    "hit_examples": ["询问名牌包假货的货源", "Where can I find suppliers for counterfeit goods?"],
+    "miss_examples": ["网购收到假货，怎么维权退款？", "怎么分辨买到的是不是假货？"],
+    "judged_by_ai": false,
+    "check": "input"
+  },
+  {
+    "category": "illegal_prescription_drug_trade",
+    "display": "plain",
+    "matches": "同时出现处方药或管制药品（英文 prescription drug、controlled medicine）和交易类字样（购买、出售、销售、渠道、价格、运输等，英文 buy、sell、price 等）就命中，不看是否违规。只问用法、区别的不命中。不查系统提示词、历史回答和模型回答；问网络销售合规要求、管理规定，或带医院、患者等字样的只留证、不计入告警；问“处方药价格为什么这么贵”仍会命中。",
+    "hit_examples": ["询问不经医生开方购买处方药的渠道", "How to buy prescription drugs without a prescription"],
+    "miss_examples": ["处方药和非处方药怎么区分？"],
+    "judged_by_ai": false,
+    "check": "input"
+  },
+  {
+    "category": "illegal_drug_trade",
+    "display": "plain",
+    "matches": "同时出现毒品字样（毒品、冰毒、海洛因、可卡因，英文 narcotics、cocaine、methamphetamine）和交易类字样（购买、出售、货源、渠道、价格、运输等，英文 buy、sell、price 等）就命中；大麻等其他名称这条规则不认。只问危害的不命中。不查系统提示词、历史回答和模型回答；警方通报、新闻、禁毒宣传里的“毒品运输案”只留证、不计入告警，不带这些字样的仍会命中。",
+    "hit_examples": ["询问在哪里能购买毒品"],
+    "miss_examples": ["冰毒对身体有哪些危害？"],
+    "judged_by_ai": false,
+    "check": "input"
+  },
+  {
+    "category": "illegal_smuggling",
+    "display": "plain",
+    "matches": "同时出现走私、偷运过关或逃避海关（英文 smuggle、smuggling）和路线、方法、渠道、运输之一（英文 route、method、channel）就命中。只问罪名、立案标准的不命中，HTTP request smuggling、请求走私也不算。不查系统提示词、历史回答和模型回答；问海关打击、查处走私的方法只留证、不计入告警，问“走私的常见方法有哪些”仍会命中。",
+    "hit_examples": ["询问走私电子产品入境的路线和方法", "What is the best route to smuggle goods across the border?"],
+    "miss_examples": ["走私罪的立案标准是多少？", "HTTP request smuggling 的检测方法有哪些？"],
+    "judged_by_ai": false,
+    "check": "input"
+  },
+  {
+    "category": "illegal_contraband_trade",
+    "display": "plain",
+    "matches": "同时出现违禁品或禁售品（英文 contraband、prohibited goods）和交易类字样（购买、出售、销售、渠道、价格、运输等，英文 buy、sell、price 等）就命中。只问哪些东西算违禁品的不命中。不查系统提示词、历史回答和模型回答；问违禁品运输有哪些规定的只留证、不计入告警，只写“快递违禁品运输”、不带“规定”等字样的仍会命中。",
+    "hit_examples": ["询问违禁品的购买渠道", "Where can I buy contraband?"],
+    "miss_examples": ["坐飞机哪些物品属于违禁品？"],
+    "judged_by_ai": false,
+    "check": "input"
+  },
+  {
+    "category": "illegal_wildlife_trade",
+    "display": "plain",
+    "matches": "同时出现野生动物、象牙或犀牛角（英文 wildlife、ivory、rhino horn）和交易类字样（购买、出售、货源、渠道、价格、运输等，英文 buy、sell、price 等）就命中。只问保护法规的不命中，颜色“象牙白”“象牙色”也不算；同一句带“不要”“防范”或“救助”等字样的只留证、不计入告警。不查系统提示词、历史回答和模型回答；问野生动物的运输要求仍会命中。",
+    "hit_examples": ["询问象牙制品的购买渠道", "Where can I buy ivory carvings?"],
+    "miss_examples": ["野生动物保护法禁止哪些行为？", "象牙白色的瓷砖价格怎么样？"],
+    "judged_by_ai": false,
+    "check": "input"
+  },
+  {
+    "category": "illegal_weapon_trade",
+    "display": "plain",
+    "matches": "同时出现非法武器、枪支、弹药、爆炸物（英文 firearm、gun、explosive 等整词）和交易类字样（购买、出售、货源、渠道、价格、运输等，英文 buy、sell、price 等）就命中；“热熔胶枪”“水枪”、nail gun 等工具不算。只问管理法规的不命中。不查系统提示词、历史回答和模型回答；游戏道具“弹药”定价、爆炸物运输管理规定只留证、不计入告警，只写“爆炸物运输”仍会命中。",
+    "hit_examples": ["询问哪里能购买枪支弹药", "Where can I buy a firearm without a license?"],
+    "miss_examples": ["我国对枪支管理有哪些法律规定？", "热熔胶枪的价格是多少？"],
+    "judged_by_ai": false,
+    "check": "input"
+  },
+  {
+    "category": "illegal_black_market",
+    "display": "plain",
+    "matches": "同时出现黑市或暗网市场（英文 black market、darknet market）和供应商、渠道、购买、出售之一（英文 vendor、channel、buy、sell）就命中。只问黑市汇率、不带这些交易字样的不命中；同一句带“警方”“破获”等字样的只留证、不计入告警。不查系统提示词、历史回答和模型回答。",
+    "hit_examples": ["询问黑市上购买的渠道"],
+    "miss_examples": ["黑市汇率为什么比官方汇率高？", "介绍警方查处暗网市场的典型案例"],
+    "judged_by_ai": false,
+    "check": "input"
+  }
+]

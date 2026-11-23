@@ -1,0 +1,30 @@
+{
+  "id": "provider-luma",
+  "name": "Luma",
+  "vendor": "Luma",
+  "catalog_entries": [
+    {
+      "id": "luma",
+      "provider": "luma",
+      "provider_cn": "Luma",
+      "product": "luma",
+      "product_cn": "Luma",
+      "category": "video",
+      "region": "global",
+      "domains": [
+        "lumalabs.ai"
+      ],
+      "path_rules": [
+        "/"
+      ],
+      "request_decoder": "video_web",
+      "response_decoder": "video_web",
+      "retain_level": "summary",
+      "risk_profile": "video_ai",
+      "enabled": true,
+      "priority": 50,
+      "source_url": "https://lumalabs.ai/"
+    }
+  ],
+  "agent_definitions": []
+}

@@ -1,0 +1,56 @@
+# 企业 AI 对话门户（替换 LobeHub 的新 UI）
+# 同时连两个网络：
+#   - chatportal-net (internal)：访问 postgres/portal-proxy/keycloak
+#   - eap-edge：发布宿主端口 3100（internal 网无法发布端口）
+name: enterprise-ai-portal
+
+networks:
+  jjdguard-portal-net:
+    external: true
+    name: docker-compose_jjdguard-net
+  jjdguard-portal-control:
+    external: true
+    name: ${JJD_PORTAL_CP_NETWORK:-jjdguard-portal-control-net}
+  eap-edge:
+    name: eap-edge
+
+services:
+  web:
+    build:
+      context: .
+      args:
+        NEXT_PUBLIC_BILLING_ENABLED: ${BILLING_ENABLED:-false}
+    image: enterprise-ai-portal:0.2.0-slim
+    container_name: enterprise-ai-portal
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD}@chatportal-postgres:5432/enterprise_ai_portal
+      AUTH_SECRET: ${AUTH_SECRET}
+      AUTH_TRUST_HOST: 'true'
+      NEXTAUTH_URL: http://home:3100
+      OIDC_ISSUER: http://home:8180/realms/chat-portal-dev
+      OIDC_CLIENT_ID: chat-portal-ui
+      OIDC_CLIENT_SECRET: ${CHAT_PORTAL_UI_OIDC_SECRET}
+      PORTAL_PROXY_URL: http://portal-proxy:8788
+      PORTAL_INTERNAL_TOKEN: ${PORTAL_INTERNAL_TOKEN}
+      JJD_CP_URL: http://jjdguard-portal-control-plane:8081
+      JJD_PORTAL_API_SECRET: ${JJD_PORTAL_API_SECRET}
+      GATEWAY_PUBLIC_URL: ${GATEWAY_PUBLIC_URL:-}
+      NEXT_PUBLIC_BILLING_ENABLED: ${BILLING_ENABLED:-false}
+      BRAND_NAME: 企业 AI 对话门户
+      BRAND_SHORT_NAME: AI 门户
+      BRAND_ACCENT: '#2451eb'
+      NEXT_PUBLIC_PORTAL_ADMIN_URL: http://home:8280/admin
+      NEXT_PUBLIC_PORTAL_DEPT_URL: http://home:8280/portal/dept
+    ports:
+      - '3100:3100'
+    networks:
+      - jjdguard-portal-net
+      - jjdguard-portal-control
+      - eap-edge
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3100/api/me').then(r=>process.exit(r.ok||r.status===401?0:1)).catch(()=>process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 30s

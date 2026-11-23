@@ -1,0 +1,17 @@
+[Unit]
+Description=JJDGuard 大模型安全网关
+After=docker.service network-online.target
+Wants=network-online.target
+Requires=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStartPre=/opt/jjdguard/current/deploy/offline-installer/wait-docker.sh
+ExecStart=/opt/jjdguard/current/jjdctl start
+ExecStop=/opt/jjdguard/current/jjdctl stop
+TimeoutStartSec=1200
+TimeoutStopSec=180
+
+[Install]
+WantedBy=multi-user.target

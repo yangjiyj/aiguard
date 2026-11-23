@@ -1,0 +1,18 @@
+services:
+  tier1-classifier:
+    image: ${TIER1_CPU_IMAGE:-docker-compose-tier1-classifier:latest}
+    environment:
+      TIER1_EXECUTION_PROVIDER: cpu
+      # Blank = follow the P1 CPU tier. TIER1_CPU_THREADS pins it for the CPU overlay;
+      # otherwise an operator's explicit TIER1_THREADS is inherited (it used to be
+      # dropped here, so a pinned value silently stopped applying once tier1 was scaled).
+      TIER1_THREADS: ${TIER1_CPU_THREADS:-${TIER1_THREADS:-}}
+      # Concurrency MUST follow engine-resource-autotune.sh (large = 4/8/256).
+      # An overlay-local default here silently overrode the autotuned tier: the
+      # sidecar ran 2x16 while the engine had 8x256 in-flight, so /health kept
+      # saying within_limit and 503s showed up as "degraded" under load.
+      # Explicit TIER1_CPU_* wins; otherwise inherit the autotuned value and only
+      # fall back to the base compose default when autotune never ran.
+      TIER1_WORKERS: ${TIER1_CPU_WORKERS:-${TIER1_WORKERS:-1}}
+      TIER1_INFERENCE_WORKERS: ${TIER1_CPU_INFERENCE_WORKERS:-${TIER1_INFERENCE_WORKERS:-1}}
+      TIER1_INFERENCE_CAPACITY: ${TIER1_CPU_INFERENCE_CAPACITY:-${TIER1_INFERENCE_CAPACITY:-8}}

@@ -1,0 +1,41 @@
+{
+  "addon_sha256": "8722e4f9a8a80ad36236dc7324a531ac867b17bbc7e5167fe4cbb6650ceb5e95",
+  "base_image": "sha256:67aa17ca075a2ca9c2cc71527327da6611aec8738370510cb2e1171366ee5dbd",
+  "core_build_receipt_sha256": "9af6088534e9671b2e84625e082d8a2af66ae8628a2d769aa8d5754f27007b20",
+  "cuda_architectures": [
+    86
+  ],
+  "cuda_toolkit": "12.4",
+  "extension_receipt_sha256": "4149ccae98e2ab7ecba42b81d48cbf870e705140af9c0effa3554d0252adc29a",
+  "libraries": [
+    {
+      "bytes": 707904,
+      "copyright": "/usr/share/doc/libcudart12/copyright",
+      "copyright_sha256": "5f41ee264a7ae401f058dc46d1115bbf4172ea0f88ee36d55f00585be9939e5b",
+      "input": "/usr/lib/x86_64-linux-gnu/libcudart.so.12.4.127",
+      "package": "libcudart12:amd64",
+      "sha256": "8774224f5b11a73b15d074a3fcce7327322c5c4cfdfd924d6a826779eec968fe",
+      "soname": "libcudart.so.12"
+    },
+    {
+      "bytes": 109604768,
+      "copyright": "/usr/share/doc/libcublas12/copyright",
+      "copyright_sha256": "5f41ee264a7ae401f058dc46d1115bbf4172ea0f88ee36d55f00585be9939e5b",
+      "input": "/usr/lib/x86_64-linux-gnu/libcublas.so.12.4.5.8",
+      "package": "libcublas12:amd64",
+      "sha256": "4cc45526449a95d3985389785e985b7832460ea3db178bc9e9963be2111fbee8",
+      "soname": "libcublas.so.12"
+    },
+    {
+      "bytes": 441938896,
+      "copyright": "/usr/share/doc/libcublaslt12/copyright",
+      "copyright_sha256": "5f41ee264a7ae401f058dc46d1115bbf4172ea0f88ee36d55f00585be9939e5b",
+      "input": "/usr/lib/x86_64-linux-gnu/libcublasLt.so.12.4.5.8",
+      "package": "libcublaslt12:amd64",
+      "sha256": "44a813aa2da08830f9083f81d0eb73f1ae4052a4d9b0b0de480a8f6cd9eb3078",
+      "soname": "libcublasLt.so.12"
+    }
+  ],
+  "llama_revision": "3653e6d6d547ec763317d9ecd0ace334a7e21359",
+  "schema": "jjdguard-gpu-runtime-input-lock/v1"
+}

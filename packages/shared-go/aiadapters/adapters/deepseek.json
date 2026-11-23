@@ -1,0 +1,130 @@
+{
+  "id": "provider-deepseek",
+  "name": "DeepSeek",
+  "vendor": "DeepSeek",
+  "catalog_entries": [
+    {
+      "id": "deepseek_file_poll",
+      "provider": "deepseek",
+      "provider_cn": "DeepSeek",
+      "product": "deepseek_chat",
+      "product_cn": "DeepSeek Chat",
+      "category": "chat",
+      "region": "cn",
+      "domains": [
+        "chat.deepseek.com"
+      ],
+      "path_rules": [
+        "contains:/fetch_files"
+      ],
+      "request_decoder": "web_support",
+      "response_decoder": "web_support",
+      "retain_level": "summary",
+      "risk_profile": "llm_web",
+      "enabled": true,
+      "priority": 103,
+      "source_url": "https://www.deepseek.com/en"
+    },
+    {
+      "id": "deepseek_chat_upload",
+      "provider": "deepseek",
+      "provider_cn": "DeepSeek",
+      "product": "deepseek_chat",
+      "product_cn": "DeepSeek Chat",
+      "category": "chat",
+      "region": "cn",
+      "domains": [
+        "chat.deepseek.com"
+      ],
+      "path_rules": [
+        "contains:/file",
+        "contains:/upload",
+        "contains:/attachment",
+        "contains:/document"
+      ],
+      "request_decoder": "deepseek_web",
+      "response_decoder": "deepseek_web",
+      "retain_level": "content",
+      "risk_profile": "llm_web",
+      "enabled": true,
+      "priority": 102,
+      "source_url": "https://www.deepseek.com/en"
+    },
+    {
+      "id": "deepseek_api",
+      "provider": "deepseek",
+      "provider_cn": "DeepSeek",
+      "product": "deepseek_api",
+      "product_cn": "DeepSeek API",
+      "category": "api",
+      "region": "cn",
+      "domains": [
+        "api.deepseek.com"
+      ],
+      "path_rules": [
+        "/",
+        "/v1/",
+        "/api/v0/"
+      ],
+      "request_decoder": "openai_compatible",
+      "response_decoder": "openai_compatible",
+      "retain_level": "content",
+      "risk_profile": "llm_api",
+      "enabled": true,
+      "priority": 101,
+      "source_url": "https://api-docs.deepseek.com/"
+    },
+    {
+      "id": "deepseek_chat",
+      "provider": "deepseek",
+      "provider_cn": "DeepSeek",
+      "product": "deepseek_chat",
+      "product_cn": "DeepSeek Chat",
+      "category": "chat",
+      "region": "cn",
+      "domains": [
+        "chat.deepseek.com",
+        "www.deepseek.com",
+        "*.deepseek.com"
+      ],
+      "path_rules": [
+        "contains:/completion"
+      ],
+      "request_decoder": "deepseek_web",
+      "response_decoder": "deepseek_web",
+      "retain_level": "content",
+      "risk_profile": "llm_web",
+      "enabled": true,
+      "priority": 100,
+      "source_url": "https://www.deepseek.com/en"
+    },
+    {
+      "id": "deepseek_web_support",
+      "provider": "deepseek",
+      "provider_cn": "DeepSeek",
+      "product": "deepseek_chat",
+      "product_cn": "DeepSeek Chat",
+      "category": "chat",
+      "region": "cn",
+      "domains": [
+        "*.deepseek.com"
+      ],
+      "path_rules": [
+        "contains:/chat/completion",
+        "contains:/completion",
+        "contains:/file",
+        "contains:/upload",
+        "contains:/attachment",
+        "contains:/document"
+      ],
+      "request_decoder": "web_support",
+      "response_decoder": "web_support",
+      "retain_level": "summary",
+      "risk_profile": "llm_web",
+      "enabled": true,
+      "priority": 80,
+      "source_url": "https://www.deepseek.com/en"
+    }
+  ],
+  "agent_definitions": []
+}

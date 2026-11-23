@@ -1,0 +1,30 @@
+{
+  "id": "provider-suno",
+  "name": "Suno",
+  "vendor": "Suno",
+  "catalog_entries": [
+    {
+      "id": "suno",
+      "provider": "suno",
+      "provider_cn": "Suno",
+      "product": "suno",
+      "product_cn": "Suno",
+      "category": "audio",
+      "region": "global",
+      "domains": [
+        "suno.com"
+      ],
+      "path_rules": [
+        "/"
+      ],
+      "request_decoder": "audio_web",
+      "response_decoder": "audio_web",
+      "retain_level": "summary",
+      "risk_profile": "audio_ai",
+      "enabled": true,
+      "priority": 50,
+      "source_url": "https://suno.com/"
+    }
+  ],
+  "agent_definitions": []
+}

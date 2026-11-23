@@ -1,0 +1,16 @@
+{
+  "frozen": true,
+  "split": "blind",
+  "fixture_only": true,
+  "dataset_sha256": "54a120c091689a3a59775e19d033bb221b7fac0fafa9408ee47052f274afbfef",
+  "model_sha256": "ef97051363b22b276f584583f4d12280ddb78dc1b9a28d43475beac4786d3bbf",
+  "config_sha256": "f1d889b7145bf391a570caae8e082c86024638eecc2eda066668653d1fdedbfc",
+  "runtime_revision": "REPLACE_WITH_FROZEN_RUNTIME_REVISION",
+  "thresholds": {
+    "tier1_low": 0.3,
+    "tier1_high": 0.7
+  },
+  "training_template_hashes": [],
+  "recall_min": 1.0,
+  "false_block_max": 0.0
+}

@@ -1,0 +1,111 @@
+{
+  "name": "forbidden_model",
+  "description": "用户无该模型授权：网关 403 forbidden_model 不写请求记录，只能靠授权配置判断",
+  "fixture": {
+    "teams": [
+      {
+        "key": "dev",
+        "mode": "allowlist",
+        "models": [
+          "sol"
+        ]
+      }
+    ],
+    "providers": [
+      {
+        "key": "p1",
+        "name": "主渠道",
+        "type": "openai",
+        "base_url": "https://api.example.com"
+      }
+    ],
+    "models": [
+      {
+        "key": "sol",
+        "provider": "p1",
+        "name": "gpt-6.1-sol"
+      },
+      {
+        "key": "luna",
+        "provider": "p1",
+        "name": "gpt-6-luna"
+      },
+      {
+        "key": "opus",
+        "provider": "p1",
+        "name": "claude-opus-5-5"
+      }
+    ],
+    "users": [
+      {
+        "key": "zs",
+        "username": "zhangsan",
+        "team": "dev"
+      }
+    ],
+    "internal_keys": [
+      {
+        "key": "k1",
+        "user": "zs"
+      }
+    ],
+    "user_model_extra_grants": [
+      {
+        "user": "zs",
+        "model": "claude-opus-5-5"
+      }
+    ]
+  },
+  "input": {
+    "kind": "user",
+    "ref": "zhangsan",
+    "text": "张三用 gpt-6-luna 一直 403",
+    "scope": "admin"
+  },
+  "expect": {
+    "tier": "L2",
+    "must_check_ids_any": [
+      "user_access"
+    ],
+    "must_keywords": [
+      "没有",
+      "使用权限",
+      "gpt-6-luna"
+    ],
+    "must_level": {
+      "user_access": "confirmed"
+    },
+    "forbid_keywords": [
+      "上游"
+    ],
+    "l3": {
+      "level_by_kw": [
+        {
+          "kw": [
+            "授权",
+            "权限"
+          ],
+          "level": "confirmed"
+        }
+      ],
+      "forbid_keywords": [
+        "上游"
+      ],
+      "must_keywords_any": [
+        "没有",
+        "未获",
+        "未授权",
+        "无权",
+        "不具备"
+      ],
+      "must_keywords_any2": [
+        "使用权限",
+        "授权",
+        "权限"
+      ],
+      "must_keywords": [
+        "gpt-6-luna"
+      ]
+    }
+  }
+}

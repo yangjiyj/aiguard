@@ -1,0 +1,112 @@
+{
+  "id": "provider-google",
+  "name": "Google",
+  "vendor": "Google",
+  "catalog_entries": [
+    {
+      "id": "google_gemini",
+      "provider": "google",
+      "provider_cn": "Google",
+      "product": "gemini",
+      "product_cn": "Gemini",
+      "category": "chat",
+      "region": "global",
+      "domains": [
+        "gemini.google.com",
+        "www.gemini.google.com",
+        "aistudio.google.com",
+        "notebooklm.google.com"
+      ],
+      "path_rules": [
+        "contains:bardfrontendservice",
+        "contains:streamgenerate"
+      ],
+      "request_decoder": "gemini_web",
+      "response_decoder": "gemini_web",
+      "retain_level": "content",
+      "risk_profile": "llm_web",
+      "enabled": true,
+      "priority": 100,
+      "source_url": "https://support.google.com/gemini/answer/13275745"
+    },
+    {
+      "id": "google_gemini_web",
+      "provider": "google",
+      "provider_cn": "Google",
+      "product": "gemini",
+      "product_cn": "Gemini",
+      "category": "chat",
+      "region": "global",
+      "domains": [
+        "gemini.google.com",
+        "www.gemini.google.com",
+        "aistudio.google.com",
+        "notebooklm.google.com"
+      ],
+      "path_rules": [
+        "/",
+        "/app",
+        "/_/BardChatUi/data/",
+        "contains:batchexecute",
+        "contains:/chat",
+        "contains:/prompt"
+      ],
+      "request_decoder": "gemini_web",
+      "response_decoder": "gemini_web",
+      "retain_level": "summary",
+      "risk_profile": "llm_web",
+      "enabled": true,
+      "priority": 99,
+      "source_url": "https://support.google.com/gemini/answer/13275745"
+    },
+    {
+      "id": "google_gemini_api",
+      "provider": "google",
+      "provider_cn": "Google",
+      "product": "gemini_api",
+      "product_cn": "Gemini API",
+      "category": "api",
+      "region": "global",
+      "domains": [
+        "generativelanguage.googleapis.com",
+        "*.aiplatform.googleapis.com",
+        "vertexai.googleapis.com"
+      ],
+      "path_rules": [
+        "/v1beta/models/",
+        "/v1/models/",
+        "/v1/"
+      ],
+      "request_decoder": "gemini_generate_content",
+      "response_decoder": "gemini_generate_content",
+      "retain_level": "content",
+      "risk_profile": "llm_api",
+      "enabled": true,
+      "priority": 90,
+      "source_url": "https://ai.google.dev/"
+    },
+    {
+      "id": "google_gemini_support",
+      "provider": "google",
+      "provider_cn": "Google",
+      "product": "gemini",
+      "product_cn": "Gemini",
+      "category": "chat",
+      "region": "global",
+      "domains": [
+        "gemini.google.com",
+        "www.gemini.google.com",
+        "gemini.gstatic.com"
+      ],
+      "path_rules": null,
+      "request_decoder": "web_support",
+      "response_decoder": "web_support",
+      "retain_level": "summary",
+      "risk_profile": "llm_web",
+      "enabled": true,
+      "priority": 70,
+      "source_url": "https://support.google.com/gemini/"
+    }
+  ],
+  "agent_definitions": []
+}

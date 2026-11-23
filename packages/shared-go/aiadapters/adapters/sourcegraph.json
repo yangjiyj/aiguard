@@ -1,0 +1,34 @@
+{
+  "id": "provider-sourcegraph",
+  "name": "Sourcegraph",
+  "vendor": "Sourcegraph",
+  "catalog_entries": [
+    {
+      "id": "sourcegraph_cody",
+      "provider": "sourcegraph",
+      "provider_cn": "Sourcegraph",
+      "product": "sourcegraph_cody",
+      "product_cn": "Sourcegraph Cody",
+      "category": "coding",
+      "region": "global",
+      "domains": [
+        "cody-gateway.sourcegraph.com",
+        "sourcegraph.com",
+        "*.sourcegraph.com"
+      ],
+      "path_rules": [
+        "/",
+        "/.api/",
+        "/cody/"
+      ],
+      "request_decoder": "coding_ai",
+      "response_decoder": "coding_ai",
+      "retain_level": "content",
+      "risk_profile": "ai_ide_agent",
+      "enabled": true,
+      "priority": 70,
+      "source_url": "https://sourcegraph.com/cody"
+    }
+  ],
+  "agent_definitions": []
+}

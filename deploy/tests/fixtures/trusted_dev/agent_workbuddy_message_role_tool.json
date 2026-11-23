@@ -1,0 +1,34 @@
+{
+  "name": "agent_workbuddy_message_role_tool",
+  "note": "workbuddy tool output carried a phone-number pattern; detector set only message_role.",
+  "event": {
+    "event_type": "phone_cn",
+    "severity": "high",
+    "action_taken": "audit",
+    "principal_key": "user_9",
+    "matched_summary": {
+      "findings": [
+        {
+          "rule_type": "agent_detect",
+          "type": "agent_behavior",
+          "category": "agent_workbuddy",
+          "severity": "low",
+          "confidence": 0.9,
+          "counts_as_security_finding": false
+        },
+        {
+          "category": "phone_cn",
+          "severity": "high",
+          "confidence": 0.9,
+          "counts_as_security_finding": true,
+          "type": "pii",
+          "message_role": "tool"
+        }
+      ]
+    }
+  },
+  "expect": {
+    "routed": true,
+    "reason": "tool_of_agent_workbuddy"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "name": "proxy_restart_interrupt",
+  "description": "开发 VM 51aaece9：反向代理请求失败，上游/交付结局均 unknown、无状态码，61 秒后结束；其间 proxy-server 与 gateway-core 容器重启（开发发布），应确定地判为服务重启时被中断",
+  "fixture": {
+    "providers": [],
+    "request_logs": [
+      {
+        "label": "proxy_req",
+        "count": 1,
+        "endpoint_type": "proxy",
+        "status": "failed",
+        "from": "-20m",
+        "latency_ms": 61276,
+        "proxy_mode": "reverse",
+        "proxy_target_host": "api.example-gateway.com",
+        "agent_type": "openai-codex",
+        "upstream_outcome": "unknown",
+        "delivery_outcome": "unknown"
+      }
+    ],
+    "host_snapshot": {
+      "at": "@0m",
+      "agent_version": "1.0.0",
+      "containers": [
+        {"name": "jjd-proxy-server-1", "service": "proxy-server", "state": "running", "health": "healthy", "restart_count": 0, "image": "proxy-server:2.9.8", "image_id": "sha256:ccc", "started_at": "@-19m53s"},
+        {"name": "jjd-gateway-core-1", "service": "gateway-core", "state": "running", "health": "healthy", "restart_count": 0, "image": "gateway-core:2.9.8", "image_id": "sha256:ddd", "started_at": "@-19m50s"},
+        {"name": "jjd-control-plane-1", "service": "control-plane", "state": "running", "health": "healthy", "restart_count": 0, "image": "control-plane:2.9.8", "image_id": "sha256:eee", "started_at": "@-3h"}
+      ],
+      "drift": [],
+      "disk": [{"mount": "/", "used_pct": 41, "avail_bytes": 107374182400}],
+      "certs": [],
+      "errors": []
+    }
+  },
+  "input": {"kind": "request", "ref": "@proxy_req:1", "scope": "admin"},
+  "expect": {
+    "tier": "L2",
+    "must_check_ids_any": ["gw_restart_interrupt"],
+    "must_keywords": ["重启", "中断", "重新发起请求"],
+    "must_level": {"gw_restart_interrupt": "confirmed"},
+    "forbid_keywords": ["限流", "欠费", "无法判断"],
+    "l3": {
+      "must_keywords_any": ["重启", "升级", "发布"],
+      "must_keywords_any2": ["中断", "切断", "被中断"],
+      "level_by_kw": [
+        {"kw": ["重启", "升级", "发布"], "level": "confirmed"}
+      ],
+      "forbid_keywords": ["欠费", "余额不足"]
+    }
+  }
+}

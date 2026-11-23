@@ -1,0 +1,69 @@
+[
+  {
+    "name": "go_test_argv",
+    "tool_name": "Bash",
+    "tool_type": "system",
+    "arguments": {
+      "executable": "go",
+      "args": ["test", "./..."]
+    },
+    "mode": "strict",
+    "command_allowlist": [
+      {"executable": "go", "args_prefix": ["test"]}
+    ],
+    "want_raw": "allow",
+    "want_effective": "allow"
+  },
+  {
+    "name": "readonly_select_by_id",
+    "tool_name": "db.query",
+    "tool_type": "database",
+    "arguments": {
+      "query": "SELECT id, name FROM users WHERE id = 42 LIMIT 1"
+    },
+    "mode": "strict",
+    "want_raw": "allow",
+    "want_effective": "allow"
+  },
+  {
+    "name": "public_http_get",
+    "tool_name": "http.get",
+    "tool_type": "network",
+    "arguments": {
+      "url": "https://api.example.com/v1/status"
+    },
+    "mode": "strict",
+    "want_raw": "allow",
+    "want_effective": "allow"
+  },
+  {
+    "name": "read_project_readme",
+    "tool_name": "file.read",
+    "tool_type": "file",
+    "arguments": {
+      "path": "/workspace/service/README.md"
+    },
+    "mode": "strict",
+    "want_raw": "allow",
+    "want_effective": "allow"
+  },
+  {
+    "name": "trusted_user_requested_upload_without_secret",
+    "tool_name": "network.upload",
+    "tool_type": "network",
+    "arguments": {
+      "url": "https://files.example.com/upload",
+      "body": "quarterly report"
+    },
+    "fragments": [
+      {
+        "id": "user-1",
+        "trust": "trusted",
+        "text": "Upload the quarterly report to https://files.example.com/upload"
+      }
+    ],
+    "mode": "strict",
+    "want_raw": "allow",
+    "want_effective": "allow"
+  }
+]

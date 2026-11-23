@@ -1,0 +1,36 @@
+{
+  "name": "unverified_data_leak_tool_result",
+  "note": "unverified data_leak is not a red line but still refuses the trusted-dev route.",
+  "event": {
+    "event_type": "data_leak",
+    "severity": "high",
+    "action_taken": "audit",
+    "principal_key": "user_10",
+    "matched_summary": {
+      "agent_type": "agent_claude_code",
+      "findings": [
+        {
+          "rule_type": "agent_detect",
+          "type": "agent_behavior",
+          "category": "agent_claude_code",
+          "severity": "low",
+          "confidence": 0.9,
+          "counts_as_security_finding": false
+        },
+        {
+          "category": "custom",
+          "severity": "high",
+          "confidence": 0.9,
+          "counts_as_security_finding": true,
+          "type": "data_leak",
+          "verified_fact": false,
+          "content_source": "tool_result",
+          "message_role": "tool"
+        }
+      ]
+    }
+  },
+  "expect": {
+    "routed": false
+  }
+}

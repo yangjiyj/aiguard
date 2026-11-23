@@ -1,0 +1,50 @@
+.billing-console-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px 24px;
+  margin-bottom: 16px;
+}
+
+.billing-console-header-main {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.billing-console-header-updated {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.billing-console-header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  flex: 0 1 auto;
+  gap: 8px;
+  margin-left: auto;
+  max-width: 100%;
+}
+
+.billing-console-header-tenant {
+  width: 220px;
+  max-width: 100%;
+}
+
+@media (max-width: 600px) {
+  .billing-console-header {
+    flex-wrap: wrap;
+  }
+
+  .billing-console-header-actions {
+    flex-basis: 100%;
+  }
+
+  .billing-console-header-tenant {
+    flex: 1 1 160px;
+    width: auto;
+  }
+}

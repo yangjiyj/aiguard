@@ -1,0 +1,33 @@
+{
+  "id": "provider-characterai",
+  "name": "Character.AI",
+  "vendor": "Character.AI",
+  "catalog_entries": [
+    {
+      "id": "character_ai",
+      "provider": "characterai",
+      "provider_cn": "Character.AI",
+      "product": "character_ai",
+      "product_cn": "Character.AI",
+      "category": "chat",
+      "region": "global",
+      "domains": [
+        "character.ai",
+        "*.character.ai"
+      ],
+      "path_rules": [
+        "/",
+        "/chat",
+        "contains:/chat"
+      ],
+      "request_decoder": "character_web",
+      "response_decoder": "character_web",
+      "retain_level": "content",
+      "risk_profile": "llm_web",
+      "enabled": true,
+      "priority": 50,
+      "source_url": "https://character.ai/"
+    }
+  ],
+  "agent_definitions": []
+}

@@ -1,0 +1,27 @@
+# JJDGuard 离线镜像目录 v2 - 镜像范围与来源的唯一权威。
+#
+# 固定七列（空白分隔，# 注释，空行忽略）：
+# runtime_tag profile kind component expected_digest dockerfile context
+#
+# profile: common | full | chat
+# kind: first-party | upstream-source | home-runtime | third-party
+# expected_digest: third-party 必须是 sha256:64hex，其余必须为 -
+# dockerfile/context: first-party、upstream-source 与 home-runtime 必填且为仓库相对路径；third-party 为 - -
+#
+# runtime_tag 必须是纯标签，禁止 @sha256:。digest 只在构建/打包门禁中验证，
+# 否则 docker save/load 会丢失可供 Compose 使用的 RepoTag，导致离线环境尝试联网拉取。
+
+docker-compose-gateway-core:latest             common first-party     gateway-core          - apps/gateway-core/Dockerfile                 .
+docker-compose-control-plane:latest            common first-party     control-plane         - apps/control-plane/Dockerfile                .
+docker-compose-security-engine:latest          common first-party     security-engine       - apps/security-engine/Dockerfile              .
+docker-compose-proxy-server:latest             common first-party     proxy-server          - apps/proxy-server/Dockerfile                  .
+docker-compose-web-console:latest              common first-party     web-console           - apps/web-console/Dockerfile                   apps/web-console
+docker-compose-worker:latest                   common first-party     worker                - apps/worker/Dockerfile                        .
+postgres:16-alpine                             common third-party     postgres              sha256:57c72fd2a128e416c7fcc499958864df5301e940bca0a56f58fddf30ffc07777 - -
+valkey/valkey:8.1.10-alpine                    common third-party     redis                 sha256:081c2f5cb575efc901aa80ff9cdbd1ec6a301682fd35e1ebb4b0990a4a4a8507 - -
+docker-compose-llm-judge:latest                full   upstream-source llm-judge             - deploy/docker-compose/llm-judge/Dockerfile.offline deploy/docker-compose/llm-judge
+docker-compose-tier1-classifier:latest         full   first-party     tier1-classifier      - apps/tier1-classifier/Dockerfile              apps/tier1-classifier
+enterprise-ai-portal:0.2.0-slim                chat   first-party     enterprise-ai-portal  - enterprise-ai-portal/Dockerfile               enterprise-ai-portal
+chat-portal/portal-proxy:0.1.0                 chat   home-runtime   portal-proxy          - portal-proxy/Dockerfile.offline               portal-proxy
+docker.1ms.run/keycloak/keycloak:26.3          chat   third-party     keycloak              sha256:357829ec7c4693397533035092ad13b0644bcc95ded311f33a3738c4d9e9bdba - -
+docker.1ms.run/library/caddy:2-alpine          chat   third-party     caddy                 sha256:5f5c8640aae01df9654968d946d8f1a56c497f1dd5c5cda4cf95ab7c14d58648 - -

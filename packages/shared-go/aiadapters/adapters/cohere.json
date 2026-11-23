@@ -1,0 +1,33 @@
+{
+  "id": "provider-cohere",
+  "name": "Cohere",
+  "vendor": "Cohere",
+  "catalog_entries": [
+    {
+      "id": "cohere_api",
+      "provider": "cohere",
+      "provider_cn": "Cohere",
+      "product": "cohere_api",
+      "product_cn": "Cohere API",
+      "category": "api",
+      "region": "global",
+      "domains": [
+        "cohere.com",
+        "api.cohere.com"
+      ],
+      "path_rules": [
+        "/",
+        "/v1/",
+        "/v2/"
+      ],
+      "request_decoder": "cohere",
+      "response_decoder": "cohere",
+      "retain_level": "content",
+      "risk_profile": "llm_api",
+      "enabled": true,
+      "priority": 60,
+      "source_url": "https://docs.cohere.com/"
+    }
+  ],
+  "agent_definitions": []
+}

@@ -1,0 +1,30 @@
+{
+  "id": "provider-ideogram",
+  "name": "Ideogram",
+  "vendor": "Ideogram",
+  "catalog_entries": [
+    {
+      "id": "ideogram",
+      "provider": "ideogram",
+      "provider_cn": "Ideogram",
+      "product": "ideogram",
+      "product_cn": "Ideogram",
+      "category": "image",
+      "region": "global",
+      "domains": [
+        "ideogram.ai"
+      ],
+      "path_rules": [
+        "/"
+      ],
+      "request_decoder": "image_web",
+      "response_decoder": "image_web",
+      "retain_level": "summary",
+      "risk_profile": "image_ai",
+      "enabled": true,
+      "priority": 50,
+      "source_url": "https://ideogram.ai/"
+    }
+  ],
+  "agent_definitions": []
+}

@@ -1,0 +1,61 @@
+{
+  "id": "provider-microsoft",
+  "name": "Microsoft",
+  "vendor": "Microsoft",
+  "catalog_entries": [
+    {
+      "id": "microsoft_copilot",
+      "provider": "microsoft",
+      "provider_cn": "Microsoft",
+      "product": "copilot",
+      "product_cn": "Microsoft Copilot",
+      "category": "chat",
+      "region": "global",
+      "domains": [
+        "copilot.microsoft.com",
+        "edgeservices.bing.com",
+        "www.bing.com",
+        "bing.com"
+      ],
+      "path_rules": [
+        "/",
+        "/chat",
+        "/copilot"
+      ],
+      "request_decoder": "copilot_web",
+      "response_decoder": "copilot_web",
+      "retain_level": "content",
+      "risk_profile": "llm_web",
+      "enabled": true,
+      "priority": 95,
+      "source_url": "https://learn.microsoft.com/en-us/microsoft-365-copilot/which-copilot-for-your-organization"
+    },
+    {
+      "id": "vscode_marketplace",
+      "provider": "microsoft",
+      "provider_cn": "Microsoft",
+      "product": "vscode_marketplace",
+      "product_cn": "VS Code 扩展与更新",
+      "category": "coding",
+      "region": "global",
+      "domains": [
+        "main.vscode-cdn.net",
+        "*.vscode-cdn.net",
+        "marketplace.visualstudio.com"
+      ],
+      "path_rules": [
+        "/extensions",
+        "/core",
+        "/items"
+      ],
+      "request_decoder": "software_update",
+      "response_decoder": "software_update",
+      "retain_level": "summary",
+      "risk_profile": "ai_ide_agent",
+      "enabled": true,
+      "priority": 70,
+      "source_url": "https://code.visualstudio.com/docs/setup/network"
+    }
+  ],
+  "agent_definitions": []
+}

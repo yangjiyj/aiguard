@@ -1,0 +1,26 @@
+{
+  "name": "plain_api_call_tool_result",
+  "note": "a tool_result hit with no coding-agent evidence is an ordinary API call.",
+  "event": {
+    "event_type": "classified_classified_cn",
+    "severity": "high",
+    "action_taken": "audit",
+    "principal_key": "key_xyz",
+    "matched_summary": {
+      "findings": [
+        {
+          "category": "classified_classified_cn",
+          "severity": "high",
+          "confidence": 0.9,
+          "counts_as_security_finding": true,
+          "type": "classified",
+          "content_source": "tool_result",
+          "message_role": "tool"
+        }
+      ]
+    }
+  },
+  "expect": {
+    "routed": false
+  }
+}

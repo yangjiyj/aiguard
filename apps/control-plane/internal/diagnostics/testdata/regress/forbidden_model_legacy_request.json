@@ -1,0 +1,104 @@
+{
+  "name": "forbidden_model_legacy_request",
+  "description": "旧版本网关以账号授权拒绝（forbidden_model），没有记录拒绝原因，但把 403 写进了 upstream_status_code：不能说成上游返回 403",
+  "fixture": {
+    "teams": [
+      {
+        "key": "dev",
+        "mode": "allowlist",
+        "models": [
+          "sol",
+          "luna"
+        ]
+      }
+    ],
+    "providers": [
+      {
+        "key": "p1",
+        "name": "主渠道",
+        "type": "openai",
+        "base_url": "https://api.example.com"
+      }
+    ],
+    "models": [
+      {
+        "key": "sol",
+        "provider": "p1",
+        "name": "gpt-6.1-sol"
+      },
+      {
+        "key": "luna",
+        "provider": "p1",
+        "name": "gpt-6-luna"
+      }
+    ],
+    "users": [
+      {
+        "key": "zs",
+        "username": "zhangsan",
+        "team": "dev"
+      }
+    ],
+    "internal_keys": [
+      {
+        "key": "k_open",
+        "user": "zs",
+        "name": "张三的网页助手"
+      },
+      {
+        "key": "k_narrow",
+        "user": "zs",
+        "name": "张三的编程助手",
+        "model_allowlist": [
+          "gpt-6-luna"
+        ]
+      }
+    ],
+    "request_logs": [
+      {
+        "label": "denied",
+        "count": 1,
+        "user": "zs",
+        "key": "k_open",
+        "status": "forbidden_model",
+        "upstream_status": 403,
+        "from": "-5m",
+        "to": "-5m",
+        "routing_decision_json": {
+          "fallback_retries": 0
+        }
+      }
+    ]
+  },
+  "input": {
+    "kind": "request",
+    "ref": "@denied:1",
+    "text": "这个请求为什么失败",
+    "scope": "admin"
+  },
+  "expect": {
+    "tier": "L2",
+    "must_check_ids_any": [
+      "user_access"
+    ],
+    "must_level": {
+      "user_access": "suspected"
+    },
+    "forbid_keywords": [
+      "凭据",
+      "鉴权"
+    ],
+    "l3": {
+      "forbid_keywords": [
+        "上游 HTTP 403",
+        "上游返回 403",
+        "上游返回了 403",
+        "上游 403"
+      ],
+      "must_keywords_any": [
+        "授权",
+        "权限"
+      ]
+    }
+  }
+}

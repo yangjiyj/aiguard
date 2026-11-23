@@ -1,0 +1,63 @@
+{
+  "id": "provider-baidu",
+  "name": "百度",
+  "vendor": "百度",
+  "catalog_entries": [
+    {
+      "id": "wenxin_yiyan",
+      "provider": "baidu",
+      "provider_cn": "百度",
+      "product": "wenxin_yiyan",
+      "product_cn": "文心一言 / 文小言",
+      "category": "chat",
+      "region": "cn",
+      "domains": [
+        "yiyan.baidu.com",
+        "chat.baidu.com",
+        "wenxin.baidu.com",
+        "*.yiyan.baidu.com"
+      ],
+      "path_rules": [
+        "/",
+        "/chat",
+        "contains:/chat",
+        "contains:/message",
+        "contains:/conversation",
+        "contains:/completion"
+      ],
+      "request_decoder": "baidu_web",
+      "response_decoder": "baidu_web",
+      "retain_level": "content",
+      "risk_profile": "llm_web",
+      "enabled": true,
+      "priority": 100,
+      "source_url": "https://yiyan.baidu.com/"
+    },
+    {
+      "id": "qianfan_api",
+      "provider": "baidu",
+      "provider_cn": "百度",
+      "product": "qianfan_api",
+      "product_cn": "百度千帆 API",
+      "category": "api",
+      "region": "cn",
+      "domains": [
+        "qianfan.baidubce.com",
+        "*.qianfan.baidubce.com"
+      ],
+      "path_rules": [
+        "/v2/",
+        "/v1/",
+        "/rpc/"
+      ],
+      "request_decoder": "qianfan",
+      "response_decoder": "qianfan",
+      "retain_level": "content",
+      "risk_profile": "llm_api",
+      "enabled": true,
+      "priority": 90,
+      "source_url": "https://cloud.baidu.com/product/qianfan.html"
+    }
+  ],
+  "agent_definitions": []
+}

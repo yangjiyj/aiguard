@@ -1,0 +1,31 @@
+{
+  "id": "provider-meta",
+  "name": "Meta",
+  "vendor": "Meta",
+  "catalog_entries": [
+    {
+      "id": "meta_ai",
+      "provider": "meta",
+      "provider_cn": "Meta",
+      "product": "meta_ai",
+      "product_cn": "Meta AI",
+      "category": "chat",
+      "region": "global",
+      "domains": [
+        "meta.ai",
+        "ai.meta.com"
+      ],
+      "path_rules": [
+        "/"
+      ],
+      "request_decoder": "meta_web",
+      "response_decoder": "meta_web",
+      "retain_level": "content",
+      "risk_profile": "llm_web",
+      "enabled": true,
+      "priority": 60,
+      "source_url": "https://ai.meta.com/get-meta-ai/"
+    }
+  ],
+  "agent_definitions": []
+}

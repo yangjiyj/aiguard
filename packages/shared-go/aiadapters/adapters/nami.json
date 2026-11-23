@@ -1,0 +1,37 @@
+{
+  "id": "provider-nami",
+  "name": "纳米 AI",
+  "vendor": "纳米 AI",
+  "catalog_entries": [
+    {
+      "id": "nami_ai",
+      "provider": "nami",
+      "provider_cn": "纳米 AI",
+      "product": "nami_ai",
+      "product_cn": "纳米 AI",
+      "category": "chat",
+      "region": "cn",
+      "domains": [
+        "n.cn",
+        "www.n.cn",
+        "bot.n.cn"
+      ],
+      "path_rules": [
+        "/",
+        "/chat",
+        "contains:/chat",
+        "contains:/message",
+        "contains:/conversation",
+        "contains:/completion"
+      ],
+      "request_decoder": "nami_web",
+      "response_decoder": "nami_web",
+      "retain_level": "content",
+      "risk_profile": "llm_web",
+      "enabled": true,
+      "priority": 75,
+      "source_url": "https://www.n.cn/"
+    }
+  ],
+  "agent_definitions": []
+}

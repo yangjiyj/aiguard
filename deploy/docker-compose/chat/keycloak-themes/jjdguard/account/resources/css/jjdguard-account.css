@@ -1,0 +1,82 @@
+/* JJDGUARD account 账户控制台主题:白底 + 去 Keycloak logo + 系统深色模式压白(复用 admin 规则,PF5 类通用) */
+:root, html, body { color-scheme: light !important; }
+html, body, .pf-v5-c-page, .pf-v5-c-page__main, .pf-v5-c-page__main-section, .pf-v5-c-page__sidebar, main {
+  background: #ffffff !important;
+}
+/* 顶栏 masthead + 内部工具条 全白，文字深色 */
+.pf-v5-c-masthead { background: #ffffff !important; border-bottom: 1px solid #e6e6e6 !important; }
+.pf-v5-c-masthead .pf-v5-c-toolbar, .pf-v5-c-masthead .pf-v5-c-toolbar__content { background: transparent !important; }
+.pf-v5-c-masthead, .pf-v5-c-masthead * { color: #1a1a1a !important; }
+/* 隐藏「临时管理员」黄警告条 */
+.pf-v5-c-banner, [class*="c-banner"] { display: none !important; }
+/* Welcome 页：隐藏 Keycloak 英文营销 + 文档/社区/博客链接（keycloak SPA 焊死的内容） */
+.pf-v5-c-page__main-section.pf-m-light .pf-v5-l-grid.pf-v5-u-ml-lg { display: none !important; }
+/* 顶栏 logo 尺寸 */
+.keycloak__pageheader_brand, img[alt="Logo"] { height: 34px !important; width: auto !important; }
+/* 主按钮黑 */
+.pf-v5-c-button.pf-m-primary { background: #1a1a1a !important; border-color: #1a1a1a !important; color: #fff !important; }
+
+/* 左侧菜单文字深色（白底可见）+ 悬停/选中态 */
+.pf-v5-c-nav__link, .pf-v5-c-nav__item, .pf-v5-c-nav__section-title,
+.pf-v5-c-page__sidebar .pf-v5-c-nav *, .pf-v5-c-page__sidebar a, .pf-v5-c-page__sidebar span { color: #1a1a1a !important; }
+.pf-v5-c-nav__link:hover, .pf-v5-c-nav__link.pf-m-current { background: #f2f2f2 !important; }
+.pf-v5-c-nav__link.pf-m-current { border-left: 3px solid #1a1a1a !important; }
+
+/* ===== 系统深色模式压制：<html class="pf-v5-theme-dark"> 会把 PF5 全局变量设成深色，
+   这里在同等/更高特异性(html.class)上把它们改回浅色，令整台内容区(表格/卡片/输入框)恒为白底 ===== */
+html.pf-v5-theme-dark {
+  color-scheme: light !important;
+  /* 背景 → 浅 */
+  --pf-v5-global--BackgroundColor--100: #ffffff !important;
+  --pf-v5-global--BackgroundColor--150: #fafafa !important;
+  --pf-v5-global--BackgroundColor--200: #f0f2f5 !important;
+  --pf-v5-global--BackgroundColor--300: #ffffff !important;
+  --pf-v5-global--BackgroundColor--400: #ededed !important;
+  --pf-v5-global--BackgroundColor--light-100: #ffffff !important;
+  --pf-v5-global--BackgroundColor--light-200: #f0f2f5 !important;
+  --pf-v5-global--BackgroundColor--light-300: #f5f5f5 !important;
+  --pf-v5-global--BackgroundColor--dark-100: #ffffff !important;
+  --pf-v5-global--BackgroundColor--dark-200: #f0f2f5 !important;
+  --pf-v5-global--BackgroundColor--dark-300: #f5f5f5 !important;
+  --pf-v5-global--BackgroundColor--dark-400: #ededed !important;
+  --pf-v5-global--BackgroundColor--dark-transparent-100: rgba(0,0,0,.04) !important;
+  --pf-v5-global--BackgroundColor--dark-transparent-200: rgba(0,0,0,.06) !important;
+  /* 边框 → 浅灰 */
+  --pf-v5-global--BorderColor--100: #d2d2d2 !important;
+  --pf-v5-global--BorderColor--200: #b8bbbe !important;
+  --pf-v5-global--BorderColor--300: #ededed !important;
+  --pf-v5-global--BorderColor--light-100: #d2d2d2 !important;
+  --pf-v5-global--BorderColor--dark-100: #d2d2d2 !important;
+  /* 文字 → 深(深色主题里这些是浅色，白底上必须翻深否则不可见) */
+  --pf-v5-global--Color--100: #151515 !important;
+  --pf-v5-global--Color--200: #4f5255 !important;
+  --pf-v5-global--Color--light-100: #151515 !important;
+  --pf-v5-global--Color--light-200: #4f5255 !important;
+}
+/* 深色模式下正文区容器兜底(某些用固定 class 非变量) */
+html.pf-v5-theme-dark .pf-v5-c-card,
+html.pf-v5-theme-dark .pf-v5-c-table,
+html.pf-v5-theme-dark .pf-v5-c-table tbody tr,
+html.pf-v5-theme-dark .pf-v5-c-form-control,
+html.pf-v5-theme-dark .pf-v5-c-menu,
+html.pf-v5-theme-dark .pf-v5-c-panel,
+html.pf-v5-theme-dark .pf-v5-c-tabs__link,
+html.pf-v5-theme-dark input, html.pf-v5-theme-dark select, html.pf-v5-theme-dark textarea {
+  background-color: #ffffff !important;
+  color: #151515 !important;
+}
+html.pf-v5-theme-dark .pf-v5-c-table thead th { background-color: #fafafa !important; color: #151515 !important; }
+/* 次级单元格文字(客户端名称/类型等)在深色主题里是浅灰#e0e0e0,白底发虚→强制深色;链接保留蓝 */
+html.pf-v5-theme-dark .pf-v5-c-table td,
+html.pf-v5-theme-dark .pf-v5-c-table th,
+html.pf-v5-theme-dark .pf-v5-c-table__text,
+html.pf-v5-theme-dark .pf-v5-c-table td span,
+html.pf-v5-theme-dark .pf-v5-c-content, html.pf-v5-theme-dark .pf-v5-c-content *,
+html.pf-v5-theme-dark .pf-v5-c-description-list__description,
+html.pf-v5-theme-dark .pf-v5-c-form__helper-text,
+html.pf-v5-theme-dark .pf-v5-c-page__main-section p,
+html.pf-v5-theme-dark .pf-v5-c-title { color: #151515 !important; }
+/* 链接/链接按钮恒为蓝，不被上面的深色规则波及 */
+html.pf-v5-theme-dark .pf-v5-c-table a,
+html.pf-v5-theme-dark a.pf-v5-c-button.pf-m-link,
+html.pf-v5-theme-dark .pf-v5-c-button.pf-m-link { color: #0066cc !important; }

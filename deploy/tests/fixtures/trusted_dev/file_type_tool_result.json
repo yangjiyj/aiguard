@@ -1,0 +1,35 @@
+{
+  "name": "file_type_tool_result",
+  "note": "file-class evidence always needs a human even inside tool output.",
+  "event": {
+    "event_type": "config_file",
+    "severity": "high",
+    "action_taken": "audit",
+    "principal_key": "user_8",
+    "matched_summary": {
+      "agent_type": "agent_claude_code",
+      "findings": [
+        {
+          "rule_type": "agent_detect",
+          "type": "agent_behavior",
+          "category": "agent_claude_code",
+          "severity": "low",
+          "confidence": 0.9,
+          "counts_as_security_finding": false
+        },
+        {
+          "category": "config_file",
+          "severity": "high",
+          "confidence": 0.9,
+          "counts_as_security_finding": true,
+          "type": "file",
+          "content_source": "tool_result",
+          "message_role": "tool"
+        }
+      ]
+    }
+  },
+  "expect": {
+    "routed": false
+  }
+}

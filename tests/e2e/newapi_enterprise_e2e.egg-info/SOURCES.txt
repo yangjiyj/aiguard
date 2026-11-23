@@ -1,0 +1,6 @@
+pyproject.toml
+newapi_enterprise_e2e.egg-info/PKG-INFO
+newapi_enterprise_e2e.egg-info/SOURCES.txt
+newapi_enterprise_e2e.egg-info/dependency_links.txt
+newapi_enterprise_e2e.egg-info/requires.txt
+newapi_enterprise_e2e.egg-info/top_level.txt

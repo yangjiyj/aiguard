@@ -1,0 +1,84 @@
+{
+  "id": "provider-anthropic",
+  "name": "Anthropic",
+  "vendor": "Anthropic",
+  "catalog_entries": [
+    {
+      "id": "anthropic_claude",
+      "provider": "anthropic",
+      "provider_cn": "Anthropic",
+      "product": "claude",
+      "product_cn": "Claude",
+      "category": "chat",
+      "region": "global",
+      "domains": [
+        "claude.ai",
+        "*.claude.ai",
+        "a-api.anthropic.com"
+      ],
+      "path_rules": [
+        "contains:/chat",
+        "contains:/message",
+        "contains:/completion",
+        "contains:/conversation"
+      ],
+      "request_decoder": "claude_web",
+      "response_decoder": "claude_web",
+      "retain_level": "content",
+      "risk_profile": "llm_web",
+      "enabled": true,
+      "priority": 100,
+      "source_url": "https://support.claude.com/en/articles/8114491-getting-started-with-claude"
+    },
+    {
+      "id": "anthropic_api",
+      "provider": "anthropic",
+      "provider_cn": "Anthropic",
+      "product": "anthropic_api",
+      "product_cn": "Anthropic API",
+      "category": "api",
+      "region": "global",
+      "domains": [
+        "api.anthropic.com",
+        "console.anthropic.com"
+      ],
+      "path_rules": [
+        "/v1/messages",
+        "/v1/complete"
+      ],
+      "request_decoder": "anthropic_messages",
+      "response_decoder": "anthropic_messages",
+      "retain_level": "content",
+      "risk_profile": "llm_api",
+      "enabled": true,
+      "priority": 90,
+      "source_url": "https://docs.anthropic.com/"
+    },
+    {
+      "id": "anthropic_claude_support",
+      "provider": "anthropic",
+      "provider_cn": "Anthropic",
+      "product": "claude",
+      "product_cn": "Claude",
+      "category": "chat",
+      "region": "global",
+      "domains": [
+        "claude.ai",
+        "*.claude.ai",
+        "a-api.anthropic.com",
+        "assets-proxy.anthropic.com",
+        "a-cdn.anthropic.com",
+        "s-cdn.anthropic.com"
+      ],
+      "path_rules": null,
+      "request_decoder": "web_support",
+      "response_decoder": "web_support",
+      "retain_level": "summary",
+      "risk_profile": "llm_web",
+      "enabled": true,
+      "priority": 80,
+      "source_url": "https://support.claude.com/"
+    }
+  ],
+  "agent_definitions": []
+}

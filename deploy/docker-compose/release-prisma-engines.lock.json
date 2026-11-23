@@ -1,0 +1,20 @@
+{
+  "schema": "jjdguard-release-prisma-engines-lock/v1",
+  "prisma_version": "6.19.3",
+  "platform": "linux-musl-openssl-3.0.x",
+  "origin": "home-local-portal-runtime",
+  "source_image": "enterprise-ai-portal:0.2.0-slim",
+  "source_image_id": "sha256:e28bd38e70cb8623542e8b37b24e14ccd9aecff610c903dcd86df3fd215433b5",
+  "manifest": [
+    {
+      "path": "libquery_engine-linux-musl-openssl-3.0.x.so.node",
+      "size": 17556136,
+      "sha256": "28abc36457335e1a45fe2fe79a4c781b55347e696d6f4410c83bf232d92a726c"
+    },
+    {
+      "path": "schema-engine-linux-musl-openssl-3.0.x",
+      "size": 19644784,
+      "sha256": "955e3bff1be23248a0922a219f7c4e200acc8fdd1fc72479557c0a9d782bd64a"
+    }
+  ]
+}

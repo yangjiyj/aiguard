@@ -1,0 +1,160 @@
+{
+  "id": "provider-github",
+  "name": "GitHub",
+  "vendor": "GitHub",
+  "catalog_entries": [
+    {
+      "id": "github_copilot_telemetry",
+      "provider": "github",
+      "provider_cn": "GitHub",
+      "product": "github_copilot_telemetry",
+      "product_cn": "GitHub Copilot 遥测",
+      "category": "coding",
+      "region": "global",
+      "domains": [
+        "collector.github.com",
+        "copilot-telemetry.githubusercontent.com",
+        "origin-tracker.githubusercontent.com",
+        "default.exp-tas.com",
+        "copilot-user-management.githubusercontent.com",
+        "telemetry.githubcopilot.com",
+        "telemetry.*.githubcopilot.com"
+      ],
+      "path_rules": null,
+      "request_decoder": "telemetry",
+      "response_decoder": "telemetry",
+      "retain_level": "summary",
+      "risk_profile": "ai_ide_agent",
+      "enabled": true,
+      "priority": 96,
+      "source_url": "https://docs.github.com/en/copilot/reference/copilot-allowlist-reference"
+    },
+    {
+      "id": "github_copilot_reports",
+      "provider": "github",
+      "provider_cn": "GitHub",
+      "product": "github_copilot_reports",
+      "product_cn": "GitHub Copilot 报表",
+      "category": "coding",
+      "region": "global",
+      "domains": [
+        "copilot-reports.github.com",
+        "copilot-reports*.b01.azurefd.net",
+        "usagereports*.blob.core.windows.net"
+      ],
+      "path_rules": null,
+      "request_decoder": "telemetry",
+      "response_decoder": "telemetry",
+      "retain_level": "summary",
+      "risk_profile": "ai_ide_agent",
+      "enabled": true,
+      "priority": 95,
+      "source_url": "https://docs.github.com/en/copilot/reference/copilot-allowlist-reference"
+    },
+    {
+      "id": "github_copilot_chat_completions_aux",
+      "provider": "github",
+      "provider_cn": "GitHub",
+      "product": "github_copilot",
+      "product_cn": "GitHub Copilot / VS Code Copilot",
+      "category": "coding",
+      "region": "global",
+      "domains": [
+        "api.githubcopilot.com",
+        "copilot-proxy.githubusercontent.com",
+        "*.githubcopilot.com",
+        "*.individual.githubcopilot.com",
+        "*.business.githubcopilot.com",
+        "*.enterprise.githubcopilot.com"
+      ],
+      "path_rules": [
+        "contains:/chat/completions"
+      ],
+      "request_decoder": "web_support",
+      "response_decoder": "web_support",
+      "retain_level": "summary",
+      "risk_profile": "ai_ide_agent",
+      "enabled": true,
+      "priority": 93,
+      "source_url": "https://docs.github.com/en/copilot/reference/copilot-allowlist-reference"
+    },
+    {
+      "id": "github_copilot",
+      "provider": "github",
+      "provider_cn": "GitHub",
+      "product": "github_copilot",
+      "product_cn": "GitHub Copilot / VS Code Copilot",
+      "category": "coding",
+      "region": "global",
+      "domains": [
+        "api.githubcopilot.com",
+        "copilot-proxy.githubusercontent.com",
+        "*.githubcopilot.com",
+        "*.individual.githubcopilot.com",
+        "*.business.githubcopilot.com",
+        "*.enterprise.githubcopilot.com",
+        "github.com",
+        "api.github.com"
+      ],
+      "path_rules": [
+        "contains:/completions",
+        "contains:/responses"
+      ],
+      "request_decoder": "copilot",
+      "response_decoder": "copilot",
+      "retain_level": "content",
+      "risk_profile": "ai_ide_agent",
+      "enabled": true,
+      "priority": 92,
+      "source_url": "https://docs.github.com/en/copilot/reference/copilot-allowlist-reference"
+    },
+    {
+      "id": "github_copilot_chat_attachments_upload",
+      "provider": "github",
+      "provider_cn": "GitHub",
+      "product": "github_copilot",
+      "product_cn": "GitHub Copilot / VS Code Copilot",
+      "category": "coding",
+      "region": "global",
+      "domains": [
+        "uploads.github.com"
+      ],
+      "path_rules": [
+        "contains:/copilot/chat/attachments"
+      ],
+      "request_decoder": "github_copilot_upload",
+      "response_decoder": "github_copilot_upload",
+      "retain_level": "content",
+      "risk_profile": "ai_ide_agent",
+      "enabled": true,
+      "priority": 94,
+      "source_url": "https://docs.github.com/en/copilot/reference/copilot-allowlist-reference"
+    },
+    {
+      "id": "github_copilot_support",
+      "provider": "github",
+      "provider_cn": "GitHub",
+      "product": "github_copilot",
+      "product_cn": "GitHub Copilot / VS Code Copilot",
+      "category": "coding",
+      "region": "global",
+      "domains": [
+        "api.githubcopilot.com",
+        "copilot-proxy.githubusercontent.com",
+        "*.githubcopilot.com",
+        "*.individual.githubcopilot.com",
+        "*.business.githubcopilot.com",
+        "*.enterprise.githubcopilot.com"
+      ],
+      "path_rules": null,
+      "request_decoder": "web_support",
+      "response_decoder": "web_support",
+      "retain_level": "summary",
+      "risk_profile": "ai_ide_agent",
+      "enabled": true,
+      "priority": 80,
+      "source_url": "https://docs.github.com/en/copilot/reference/copilot-allowlist-reference"
+    }
+  ],
+  "agent_definitions": []
+}

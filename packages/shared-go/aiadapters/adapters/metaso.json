@@ -1,0 +1,30 @@
+{
+  "id": "provider-metaso",
+  "name": "秘塔",
+  "vendor": "秘塔",
+  "catalog_entries": [
+    {
+      "id": "metaso",
+      "provider": "metaso",
+      "provider_cn": "秘塔",
+      "product": "metaso",
+      "product_cn": "秘塔 AI 搜索",
+      "category": "search",
+      "region": "cn",
+      "domains": [
+        "metaso.cn"
+      ],
+      "path_rules": [
+        "/"
+      ],
+      "request_decoder": "search_web",
+      "response_decoder": "search_web",
+      "retain_level": "content",
+      "risk_profile": "ai_search",
+      "enabled": true,
+      "priority": 70,
+      "source_url": "https://metaso.cn/"
+    }
+  ],
+  "agent_definitions": []
+}

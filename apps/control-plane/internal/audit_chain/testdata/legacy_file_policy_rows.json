@@ -1,0 +1,117 @@
+[
+  {
+    "seq": 49,
+    "event_type": "audit_op",
+    "hash_alg": "sha256-hmac",
+    "payload": {
+      "policy": {
+        "max_file_mb": 100,
+        "review_types": [
+          "rar",
+          "7z",
+          "gzip",
+          "bz2",
+          "xz",
+          "archive",
+          "zip"
+        ],
+        "blocked_types": [
+          "pdf",
+          "docx",
+          "doc",
+          "xls",
+          "xlsx",
+          "pptx",
+          "rtf",
+          "txt",
+          "csv",
+          "md"
+        ],
+        "max_zip_ratio": 100,
+        "max_attachments": 10
+      }
+    },
+    "payload_hash": "c51b4c28863c2ee28c4a4b5aac1bbdfeb706cf9bc7800161237b7694bffd9471"
+  },
+  {
+    "seq": 50,
+    "event_type": "audit_op",
+    "hash_alg": "sha256-hmac",
+    "payload": {
+      "policy": {
+        "max_file_mb": 100,
+        "review_types": [
+          "rar",
+          "7z",
+          "gzip",
+          "bz2",
+          "xz",
+          "archive",
+          "zip"
+        ],
+        "allowed_types": [
+          "pdf",
+          "png",
+          "jpeg",
+          "webp"
+        ],
+        "blocked_types": [
+          "pdf",
+          "docx",
+          "doc",
+          "xls",
+          "xlsx",
+          "pptx",
+          "rtf",
+          "txt",
+          "csv",
+          "md"
+        ],
+        "max_zip_ratio": 100,
+        "max_attachments": 10
+      }
+    },
+    "payload_hash": "f72397bb73f0290cf768e5a577836079faa0746d92513c7e78c9d09bf165b4fc"
+  },
+  {
+    "seq": 196,
+    "event_type": "audit_op",
+    "hash_alg": "sha256-hmac",
+    "payload": {
+      "policy": {
+        "max_file_mb": 100,
+        "allowed_types": [
+          "pdf",
+          "png",
+          "jpeg",
+          "webp",
+          "rar",
+          "7z",
+          "gzip",
+          "bz2",
+          "xz",
+          "archive",
+          "zip"
+        ],
+        "blocked_types": [
+          "pdf",
+          "docx",
+          "doc",
+          "xls",
+          "xlsx",
+          "pptx",
+          "rtf",
+          "txt",
+          "csv",
+          "md",
+          "unknown",
+          "executable",
+          "script"
+        ],
+        "max_zip_ratio": 100,
+        "max_attachments": 10
+      }
+    },
+    "payload_hash": "884f34f070f69f616860210687b385718b7f6869b712bcf57b698a93ebe21eb7"
+  }
+]

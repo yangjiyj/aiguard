@@ -1,0 +1,117 @@
+// portal-proxy 员工密钥映射库（dev 用 SQLite，生产预留 PG）
+// 红线：keyEnc 为 AES-256-GCM 密文（iv:tag:ct 各段 base64），密钥来自 env PORTAL_KEY_ENC_SECRET，
+// 员工网关 key 明文绝不落库、绝不进日志。
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model EmployeeKey {
+  id           String    @id @default(cuid())
+  // 多租户预留（Phase 3 Track C）：默认值恒为 tenant_default ≡ config.ts cfg.tenantId ≡ 网关 tenant。
+  // 首版单租户，写入统一 stamp cfg.tenantId；查询暂不强制 where tenantId（技术债，见 README「多租户预留」）。
+  tenantId     String    @default("tenant_default")
+  lobeUserId   String
+  email        String
+  ssoSubject   String?
+  gatewayKeyId String
+  keyPrefix    String
+  keyEnc       String // AES-256-GCM(base64 iv:tag:ct)，密钥 env PORTAL_KEY_ENC_SECRET
+  status       String    @default("active")
+  createdAt    DateTime  @default(now())
+  lastUsedAt   DateTime?
+
+  // Phase 2 分组评估：员工当前归属分组、对应网关 project、上次解出的 department、上次评估时刻。
+  // 惰性重评估据 lastDepartment 变化 + lastEvaluatedAt + TTL 去抖（见 evaluate.ts / server.ts）。
+  mappedGroup      String?
+  gatewayProjectId String?
+  lastDepartment   String?
+  lastEvaluatedAt  DateTime?
+
+  // Phase4 阶段B：用户打通开关 ON 时，key 绑到的网关 user id（幂等键=SSO sub）。开关关时恒 null（向后兼容现状）。
+  gatewayUserId String?
+  // Phase4 B6 scope 漂移治本：本 key 签发时的 SCOPE_VERSION。存量/迁移遗留=0（default），
+  // settleEmployeeKey 检测 < 当前 SCOPE_VERSION 则重签自愈（补全 responses/embeddings scope，不再 401）。
+  scopeVersion Int @default(0)
+
+  // 多租户预留：唯一键由 lobeUserId 收进 (tenantId, lobeUserId)，同一 lobeUserId 可跨租户共存。
+  @@unique([tenantId, lobeUserId])
+}
+
+// 分组映射规则：按 department claim 命中得 mappedGroup 与网关 gatewayProjectId。
+// priority 升序取首个 enabled 命中；无命中走 default（gatewayProjectId=env PORTAL_DEFAULT_PROJECT_ID）。
+model GroupMappingRule {
+  id               String   @id @default(cuid())
+  // 多租户预留（Phase 3 Track C）：默认 tenant_default，写入 stamp cfg.tenantId。
+  tenantId         String   @default("tenant_default")
+  matchType        String   @default("department") // 目前仅 department
+  matchValue       String // 待匹配的 department 值
+  mappedGroup      String // 本地分组名（展示/审计用）
+  gatewayProjectId String // 命中后挂到的网关 project
+  // Phase4 阶段B：本组对应的网关 team（部门）。首次打通时惰性建 team 后回填此列；建 team 幂等靠此列（建一次即记住）。
+  gatewayTeamId    String?
+  priority         Int      @default(100) // 越小越优先
+  enabled          Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  // 多租户预留：索引前缀加 tenantId，为按租户过滤留路。
+  @@index([tenantId, matchType, matchValue])
+}
+
+// 三级角色表（Phase 3 Track D 使用；本 Track C 仅建表 + 多租户预留列，角色解析逻辑留 Track D）。
+// role: employee | manager | admin。角色解析（W9 9.6）：只认本表，无记录默认 employee，不读 OIDC role 声明。
+// managedDepartments：部门主管管辖的部门列表，SQLite 无原生 String[]，用 JSON 字符串数组存（默认 "[]"）。
+model EmployeeRole {
+  id                 String   @id @default(cuid())
+  // 多租户预留：默认 tenant_default ≡ cfg.tenantId ≡ 网关 tenant。
+  tenantId           String   @default("tenant_default")
+  subject            String // OIDC sub
+  email              String
+  role               String   @default("employee") // employee | manager | admin
+  managedDepartments String   @default("[]") // JSON 字符串数组（部门主管管辖部门）
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@unique([tenantId, subject])
+}
+
+// 门户系统配置（Phase4 阶段C）：可开可关的运行时开关，key-value 结构，多租户预留。
+// 首用键：gateway_user_sync_enabled（网关用户打通 DB 开关，value 存字面量 "true"/"false"）。
+// 合成开关＝env PORTAL_GATEWAY_USER_SYNC_ALLOWED 放行 AND 此值＝"true"（类比 SECURITY_AUDIT_ONLY 双闸）。
+// 无记录默认按「关」处理；env 未放行时后台 PUT 拒绝开启（防误开撑爆网关授权用户配额）。
+model PortalSystemConfig {
+  id        String   @id @default(cuid())
+  // 多租户预留：默认 tenant_default ≡ cfg.tenantId ≡ 网关 tenant。
+  tenantId  String   @default("tenant_default")
+  key       String
+  value     String
+  updatedAt DateTime @updatedAt
+
+  @@unique([tenantId, key])
+}
+
+// 门户后台服务端会话（W9 9.6）：浏览器只持有不透明会话 ID，库里只存其 SHA-256（idHash）。
+// 登出 / 管理撤销 / IdP back-channel logout（按 subject 或 idpSid）写 revokedAt 立即失效。
+// 不存角色：角色每请求从 EmployeeRole 实时读取，改角色即时生效。
+model PortalSession {
+  idHash     String    @id
+  tenantId   String    @default("tenant_default")
+  subject    String
+  email      String?
+  department String?
+  idpSid     String?
+  createdAt  DateTime  @default(now())
+  expiresAt  DateTime
+  revokedAt  DateTime?
+
+  @@index([tenantId, subject])
+  @@index([tenantId, idpSid])
+  @@index([expiresAt])
+}

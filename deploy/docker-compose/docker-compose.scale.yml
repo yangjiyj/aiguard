@@ -1,0 +1,37 @@
+# Multi-replica overlay for security-engine.
+#
+# Usage (Docker DNS round-robin; gateway-core keeps SECURITY_ENGINE_URL
+# pointing at the service name, no client-side address list is needed):
+#
+#   SECURITY_ENGINE_REPLICAS=8 \
+#     docker compose -f docker-compose.yml -f docker-compose.scale.yml up -d
+#
+# In an offline bundle use -f docker-compose.offline.yml as the base instead.
+# This overlay deliberately touches ONLY security-engine so it renders with
+# either base file. tier1-classifier exists only in the offline base; its
+# replicas and CUDA provider are already handled by the existing
+# tier1-scale.sh + tier1-cpu.override.yml / tier1-gpu.override.yml pair.
+#
+# Requires Docker Compose >= 2.24.4 for the !reset tag.
+#
+# Prerequisites (implemented on perf/engine-scale-out):
+#   * SECURITY_SHARED_STATE_URL points at the shared valkey service. Every
+#     in-process state (breakers, caches, file_id registry, tool pins,
+#     judge budget, scan admission) is global. Without it replicas disagree,
+#     and the startup selfcheck refuses to boot when the state is required.
+#   * SECURITY_NODE_ID is forced blank below so each replica reports
+#     hostname#pid, even though the base file defaults it to a fixed value
+#     (rule delivery pins that stable id for single-instance deployments).
+#   * SECURITY_JUDGE_GLOBAL_CONCURRENCY bounds total judge calls across replicas.
+#   * The base file publishes a fixed host port for single-instance
+#     diagnostics; replicas cannot share it, so !reset removes the binding.
+#     Replicas stay reachable on the internal jjdguard-net network only.
+services:
+  security-engine:
+    # Replicas must report distinct identities; a shared fixed id would
+    # collapse them into one node record and cross-talk on rule delivery.
+    environment:
+      SECURITY_NODE_ID: ""
+    ports: !reset []
+    deploy:
+      replicas: ${SECURITY_ENGINE_REPLICAS:-2}

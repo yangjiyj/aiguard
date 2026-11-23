@@ -1,0 +1,32 @@
+{
+  "id": "provider-lingyiwanwu",
+  "name": "零一万物",
+  "vendor": "零一万物",
+  "catalog_entries": [
+    {
+      "id": "lingyiwanwu",
+      "provider": "lingyiwanwu",
+      "provider_cn": "零一万物",
+      "product": "lingyiwanwu",
+      "product_cn": "零一万物",
+      "category": "api",
+      "region": "cn",
+      "domains": [
+        "01.ai",
+        "platform.lingyiwanwu.com"
+      ],
+      "path_rules": [
+        "/",
+        "/v1/"
+      ],
+      "request_decoder": "openai_compatible",
+      "response_decoder": "openai_compatible",
+      "retain_level": "content",
+      "risk_profile": "llm_api",
+      "enabled": true,
+      "priority": 70,
+      "source_url": "https://platform.lingyiwanwu.com/"
+    }
+  ],
+  "agent_definitions": []
+}

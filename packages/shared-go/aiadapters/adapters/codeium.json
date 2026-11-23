@@ -1,0 +1,33 @@
+{
+  "id": "provider-codeium",
+  "name": "Codeium",
+  "vendor": "Codeium",
+  "catalog_entries": [
+    {
+      "id": "windsurf_codeium",
+      "provider": "codeium",
+      "provider_cn": "Codeium",
+      "product": "windsurf_codeium",
+      "product_cn": "Windsurf / Codeium",
+      "category": "coding",
+      "region": "global",
+      "domains": [
+        "server.codeium.com",
+        "api.codeium.com",
+        "codeium.com",
+        "*.codeium.com",
+        "windsurf.com",
+        "*.windsurf.com"
+      ],
+      "path_rules": null,
+      "request_decoder": "coding_ai",
+      "response_decoder": "coding_ai",
+      "retain_level": "content",
+      "risk_profile": "ai_ide_agent",
+      "enabled": true,
+      "priority": 75,
+      "source_url": "https://codeium.com/"
+    }
+  ],
+  "agent_definitions": []
+}

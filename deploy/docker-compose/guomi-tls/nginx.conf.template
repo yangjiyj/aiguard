@@ -1,0 +1,62 @@
+# W10 optional GM/T TLCP entry for the gateway API (OpenAI-compatible).
+# Serves TLCP (SM2 dual certificate) and ordinary TLS 1.2/1.3 (RSA/ECDSA) on
+# the same port; clients negotiate. Upstream is gateway-core over the
+# internal network, exactly like gateway-tls.Caddyfile.
+worker_processes auto;
+pid /var/run/guomi-tls/nginx.pid;
+error_log /dev/stderr warn;
+
+events { worker_connections 1024; }
+
+http {
+    access_log off;
+    client_body_temp_path /var/cache/guomi-tls/body;
+    proxy_temp_path       /var/cache/guomi-tls/proxy;
+    fastcgi_temp_path     /var/cache/guomi-tls/fastcgi;
+    uwsgi_temp_path       /var/cache/guomi-tls/uwsgi;
+    scgi_temp_path        /var/cache/guomi-tls/scgi;
+    client_max_body_size  64m;
+    server_tokens off;
+
+    upstream gateway_core {
+        server ${GATEWAY_CORE_UPSTREAM};
+        keepalive 64;
+    }
+
+    server {
+        listen 8443 ssl;
+        http2 on;
+
+        enable_ntls on;
+        ssl_sign_certificate     /certs/guomi/sm2_sign.crt;
+        ssl_sign_certificate_key /certs/guomi/sm2_sign.key;
+        ssl_enc_certificate      /certs/guomi/sm2_enc.crt;
+        ssl_enc_certificate_key  /certs/guomi/sm2_enc.key;
+
+        # International certificate for clients without TLCP support.
+        ssl_certificate          /certs/gateway.crt;
+        ssl_certificate_key      /certs/gateway.key;
+
+        # ECC-SM2 suites give one-way (server-authenticated) TLCP. The ECDHE-SM2
+        # suites are listed too, but GB/T 38636 ECDHE requires the client to
+        # present its own SM2 sign/enc certificates; clients without them fall
+        # back to ECC-SM2. Client certificates are not verified here (no
+        # ssl_verify_client): API authentication stays with gateway-core keys.
+        ssl_protocols TLSv1.2 TLSv1.3;
+        ssl_ciphers "ECC-SM2-SM4-GCM-SM3:ECC-SM2-SM4-CBC-SM3:ECDHE-SM2-SM4-GCM-SM3:ECDHE-SM2-SM4-CBC-SM3:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384";
+        ssl_prefer_server_ciphers on;
+        ssl_session_cache shared:guomi:10m;
+
+        location / {
+            proxy_pass http://gateway_core;
+            proxy_http_version 1.1;
+            proxy_set_header Connection "";
+            proxy_set_header Host $host;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto https;
+            proxy_buffering off;
+            proxy_read_timeout 600s;
+            proxy_send_timeout 600s;
+        }
+    }
+}

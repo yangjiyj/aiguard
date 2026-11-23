@@ -1,0 +1,491 @@
+record	task	subject	kind	path	predicate
+meta	-	-	bootstrap-base	-	cf7303b75ad0cfede7f6dff04c5b1e1751bb56b2
+meta	-	-	bootstrap-subject	-	chore(构建): 固化 JJDGuard 命名任务验证器
+meta	-	-	bootstrap-test-blob	-	fd62a3f2e6c379f4b5d6673f1ac6d41d5a7683bc
+meta	-	-	origin-url	-	git@github.com:yangjiyj/aiguard.git
+meta	-	-	branch	-	feat/jjdguard-naming-integration
+meta	-	-	checkpoint-root	-	refs/jjdguard-task-checkpoints/naming-integration
+meta	-	-	bootstrap-path	-	scripts/tests/fixtures/jjdguard-naming-task-contract.tsv
+meta	-	-	bootstrap-path	-	scripts/tests/test_jjdguard_naming_worktree_provenance.sh
+meta	-	-	bootstrap-path	-	scripts/tests/verify_jjdguard_naming_worktree_provenance.sh
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/cmd/licensegen/main.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/cmd/licensegen/main_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/cmd/server/main.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/go.mod	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/alert/group_backfill.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/alert/group_backfill_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/alert/inbox.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/alert/inbox_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/alert/secevent_bridge.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/alert/secevent_bridge_alert_group_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/alert/secevent_bridge_counters_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/alert/secevent_bridge_daily_agg_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/alert/secevent_bridge_dedup_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/alert/secevent_bridge_exception_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/alert/secevent_bridge_fp_silence_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/alert/secevent_bridge_gate_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/alert/secevent_bridge_redline_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/alert/secevent_bridge_secret_novelty_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/alert/secevent_bridge_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/alert/secevent_bridge_triage_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/anomaly/scanner.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/auth/middleware.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/bootstrap/admin.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/bootstrap/admin_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/bootstrap/platform_defaults.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/catalog/client.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/compliance/exporter.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/compliance/exporter_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/forecast/job.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/access_retention_blob.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/access_retention_content.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/access_retention_content_fallback_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/access_retention_turn_merge_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/agent_sessions_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/agent_stats.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/agentguard_confirmation_replay_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/agentguard_policy.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/agentguard_policy_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/agentguard_risk_overview.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/alert_group_handler.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/alert_group_handler_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/alert_handler.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/alert_handler_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/anomaly_handler.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/audit_chain_handler.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/audit_disposition.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/audit_disposition_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/audit_export.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/audit_request_detail_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/audit_summary.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/audit_summary_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/budget_handler.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/budget_handler_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/ca_certificates.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/ca_certificates_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/confirmation_replayer.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/content_audit.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/content_security_config.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/content_security_config_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/content_security_industry.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/dept_scope.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/disposition_enforcer.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/eval_integration.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/eval_integration_assurance_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/eval_integration_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/forecast_handler.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/forecast_handler_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/forward_proxy_access.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/forward_proxy_access_overview_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/forward_proxy_access_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/forward_proxy_provider_mask_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/fx_handler.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/fx_handler_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/group_mapping_rules_handler.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/handler.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/iam_handler.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/license.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/license_features.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/license_features_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/license_middleware_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/license_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/llm_provider_catalog.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/lse_probe.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/mcp_manifest_fetch.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/mcp_policies_handler.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/mcp_policy_contract_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/mcp_servers_handler.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/model_eval_status_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/model_routing_e2e_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/model_routing_handler.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/model_routing_handler_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/notify_handler.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/org_admin.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/org_handler.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/org_handler_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/org_stats_scope_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/org_writer_guard.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/org_writer_guard_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/portal_integration.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/portal_integration_admin_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/portal_integration_usage.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/portal_integration_usage_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/portal_integration_usersync_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/portal_upload_ingest.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/pricing_handler.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/project_users.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/provider_price_snapshots_handler.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/proxy_access_keys_handler.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/proxy_whitelist.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/proxy_whitelist_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/quota_policy_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/rbac_handlers.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/retention_storage_handler.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/reveal_key.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/reveal_key_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/reverse_proxy.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/reverse_proxy_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/routing_decisions_handler.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/routing_decisions_handler_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/routing_policies_handler.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/rule_pack.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/ruleset_sync_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/saving_handler_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/savings_config_handler.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/savings_config_handler_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/security_rules.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/semantic_config.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/semantic_config_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/settings_handler.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/smart_detection.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/smart_detection_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/stats.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/sync_models_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/system.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/system_settings_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/team_model_sync.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/team_model_sync_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/tenant_scoped.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/tenant_scoped_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/tool_audit.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/tool_audit_filter_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/tool_risk_config.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/upgrade.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/upgrade_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/usage.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/usage_records.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/usage_records_handler_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/usage_rollup_handler_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/usage_scope_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/user_detail_teams_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/user_usage.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/user_usage_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/users.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/users_delete_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/users_license_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/handler/users_role_validation_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/notify/channel.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/notify/channel_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/org/service.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/org/service_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/permission/middleware.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/permission/middleware_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/repository/anomaly_events_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/repository/audit_chain.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/repository/forecast_jobs_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/repository/forward_proxy_access.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/repository/internal_keys.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/repository/internal_keys_ciphertext_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/repository/model_routing.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/repository/model_routing_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/repository/tool_call_logs.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/rollup/service.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/rollup/service_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/rules/compiler.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/rules/compiler_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/rules/compiler_version_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/internal/saving_v2/snapshot_cron.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/control-plane/pkg/rolluprefresh/store.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/cmd/agentguard-replay/main.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/cmd/server/main.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/go.mod	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/auth/auth.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/auth/fail_closed_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/auth/legacy_middleware_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/auth/scope_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/governor/providers/quota_cache.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/governor/providers/snapshot.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/agent_semantic_judge.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/agent_semantic_judge_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/annotate_triage_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/async_audit_writer.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/async_audit_writer_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/audit_only_triage_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/audit_writer_lse_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/audit_writer_null_user_db_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/audit_writer_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/chat_completions.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/chat_completions_agentguard_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/chat_completions_guardrail_failmode_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/chat_completions_semantic_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/chat_completions_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/chat_fingerprint_cache.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/chat_fingerprint_cache_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/chat_hot_path_regression_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/chat_policy_preflight.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/chat_policy_preflight_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/chat_response_finalizer.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/chat_response_finalizer_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/chat_routing_decision.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/chat_routing_decision_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/chat_runtime_context.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/chat_runtime_context_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/chat_security_adapter.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/chat_security_adapter_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/confirmation_replay_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/conversation_key.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/conversation_key_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/egress_safety.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/embeddings.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/embeddings_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/exception_id_passthrough_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/fallback_chain_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/findings_enrichment_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/governor_integration.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/handler_integration_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/interfaces.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/mcp_audit_only_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/mcp_proxy.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/mcp_proxy_audit.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/mcp_proxy_audit_tx_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/mcp_proxy_lse_audit_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/mcp_survivor_fixes_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/messages.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/metering_scopes_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/mocks_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/model_route_decision_v2_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/model_route_execution.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/model_route_execution_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/model_routing_e2e_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/model_routing_entrypoints_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/multimodal_content_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/p2_1_stitch_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/proxy_auth_integration.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/proxy_auth_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/proxy_security.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/reverse_proxy.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/reverse_proxy_audit.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/reverse_proxy_audit_sql_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/reverse_proxy_messages.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/reverse_proxy_messages_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/routing.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/routing_integration.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/security_action_header.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/security_action_header_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/tool_interceptor.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/tool_interceptor_agentguard_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/handler/triage_suppression_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/httpmw/realip.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/modelrouter/model_route_engine.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/modelrouter/model_route_engine_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/modelrouter/policy_cache.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/modelrouter/route_selector_v2.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/modelrouter/route_selector_v2_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/modelrouter/router.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/modelrouter/routing_types.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/provider/adapter.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/provider/adapter_stream_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/provider/adapter_streaming.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/gateway-core/internal/provider/adapter_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/proxy-server/cmd/migrate-externalize/main.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/proxy-server/cmd/server/main.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/proxy-server/go.mod	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/proxy-server/internal/handler/audit.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/proxy-server/internal/handler/content_extractor.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/proxy-server/internal/handler/conv_key.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/proxy-server/internal/handler/conv_key_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/proxy-server/internal/handler/decoder_anthropic.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/proxy-server/internal/handler/decoder_anthropic_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/proxy-server/internal/handler/decoder_openai_compat.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/proxy-server/internal/handler/decoder_yuanbao.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/proxy-server/internal/handler/llm_catalog.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/proxy-server/internal/handler/retention_backfill.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/proxy-server/internal/handler/retention_messages.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/proxy-server/internal/handler/retention_messages_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/proxy-server/internal/handler/retention_store.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/proxy-server/internal/handler/retention_store_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/proxy-server/internal/handler/security.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/proxy-server/internal/handler/security_fingerprint_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/proxy-server/internal/httpmw/realip.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/worker/cmd/worker/main.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/worker/go.mod	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/worker/internal/auditpipe/runner.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/worker/internal/auditpipe/runner_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/worker/internal/auditpipe/sink.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/worker/internal/auditpipe/sink_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	apps/worker/internal/config/config.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	middleware.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	packages/shared-go/agentdetect/agentdetect.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	packages/shared-go/go.mod	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	packages/shared-go/llmcatalog/llmcatalog.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	packages/shared-go/outbox/store.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	packages/shared-go/outbox/store_test.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	packages/shared-go/retentionstore/dbconfig.go	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	scripts/tests/test_go_module_identity.sh	-
+task	01	refactor(构建): 原子迁移 JJDGuard Go 模块路径	required	users.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/cmd/server/main.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/internal/audit_chain/appender.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/internal/audit_chain/appender_test.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/internal/handler/eval_integration.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/internal/handler/eval_integration_assurance_test.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/internal/handler/eval_integration_test.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/internal/handler/group_mapping_rules_test.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/internal/handler/header_contract.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/internal/handler/header_contract_audit_ingest.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/internal/handler/header_contract_audit_ingest_test.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/internal/handler/header_contract_test.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/internal/handler/internal_auth.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/internal/handler/internal_auth_test.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/internal/handler/portal_integration.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/internal/handler/portal_integration_test.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/internal/handler/portal_integration_usage_test.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/internal/handler/portal_upload_ingest_test.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/internal/handler/rule_pack.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/internal/repository/audit_chain.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/internal/repository/audit_chain_test.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/internal/repository/system_repo.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/internal/repository/system_repo_test.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/gateway-core/cmd/server/main.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/gateway-core/internal/auth/auth.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/gateway-core/internal/auth/auth_test.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/gateway-core/internal/auth/scope_test.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/gateway-core/internal/handler/header_contract_audit.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/gateway-core/internal/handler/header_contract_audit_test.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/gateway-core/internal/handler/reverse_proxy.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/gateway-core/internal/handler/reverse_proxy_audit.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/gateway-core/internal/handler/reverse_proxy_header_contract_test.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/gateway-core/internal/handler/reverse_proxy_messages.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/gateway-core/internal/handler/reverse_proxy_messages_test.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/proxy-server/cmd/server/main.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/proxy-server/internal/handler/audit.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/proxy-server/internal/handler/audit_retention_test.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/proxy-server/internal/handler/audit_test.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/proxy-server/internal/handler/header_contract_audit.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/proxy-server/internal/handler/header_contract_audit_test.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/proxy-server/internal/handler/proxy.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/proxy-server/internal/handler/proxy_header_contract_test.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/proxy-server/internal/handler/proxy_mitm_keepalive_test.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	deploy/migrations/116_header_contract_conflict_idempotency.sql	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	deploy/tests/test_header_contract_conflict_idempotency_migration.sh	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	deploy/tests/test_jjdguard_header_conflict_audit_chain.sh	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	packages/shared-go/agentdetect/agentdetect.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	packages/shared-go/agentdetect/agentdetect_test.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	packages/shared-go/headeraudit/client.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	packages/shared-go/headeraudit/client_test.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	packages/shared-go/headeraudit/event.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	packages/shared-go/headeraudit/event_test.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	packages/shared-go/headercompat/headercompat.go	-
+task	02	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	packages/shared-go/headercompat/headercompat_test.go	-
+task	03	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/gateway-core/internal/handler/chat_completions_test.go	-
+task	03	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/gateway-core/internal/handler/chat_hot_path_regression_test.go	-
+task	03	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/gateway-core/internal/handler/chat_response_finalizer_test.go	-
+task	03	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/gateway-core/internal/handler/confirmation_replay_test.go	-
+task	03	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/gateway-core/internal/handler/reverse_proxy.go	-
+task	03	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/gateway-core/internal/handler/routing.go	-
+task	03	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/gateway-core/internal/handler/tool_interceptor.go	-
+task	03	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/gateway-core/internal/handler/tool_interceptor_agentguard_test.go	-
+task	03	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/gateway-core/internal/handler/tool_interceptor_runtime_test.go	-
+task	03	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/gateway-core/internal/security/client.go	-
+task	03	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/gateway-core/internal/security/client_test.go	-
+task	03	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/gateway-core/internal/security/client_triage_test.go	-
+task	03	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/proxy-server/internal/handler/security.go	-
+task	03	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/proxy-server/internal/handler/security_test.go	-
+task	03	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/security-engine/app/detectors/tier1_client.py	-
+task	03	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/security-engine/app/header_compat.py	-
+task	03	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/security-engine/app/main.py	-
+task	03	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/security-engine/app/rule_pack_loader.py	-
+task	03	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/security-engine/app/semantic_config_loader.py	-
+task	03	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/security-engine/bench/README.md	-
+task	03	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/security-engine/bench/scorers.py	-
+task	03	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/security-engine/tests/test_api.py	-
+task	03	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/security-engine/tests/test_bench_scorers.py	-
+task	03	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/security-engine/tests/test_rule_pack_loader.py	-
+task	03	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/tier1-classifier/app/header_compat.py	-
+task	03	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/tier1-classifier/app/main.py	-
+task	03	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/tier1-classifier/tests/test_health_auth.py	-
+task	03	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/tier1-classifier/tests/test_stats_endpoint.py	-
+task	03	refactor(协议): 切换 JJDGuard Header 生产者	required	deploy/lib/acceptance-gate.sh	-
+task	03	refactor(协议): 切换 JJDGuard Header 生产者	required	tests/e2e/test_scenarios.py	-
+task	03	refactor(协议): 切换 JJDGuard Header 生产者	required	tests/integration/test_full_flow.py	-
+task	04	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	apps/control-plane/internal/config/config_test.go	-
+task	04	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	apps/gateway-core/internal/config/config_test.go	-
+task	04	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	apps/proxy-server/internal/config/config_test.go	-
+task	04	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	apps/tier1-classifier/Dockerfile	-
+task	04	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	apps/tier1-classifier/app/main.py	-
+task	04	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	apps/tier1-classifier/requirements-train.lock	-
+task	04	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	apps/tier1-classifier/requirements-train.txt	-
+task	04	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	apps/tier1-classifier/requirements.lock	-
+task	04	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	apps/tier1-classifier/requirements.txt	-
+task	04	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	apps/tier1-classifier/scripts/build-baseline-model.sh	-
+task	04	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	apps/tier1-classifier/scripts/build-tier1-image.sh	-
+task	04	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	apps/tier1-classifier/tests/test_build_baseline_script.py	-
+task	04	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	apps/tier1-classifier/tests/test_health_auth.py	-
+task	04	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	apps/tier1-classifier/training/retrain.py	-
+task	04	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	apps/tier1-classifier/training/tests/test_retrain.py	-
+task	04	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	deploy/docker-compose/deploy-offline.sh	-
+task	04	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	deploy/docker-compose/deploy-oneclick.sh	-
+task	04	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	deploy/docker-compose/docker-compose.offline.yml	-
+task	04	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	deploy/docker-compose/docker-compose.yml	-
+task	04	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	deploy/docker-compose/ensure-jjdguard-portal-cp-network.sh	-
+task	04	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	deploy/docker-compose/images.lst	-
+task	04	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	deploy/docker-compose/upgrade.sh	-
+task	04	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	deploy/tests/build_jjdguard_task4_images.sh	-
+task	04	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	deploy/tests/lib/jjdguard_contract_env.sh	-
+task	04	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	deploy/tests/stage_jjdguard_task4_candidate.sh	-
+task	04	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	deploy/tests/test_jjdguard_compose_env_contract.sh	-
+task	04	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	deploy/tests/test_jjdguard_portal_cp_business_smoke.sh	-
+task	04	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	deploy/tests/test_jjdguard_portal_cp_network.sh	-
+task	04	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	deploy/tests/test_jjdguard_task4_image_provenance.sh	-
+task	04	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	enterprise-ai-portal/Dockerfile	-
+task	04	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	enterprise-ai-portal/README.md	-
+task	04	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	enterprise-ai-portal/compose.yml	-
+task	04	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	enterprise-ai-portal/package.json	-
+task	04	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	enterprise-ai-portal/src/app/api/me/records/route.ts	-
+task	04	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	enterprise-ai-portal/src/app/api/models/route.ts	-
+task	04	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	enterprise-ai-portal/src/app/api/upload/route.ts	-
+task	04	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	enterprise-ai-portal/src/lib/gateway-env.ts	-
+task	04	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	enterprise-ai-portal/test/gateway-env.test.ts	-
+task	04	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	enterprise-ai-portal/test/gateway-route-integration.test.ts	-
+task	05	feat(授权): 新签 JJDGuard 产品码并兼容旧许可证	required	apps/control-plane/cmd/licensegen/main.go	-
+task	05	feat(授权): 新签 JJDGuard 产品码并兼容旧许可证	required	apps/control-plane/cmd/licensegen/main_test.go	-
+task	05	feat(授权): 新签 JJDGuard 产品码并兼容旧许可证	required	apps/control-plane/internal/handler/license.go	-
+task	05	feat(授权): 新签 JJDGuard 产品码并兼容旧许可证	required	apps/control-plane/internal/handler/license_test.go	-
+task	05	feat(授权): 新签 JJDGuard 产品码并兼容旧许可证	required	apps/control-plane/internal/license/e2e_renewal_test.go	-
+task	05	feat(授权): 新签 JJDGuard 产品码并兼容旧许可证	required	apps/control-plane/internal/license/license.go	-
+task	05	feat(授权): 新签 JJDGuard 产品码并兼容旧许可证	required	apps/control-plane/internal/license/license_test.go	-
+task	05	feat(授权): 新签 JJDGuard 产品码并兼容旧许可证	required	apps/control-plane/internal/license/testdata/e2e_jjdguard_license.json	-
+task	05	feat(授权): 新签 JJDGuard 产品码并兼容旧许可证	required	deploy/docker-compose/package-offline-bundle.sh	-
+task	05	feat(授权): 新签 JJDGuard 产品码并兼容旧许可证	required	deploy/tests/test_offline_release_hardening.sh	-
+task	06	feat(密钥): 新 API Key 改用 jjd 前缀	required	apps/control-plane/internal/handler/handler.go	-
+task	06	feat(密钥): 新 API Key 改用 jjd 前缀	required	apps/control-plane/internal/handler/proxy_key_rotation_test.go	-
+task	06	feat(密钥): 新 API Key 改用 jjd 前缀	required	apps/control-plane/internal/repository/key_test.go	-
+task	06	feat(密钥): 新 API Key 改用 jjd 前缀	required	apps/gateway-core/internal/auth/auth_test.go	-
+task	06	feat(密钥): 新 API Key 改用 jjd 前缀	required	packages/shared-go/authhelpers/authhelpers.go	-
+task	06	feat(密钥): 新 API Key 改用 jjd 前缀	required	packages/shared-go/authhelpers/authhelpers_test.go	-
+task	07	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	.gitignore	-
+task	07	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	.gitleaks.toml	-
+task	07	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	AGENTS.md	-
+task	07	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	CLAUDE.md	-
+task	07	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	README.md	-
+task	07	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	apps/control-plane/internal/repository/ca_certificates.go	-
+task	07	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	apps/control-plane/internal/repository/ca_subject.go	-
+task	07	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	apps/control-plane/internal/repository/ca_subject_test.go	-
+task	07	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	apps/proxy-server/internal/handler/ca_manager.go	-
+task	07	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	apps/proxy-server/internal/handler/ca_manager_test.go	-
+task	07	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	apps/security-engine/app/main.py	-
+task	07	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	apps/security-engine/pyproject.toml	-
+task	07	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	apps/security-engine/tests/test_api.py	-
+task	07	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	apps/worker/internal/config/config_test.go	-
+task	07	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	deploy/docker-compose/deploy-offline.sh	-
+task	07	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	deploy/docker-compose/package-offline-bundle.sh	-
+task	07	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	deploy/docker-compose/verify-jjdguard-offline-archive.sh	-
+task	07	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	deploy/migrations/jjdguard-neutral-baseline-manifest.tsv	-
+task	07	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	deploy/migrations/prepare-jjdguard-neutral-baseline.sh	-
+task	07	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	deploy/migrations/sign-jjdguard-customer-neutral-result.sh	-
+task	07	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	deploy/seeds/seed_data.sql	-
+task	07	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	deploy/tests/test_jjdguard_customer_neutral_evidence.sh	-
+task	07	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	deploy/tests/test_jjdguard_neutral_baseline.sh	-
+task	07	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	deploy/tests/test_jjdguard_offline_archive_trust.sh	-
+task	07	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	deploy/tests/test_offline_release_hardening.sh	-
+task	07	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	packages/shared-go/eventbus/publisher_test.go	-
+task	07	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	scripts/harness/preflight.sh	-
+task	07	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	scripts/harness/verify.sh	-
+task	07	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	scripts/run_tests.sh	-
+task	07	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	scripts/security/README.md	-
+task	07	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	scripts/tests/fixtures/expected-plan1-deferred-legacy-files.txt	-
+task	07	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	scripts/tests/test_active_brand_contract.sh	-
+task	07	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	tests/e2e/README.md	-
+task	07	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	tests/e2e/lib/browser.py	-
+task	07	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	tests/e2e/pyproject.toml	-
+task	07	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	tests/e2e/run_browser_in_docker.sh	-
+task	07	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	tests/performance/README.md	-

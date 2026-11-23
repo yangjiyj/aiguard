@@ -1,0 +1,188 @@
+record	task	subject	kind	path	predicate
+meta	-	-	bootstrap-base	-	61643fc69396c1725b1c2f0e24280eb3ffa5305f
+meta	-	-	bootstrap-subject	-	chore(构建): 固化 JJDGuard 命名任务验证器 r3
+meta	-	-	bootstrap-test-blob	-	e84c2b3c0168f060d83098b332d58b41c3612016
+meta	-	-	origin-url	-	git@github.com:yangjiyj/aiguard.git
+meta	-	-	branch	-	feat/jjdguard-naming-integration-r3
+meta	-	-	checkpoint-root	-	refs/jjdguard-task-checkpoints/naming-integration-r3
+meta	-	-	bootstrap-path	-	scripts/tests/fixtures/jjdguard-naming-task-contract-r3.tsv
+meta	-	-	bootstrap-path	-	scripts/tests/test_jjdguard_naming_worktree_provenance_r3.sh
+meta	-	-	bootstrap-path	-	scripts/tests/verify_jjdguard_naming_worktree_provenance_r3.sh
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/cmd/server/main.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/internal/audit_chain/appender.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/internal/audit_chain/appender_test.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/internal/handler/eval_integration.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/internal/handler/eval_integration_assurance_test.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/internal/handler/eval_integration_test.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/internal/handler/group_mapping_rules_test.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/internal/handler/header_contract.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/internal/handler/header_contract_audit_ingest.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/internal/handler/header_contract_audit_ingest_test.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/internal/handler/header_contract_test.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/internal/handler/internal_auth.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/internal/handler/internal_auth_test.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/internal/handler/portal_integration.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/internal/handler/portal_integration_test.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/internal/handler/portal_integration_usage_test.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/internal/handler/portal_upload_ingest_test.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/internal/handler/rule_pack.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/internal/repository/audit_chain.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/internal/repository/audit_chain_test.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/internal/repository/system_repo.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/control-plane/internal/repository/system_repo_test.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/gateway-core/cmd/server/main.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/gateway-core/internal/auth/auth.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/gateway-core/internal/auth/fail_closed_test.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/gateway-core/internal/auth/auth_test.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/gateway-core/internal/auth/scope_test.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/gateway-core/internal/handler/header_contract_audit.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/gateway-core/internal/handler/header_contract_audit_test.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/gateway-core/internal/handler/reverse_proxy.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/gateway-core/internal/handler/reverse_proxy_audit.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/gateway-core/internal/handler/reverse_proxy_header_contract_test.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/gateway-core/internal/handler/reverse_proxy_messages.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/gateway-core/internal/handler/reverse_proxy_messages_test.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/proxy-server/cmd/server/main.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/proxy-server/internal/handler/audit.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/proxy-server/internal/handler/audit_retention_test.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/proxy-server/internal/handler/audit_test.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/proxy-server/internal/handler/egress_guard_test.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/proxy-server/internal/handler/header_contract_audit.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/proxy-server/internal/handler/header_contract_audit_test.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/proxy-server/internal/handler/proxy.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/proxy-server/internal/handler/proxy_header_contract_test.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	apps/proxy-server/internal/handler/proxy_mitm_keepalive_test.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	deploy/migrations/116_header_contract_conflict_idempotency.sql	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	deploy/tests/test_header_contract_conflict_idempotency_migration.sh	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	deploy/tests/test_jjdguard_header_conflict_audit_chain.sh	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	packages/shared-go/agentdetect/agentdetect.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	packages/shared-go/agentdetect/agentdetect_test.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	packages/shared-go/headeraudit/client.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	packages/shared-go/headeraudit/client_test.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	packages/shared-go/headeraudit/event.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	packages/shared-go/headeraudit/event_test.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	packages/shared-go/headercompat/headercompat.go	-
+task	01	feat(协议): 增加 JJDGuard Header 双读与冲突拒绝	required	packages/shared-go/headercompat/headercompat_test.go	-
+task	02	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/gateway-core/internal/handler/chat_completions_test.go	-
+task	02	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/gateway-core/internal/handler/chat_hot_path_regression_test.go	-
+task	02	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/gateway-core/internal/handler/chat_response_finalizer_test.go	-
+task	02	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/gateway-core/internal/handler/confirmation_replay_test.go	-
+task	02	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/gateway-core/internal/handler/reverse_proxy.go	-
+task	02	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/gateway-core/internal/handler/routing.go	-
+task	02	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/gateway-core/internal/handler/tool_interceptor.go	-
+task	02	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/gateway-core/internal/handler/tool_interceptor_agentguard_test.go	-
+task	02	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/gateway-core/internal/handler/tool_interceptor_runtime_test.go	-
+task	02	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/gateway-core/internal/security/client.go	-
+task	02	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/gateway-core/internal/security/client_test.go	-
+task	02	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/gateway-core/internal/security/client_triage_test.go	-
+task	02	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/proxy-server/internal/handler/security.go	-
+task	02	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/proxy-server/internal/handler/security_test.go	-
+task	02	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/security-engine/app/detectors/tier1_client.py	-
+task	02	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/security-engine/app/header_compat.py	-
+task	02	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/security-engine/app/main.py	-
+task	02	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/security-engine/app/rule_pack_loader.py	-
+task	02	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/security-engine/app/semantic_config_loader.py	-
+task	02	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/security-engine/bench/README.md	-
+task	02	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/security-engine/bench/scorers.py	-
+task	02	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/security-engine/tests/test_api.py	-
+task	02	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/security-engine/tests/test_bench_scorers.py	-
+task	02	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/security-engine/tests/test_rule_pack_loader.py	-
+task	02	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/tier1-classifier/app/header_compat.py	-
+task	02	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/tier1-classifier/app/main.py	-
+task	02	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/tier1-classifier/tests/test_health_auth.py	-
+task	02	refactor(协议): 切换 JJDGuard Header 生产者	required	apps/tier1-classifier/tests/test_stats_endpoint.py	-
+task	02	refactor(协议): 切换 JJDGuard Header 生产者	required	deploy/lib/acceptance-gate.sh	-
+task	02	refactor(协议): 切换 JJDGuard Header 生产者	required	tests/e2e/test_scenarios.py	-
+task	02	refactor(协议): 切换 JJDGuard Header 生产者	required	tests/integration/test_full_flow.py	-
+task	03	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	apps/control-plane/internal/config/config_test.go	-
+task	03	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	apps/gateway-core/internal/config/config_test.go	-
+task	03	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	apps/proxy-server/internal/config/config_test.go	-
+task	03	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	apps/tier1-classifier/Dockerfile	-
+task	03	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	apps/tier1-classifier/app/main.py	-
+task	03	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	apps/tier1-classifier/requirements-train.lock	-
+task	03	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	apps/tier1-classifier/requirements-train.txt	-
+task	03	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	apps/tier1-classifier/requirements.lock	-
+task	03	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	apps/tier1-classifier/requirements.txt	-
+task	03	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	apps/tier1-classifier/scripts/build-baseline-model.sh	-
+task	03	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	apps/tier1-classifier/scripts/build-tier1-image.sh	-
+task	03	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	apps/tier1-classifier/tests/test_build_baseline_script.py	-
+task	03	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	apps/tier1-classifier/tests/test_health_auth.py	-
+task	03	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	apps/tier1-classifier/training/retrain.py	-
+task	03	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	apps/tier1-classifier/training/tests/test_retrain.py	-
+task	03	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	deploy/docker-compose/deploy-offline.sh	-
+task	03	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	deploy/docker-compose/deploy-oneclick.sh	-
+task	03	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	deploy/docker-compose/docker-compose.offline.yml	-
+task	03	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	deploy/docker-compose/docker-compose.yml	-
+task	03	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	deploy/docker-compose/ensure-jjdguard-portal-cp-network.sh	-
+task	03	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	deploy/docker-compose/images.lst	-
+task	03	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	deploy/docker-compose/upgrade.sh	-
+task	03	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	deploy/tests/build_jjdguard_task4_images.sh	-
+task	03	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	deploy/tests/lib/jjdguard_contract_env.sh	-
+task	03	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	deploy/tests/stage_jjdguard_task4_candidate.sh	-
+task	03	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	deploy/tests/test_jjdguard_compose_env_contract.sh	-
+task	03	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	deploy/tests/test_jjdguard_portal_cp_business_smoke.sh	-
+task	03	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	deploy/tests/test_jjdguard_portal_cp_network.sh	-
+task	03	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	deploy/tests/test_jjdguard_task4_image_provenance.sh	-
+task	03	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	enterprise-ai-portal/Dockerfile	-
+task	03	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	enterprise-ai-portal/README.md	-
+task	03	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	enterprise-ai-portal/compose.yml	-
+task	03	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	enterprise-ai-portal/package.json	-
+task	03	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	enterprise-ai-portal/src/app/api/me/records/route.ts	-
+task	03	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	enterprise-ai-portal/src/app/api/models/route.ts	-
+task	03	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	enterprise-ai-portal/src/app/api/upload/route.ts	-
+task	03	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	enterprise-ai-portal/src/lib/gateway-env.ts	-
+task	03	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	enterprise-ai-portal/test/gateway-env.test.ts	-
+task	03	refactor(配置): 统一 JJDGuard 环境变量兼容入口	required	enterprise-ai-portal/test/gateway-route-integration.test.ts	-
+task	04	feat(授权): 新签 JJDGuard 产品码并兼容旧许可证	required	apps/control-plane/cmd/licensegen/main.go	-
+task	04	feat(授权): 新签 JJDGuard 产品码并兼容旧许可证	required	apps/control-plane/cmd/licensegen/main_test.go	-
+task	04	feat(授权): 新签 JJDGuard 产品码并兼容旧许可证	required	apps/control-plane/internal/handler/license.go	-
+task	04	feat(授权): 新签 JJDGuard 产品码并兼容旧许可证	required	apps/control-plane/internal/handler/license_test.go	-
+task	04	feat(授权): 新签 JJDGuard 产品码并兼容旧许可证	required	apps/control-plane/internal/license/e2e_renewal_test.go	-
+task	04	feat(授权): 新签 JJDGuard 产品码并兼容旧许可证	required	apps/control-plane/internal/license/license.go	-
+task	04	feat(授权): 新签 JJDGuard 产品码并兼容旧许可证	required	apps/control-plane/internal/license/license_test.go	-
+task	04	feat(授权): 新签 JJDGuard 产品码并兼容旧许可证	required	apps/control-plane/internal/license/testdata/e2e_jjdguard_license.json	-
+task	04	feat(授权): 新签 JJDGuard 产品码并兼容旧许可证	required	deploy/docker-compose/package-offline-bundle.sh	-
+task	04	feat(授权): 新签 JJDGuard 产品码并兼容旧许可证	required	deploy/tests/test_offline_release_hardening.sh	-
+task	05	feat(密钥): 新 API Key 改用 jjd 前缀	required	apps/control-plane/internal/handler/handler.go	-
+task	05	feat(密钥): 新 API Key 改用 jjd 前缀	required	apps/control-plane/internal/handler/proxy_key_rotation_test.go	-
+task	05	feat(密钥): 新 API Key 改用 jjd 前缀	required	apps/control-plane/internal/repository/key_test.go	-
+task	05	feat(密钥): 新 API Key 改用 jjd 前缀	required	apps/gateway-core/internal/auth/auth_test.go	-
+task	05	feat(密钥): 新 API Key 改用 jjd 前缀	required	packages/shared-go/authhelpers/authhelpers.go	-
+task	05	feat(密钥): 新 API Key 改用 jjd 前缀	required	packages/shared-go/authhelpers/authhelpers_test.go	-
+task	06	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	.gitignore	-
+task	06	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	.gitleaks.toml	-
+task	06	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	AGENTS.md	-
+task	06	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	CLAUDE.md	-
+task	06	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	README.md	-
+task	06	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	apps/control-plane/internal/repository/ca_certificates.go	-
+task	06	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	apps/control-plane/internal/repository/ca_subject.go	-
+task	06	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	apps/control-plane/internal/repository/ca_subject_test.go	-
+task	06	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	apps/proxy-server/internal/handler/ca_manager.go	-
+task	06	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	apps/proxy-server/internal/handler/ca_manager_test.go	-
+task	06	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	apps/security-engine/app/main.py	-
+task	06	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	apps/security-engine/pyproject.toml	-
+task	06	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	apps/security-engine/tests/test_api.py	-
+task	06	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	apps/worker/internal/config/config_test.go	-
+task	06	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	deploy/docker-compose/deploy-offline.sh	-
+task	06	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	deploy/docker-compose/package-offline-bundle.sh	-
+task	06	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	deploy/docker-compose/verify-jjdguard-offline-archive.sh	-
+task	06	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	deploy/migrations/jjdguard-neutral-baseline-manifest.tsv	-
+task	06	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	deploy/migrations/prepare-jjdguard-neutral-baseline.sh	-
+task	06	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	deploy/migrations/sign-jjdguard-customer-neutral-result.sh	-
+task	06	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	deploy/seeds/seed_data.sql	-
+task	06	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	deploy/tests/test_jjdguard_customer_neutral_evidence.sh	-
+task	06	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	deploy/tests/test_jjdguard_neutral_baseline.sh	-
+task	06	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	deploy/tests/test_jjdguard_offline_archive_trust.sh	-
+task	06	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	deploy/tests/test_offline_release_hardening.sh	-
+task	06	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	packages/shared-go/eventbus/publisher_test.go	-
+task	06	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	scripts/harness/preflight.sh	-
+task	06	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	scripts/harness/verify.sh	-
+task	06	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	scripts/run_tests.sh	-
+task	06	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	scripts/security/README.md	-
+task	06	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	scripts/tests/fixtures/expected-plan1-deferred-legacy-files.txt	-
+task	06	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	scripts/tests/test_active_brand_contract.sh	-
+task	06	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	tests/e2e/README.md	-
+task	06	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	tests/e2e/lib/browser.py	-
+task	06	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	tests/e2e/pyproject.toml	-
+task	06	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	tests/e2e/run_browser_in_docker.sh	-
+task	06	fix(品牌): 收口活动面并交付兼容数据库迁移器	required	tests/performance/README.md	-

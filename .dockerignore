@@ -1,0 +1,9 @@
+.git
+**/.git
+**/node_modules
+**/dist
+**/.cache
+**/coverage
+**/.pytest_cache
+deploy/docker-compose/.env
+deploy/docker-compose/*.env

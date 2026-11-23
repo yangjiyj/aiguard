@@ -1,0 +1,59 @@
+{
+  "id": "provider-iflytek",
+  "name": "科大讯飞",
+  "vendor": "科大讯飞",
+  "catalog_entries": [
+    {
+      "id": "spark",
+      "provider": "iflytek",
+      "provider_cn": "科大讯飞",
+      "product": "spark",
+      "product_cn": "讯飞星火",
+      "category": "chat",
+      "region": "cn",
+      "domains": [
+        "xinghuo.xfyun.cn",
+        "*.xinghuo.xfyun.cn"
+      ],
+      "path_rules": [
+        "/",
+        "/chat",
+        "contains:/chat",
+        "contains:/message",
+        "contains:/conversation",
+        "contains:/completion"
+      ],
+      "request_decoder": "spark_web",
+      "response_decoder": "spark_web",
+      "retain_level": "content",
+      "risk_profile": "llm_web",
+      "enabled": true,
+      "priority": 95,
+      "source_url": "https://xinghuo.xfyun.cn/"
+    },
+    {
+      "id": "spark_api",
+      "provider": "iflytek",
+      "provider_cn": "科大讯飞",
+      "product": "spark_api",
+      "product_cn": "讯飞星火 API",
+      "category": "api",
+      "region": "cn",
+      "domains": [
+        "spark-api.xf-yun.com",
+        "global.xfyun.cn"
+      ],
+      "path_rules": [
+        "/"
+      ],
+      "request_decoder": "spark",
+      "response_decoder": "spark",
+      "retain_level": "content",
+      "risk_profile": "llm_api",
+      "enabled": true,
+      "priority": 80,
+      "source_url": "https://global.xfyun.cn/"
+    }
+  ],
+  "agent_definitions": []
+}

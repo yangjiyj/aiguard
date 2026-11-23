@@ -1,0 +1,30 @@
+{
+  "id": "provider-midjourney",
+  "name": "Midjourney",
+  "vendor": "Midjourney",
+  "catalog_entries": [
+    {
+      "id": "midjourney",
+      "provider": "midjourney",
+      "provider_cn": "Midjourney",
+      "product": "midjourney",
+      "product_cn": "Midjourney",
+      "category": "image",
+      "region": "global",
+      "domains": [
+        "midjourney.com"
+      ],
+      "path_rules": [
+        "/"
+      ],
+      "request_decoder": "image_web",
+      "response_decoder": "image_web",
+      "retain_level": "summary",
+      "risk_profile": "image_ai",
+      "enabled": true,
+      "priority": 50,
+      "source_url": "https://www.midjourney.com/"
+    }
+  ],
+  "agent_definitions": []
+}

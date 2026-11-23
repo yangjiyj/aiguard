@@ -1,0 +1,35 @@
+{
+  "id": "provider-inflection",
+  "name": "Inflection",
+  "vendor": "Inflection",
+  "catalog_entries": [
+    {
+      "id": "pi",
+      "provider": "inflection",
+      "provider_cn": "Inflection",
+      "product": "pi",
+      "product_cn": "Pi",
+      "category": "chat",
+      "region": "global",
+      "domains": [
+        "pi.ai",
+        "www.pi.ai"
+      ],
+      "path_rules": [
+        "/",
+        "/talk",
+        "contains:/chat",
+        "contains:/message",
+        "contains:/conversation"
+      ],
+      "request_decoder": "pi_web",
+      "response_decoder": "pi_web",
+      "retain_level": "content",
+      "risk_profile": "llm_web",
+      "enabled": true,
+      "priority": 60,
+      "source_url": "https://pi.ai/"
+    }
+  ],
+  "agent_definitions": []
+}

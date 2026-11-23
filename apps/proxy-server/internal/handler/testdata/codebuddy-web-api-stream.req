@@ -1,0 +1,1 @@
+{"ManagerName":"ThreadRunnerManager","MethodName":"SendUserMessageAndRun","Parameters":[{"ThreadId":"76ecd9cc-1e93-410a-a12d-fb4ac00ab924","ClientMessageId":"a4743edc-714e-4a0e-8158-3ecb75acd3c6","Content":"GWTEST-R2-0621-1531-CodeBuddy-01 用一句话介绍你自己","Attachments":[],"Model":"gpt-5.4","ReasoningEffort":"low","Verbosity":null}]}

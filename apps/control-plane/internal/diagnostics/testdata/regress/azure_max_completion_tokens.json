@@ -1,0 +1,100 @@
+{
+  "name": "azure_max_completion_tokens",
+  "description": "Azure 新模型不接受 max_tokens，要求 max_completion_tokens",
+  "fixture": {
+    "providers": [
+      {
+        "key": "aoai",
+        "name": "AOAI",
+        "type": "azure",
+        "base_url": "https://corp-aoai.openai.azure.example.com"
+      }
+    ],
+    "models": [
+      {
+        "key": "sol",
+        "provider": "aoai",
+        "name": "gpt-6.1-sol"
+      }
+    ],
+    "users": [
+      {
+        "key": "u1",
+        "username": "corp_dev"
+      }
+    ],
+    "internal_keys": [
+      {
+        "key": "k1",
+        "user": "u1"
+      }
+    ],
+    "request_logs": [
+      {
+        "label": "err",
+        "count": 8,
+        "user": "u1",
+        "key": "k1",
+        "provider": "aoai",
+        "model": "sol",
+        "endpoint_type": "chat_completions",
+        "status": "provider_error",
+        "upstream_status": 400,
+        "from": "-55m",
+        "to": "-5m",
+        "hint": "Unsupported parameter: 'max_tokens' is not supported with this model. Use 'max_completion_tokens' instead.",
+        "upstream_error_code": "unsupported_parameter",
+        "error_message": "Unsupported parameter: 'max_tokens' is not supported with this model. Use 'max_completion_tokens' instead."
+      }
+    ]
+  },
+  "input": {
+    "kind": "request",
+    "ref": "@err:3",
+    "scope": "admin"
+  },
+  "expect": {
+    "tier": "L2",
+    "must_check_ids_any": [
+      "up_param"
+    ],
+    "must_keywords_any": [
+      "max_tokens",
+      "不兼容"
+    ],
+    "must_keywords": [
+      "网关转发与该上游不兼容"
+    ],
+    "must_level": {
+      "up_param": "confirmed"
+    },
+    "forbid_keywords": [
+      "限流",
+      "欠费"
+    ],
+    "l3": {
+      "must_keywords_any": [
+        "max_tokens",
+        "max_completion_tokens",
+        "参数"
+      ],
+      "must_keywords_any2": [
+        "不兼容",
+        "诊断包",
+        "联系厂商"
+      ],
+      "level_by_kw": [
+        {
+          "kw": [
+            "参数",
+            "不兼容"
+          ],
+          "level": "confirmed"
+        }
+      ],
+      "forbid_keywords": [
+        "欠费"
+      ]
+    }
+  }
+}

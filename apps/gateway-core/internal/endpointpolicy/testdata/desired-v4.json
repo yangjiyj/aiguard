@@ -1,0 +1,135 @@
+{
+  "allowlists": {},
+  "checksum": "sha256:045fa8b4d73859cb9ce7e2cd722be6a09c680dd2dd076287f6ad5b63af594ff2",
+  "derived_from": {
+    "agentguard_policy_version": "1:agp_4ba73d82:9ba268d4535072f9",
+    "tool_risk_config_version": "count:0;sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "generated_at": "2026-09-25T03:51:56.713844651Z",
+  "mode_default": "monitor",
+  "rules": [
+    {
+      "decision": "confirm",
+      "enabled": true,
+      "id": "builtin_destructive_rm",
+      "match": {
+        "command_regex": "(?i)(?:^|[;&|]\\s*)rm\\s+(?:-[a-z]*r[a-z]*\\s+)+/(?:\\s|$|\\*)",
+        "tool_type": "system"
+      },
+      "risk": "high"
+    },
+    {
+      "decision": "confirm",
+      "enabled": true,
+      "id": "builtin_destructive_system",
+      "match": {
+        "command_regex": "(?i)(?:^|[;&|]\\s*)(?:mkfs(?:\\.[a-z0-9]+)?|shutdown|reboot)(?:\\s|$)",
+        "tool_type": "system"
+      },
+      "risk": "high"
+    },
+    {
+      "decision": "confirm",
+      "enabled": true,
+      "id": "builtin_destructive_dd",
+      "match": {
+        "command_regex": "(?i)(?:^|[;&|]\\s*)dd\\s+[^;&|]*\\bof=/dev/",
+        "tool_type": "system"
+      },
+      "risk": "high"
+    },
+    {
+      "decision": "confirm",
+      "enabled": true,
+      "id": "builtin_secret_arguments",
+      "match": {
+        "args_secret_pattern": true
+      },
+      "risk": "high"
+    },
+    {
+      "decision": "confirm",
+      "enabled": true,
+      "id": "builtin_ssh_authorized_keys",
+      "match": {
+        "path_glob": [
+          "**/.ssh/authorized_keys",
+          "~/.ssh/authorized_keys"
+        ],
+        "tool_type": "file"
+      },
+      "risk": "high"
+    },
+    {
+      "decision": "confirm",
+      "enabled": true,
+      "id": "builtin_ssh_private_keys",
+      "match": {
+        "path_glob": [
+          "**/.ssh/id_*",
+          "~/.ssh/id_*"
+        ],
+        "tool_type": "file"
+      },
+      "risk": "high"
+    },
+    {
+      "decision": "confirm",
+      "enabled": true,
+      "id": "builtin_env_files",
+      "match": {
+        "path_glob": [
+          "**/.env",
+          "**/.env.*",
+          ".env",
+          ".env.*"
+        ],
+        "tool_type": "file"
+      },
+      "risk": "high"
+    },
+    {
+      "decision": "confirm",
+      "enabled": true,
+      "id": "builtin_curl_file_egress",
+      "match": {
+        "command_regex": "(?i)(?:^|[;&|]\\s*)curl\\s+[^;&|]*(?:-d|--data|--data-binary|--data-raw|--data-urlencode)\\s+['\"]?@[^\\s;&|]+",
+        "tool_type": "system"
+      },
+      "risk": "high"
+    },
+    {
+      "decision": "block",
+      "enabled": true,
+      "id": "src_13f545bcccc425b51e7e3e69e3d0f767",
+      "match": {
+        "tool_name_regex": "(?i)^t04policyfixture$"
+      },
+      "risk": "medium"
+    }
+  ],
+  "schema_version": "1.0",
+  "secret_patterns": [
+    {
+      "kind": "aws_access_key_id",
+      "regex": "\\b(?:AKIA|ASIA)[A-Z0-9]{16}\\b"
+    },
+    {
+      "kind": "private_key",
+      "regex": "-----BEGIN [A-Z ]*PRIVATE KEY-----"
+    },
+    {
+      "kind": "github_token",
+      "regex": "\\bgh[pousr]_[A-Za-z0-9_]{36,}\\b"
+    },
+    {
+      "kind": "openai_api_key",
+      "regex": "\\bsk-[A-Za-z0-9_-]{32,}\\b"
+    },
+    {
+      "kind": "canary_token",
+      "regex": "\\bcanary-[A-Za-z0-9_-]*(?:token|secret|credential)[A-Za-z0-9_-]*\\b"
+    }
+  ],
+  "version": 4
+}

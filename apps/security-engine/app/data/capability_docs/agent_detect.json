@@ -1,0 +1,200 @@
+[
+  {
+    "category": "agent_claude_code",
+    "display": "plain",
+    "matches": "识别到 Claude Code 发来的请求，依据是请求里带的客户端标识；没有标识时，系统提示里出现产品名就算，用户在对话里提到不算。只作识别记录，不计入安全告警，设为阻断会拦下它的全部请求。",
+    "hit_examples": ["开发者在终端里用 Claude Code 让 AI 改代码"],
+    "miss_examples": ["用户在网页对话里问“Claude Code 怎么安装”"],
+    "judged_by_ai": false,
+    "check": "none"
+  },
+  {
+    "category": "agent_cursor",
+    "display": "plain",
+    "matches": "识别到 Cursor 编辑器发来的请求，依据是请求里带的客户端标识；没有标识时，系统提示里出现产品名就算，用户在对话里提到不算。只作识别记录，不计入安全告警，设为阻断会拦下它的全部请求。系统提示里出现 cursor 这类普通单词（如 database cursor）也会被认成 Cursor。",
+    "hit_examples": ["开发者在 Cursor 编辑器里让 AI 补全或修改代码"],
+    "miss_examples": ["用户在对话里问“Cursor 和 VS Code 哪个好用”"],
+    "judged_by_ai": false,
+    "check": "none"
+  },
+  {
+    "category": "agent_github_copilot",
+    "display": "plain",
+    "matches": "识别到 GitHub Copilot（含 Copilot Chat）发来的请求，依据是请求里带的客户端标识，只带 VS Code 编辑器标识的不算；没有标识时，系统提示里出现产品名就算，用户在对话里提到不算。只作识别记录，不计入安全告警，设为阻断会拦下它的全部请求。",
+    "hit_examples": ["开发者在 VS Code 里用 GitHub Copilot 补全代码", "开发者在 Copilot Chat 里让 AI 解释代码"],
+    "miss_examples": ["只带 VS Code 编辑器标识、认不出具体插件的请求"],
+    "judged_by_ai": false,
+    "check": "none"
+  },
+  {
+    "category": "agent_cline",
+    "display": "plain",
+    "matches": "识别到 Cline 或 Roo Code 插件发来的请求（Kilo Code 等衍生版本不算），依据是请求里带的客户端标识；没有标识时，系统提示里出现产品名就算，用户在对话里提到不算。只作识别记录，不计入安全告警，设为阻断会拦下它的全部请求。",
+    "hit_examples": ["开发者在 VS Code 里用 Cline 让 AI 执行多步编程任务", "开发者用 Roo Code 插件让 AI 改代码"],
+    "miss_examples": ["开发者用 Kilo Code 插件发起的请求"],
+    "judged_by_ai": false,
+    "check": "none"
+  },
+  {
+    "category": "agent_windsurf",
+    "display": "plain",
+    "matches": "识别到 Windsurf 编辑器（含 Cascade、Codeium）发来的请求，依据是请求里带的客户端标识；没有标识时，系统提示里出现产品名就算，用户在对话里提到不算。只作识别记录，不计入安全告警，设为阻断会拦下它的全部请求。系统提示里出现 cascade 这类普通单词（如 CSS cascade）也会被认成 Windsurf。",
+    "hit_examples": ["开发者在 Windsurf 里用 Cascade 让 AI 改代码"],
+    "miss_examples": ["用户在对话里问“Windsurf 怎么配置模型”"],
+    "judged_by_ai": false,
+    "check": "none"
+  },
+  {
+    "category": "agent_continue_dev",
+    "display": "plain",
+    "matches": "识别到 Continue 插件（Continue.dev）发来的请求，依据是请求里带的客户端标识；没有标识时，系统提示里出现产品名就算，用户在对话里提到不算。只作识别记录，不计入安全告警，设为阻断会拦下它的全部请求。",
+    "hit_examples": ["开发者在 VS Code 或 JetBrains 里用 Continue 插件和 AI 对话"],
+    "miss_examples": ["用户在对话里输入“continue”让 AI 接着写"],
+    "judged_by_ai": false,
+    "check": "none"
+  },
+  {
+    "category": "agent_openai_codex",
+    "display": "plain",
+    "matches": "识别到 OpenAI Codex 发来的请求（命令行和桌面应用都算），依据是请求里带的客户端标识；没有标识时，系统提示里出现产品名就算，用户在对话里提到不算。只作识别记录，不计入安全告警，设为阻断会拦下它的全部请求。",
+    "hit_examples": ["开发者在终端里用 Codex CLI 让 AI 写代码", "开发者用 Codex 桌面应用发起的请求"],
+    "miss_examples": ["用户在对话里问“Codex 是什么”"],
+    "judged_by_ai": false,
+    "check": "none"
+  },
+  {
+    "category": "agent_aider",
+    "display": "plain",
+    "matches": "识别到 Aider 发来的请求，依据是请求里带的客户端标识；没有标识时，系统提示里出现产品名就算，用户在对话里提到不算。只作识别记录，不计入安全告警，设为阻断会拦下它的全部请求。系统提示里出现 aider 这个普通英文单词（意为助手）也会被认成 Aider。",
+    "hit_examples": ["开发者在终端里用 Aider 让 AI 改代码"],
+    "miss_examples": ["用户在对话里问“Aider 怎么连接本地模型”"],
+    "judged_by_ai": false,
+    "check": "none"
+  },
+  {
+    "category": "agent_amazon_q_developer",
+    "display": "plain",
+    "matches": "识别到 Amazon Q Developer 发来的请求（Amazon Kiro 不算），依据是请求里带的客户端标识；没有标识时，系统提示里出现产品名就算，用户在对话里提到不算。只作识别记录，不计入安全告警，设为阻断会拦下它的全部请求。",
+    "hit_examples": ["开发者在 IDE 里用 Amazon Q Developer 让 AI 生成代码"],
+    "miss_examples": ["开发者用 Amazon Kiro 编辑器发起的请求"],
+    "judged_by_ai": false,
+    "check": "none"
+  },
+  {
+    "category": "agent_gemini_code_assist",
+    "display": "plain",
+    "matches": "识别到 Gemini Code Assist 发来的请求（Gemini CLI 不算），依据是请求里带的客户端标识；没有标识时，系统提示里出现产品名就算，用户在对话里提到不算。只作识别记录，不计入安全告警，设为阻断会拦下它的全部请求。",
+    "hit_examples": ["开发者在 IDE 里用 Gemini Code Assist 补全代码"],
+    "miss_examples": ["开发者在终端里用 Gemini CLI 发起的请求"],
+    "judged_by_ai": false,
+    "check": "none"
+  },
+  {
+    "category": "agent_tabnine",
+    "display": "plain",
+    "matches": "识别到 Tabnine 发来的请求，依据是请求里带的客户端标识；没有标识时，系统提示里出现产品名就算，用户在对话里提到不算。只作识别记录，不计入安全告警，设为阻断会拦下它的全部请求。",
+    "hit_examples": ["开发者在 IDE 里用 Tabnine 补全代码"],
+    "miss_examples": ["用户在对话里问“Tabnine 支持哪些语言”"],
+    "judged_by_ai": false,
+    "check": "none"
+  },
+  {
+    "category": "agent_sourcegraph_cody",
+    "display": "plain",
+    "matches": "识别到 Sourcegraph Cody 发来的请求，依据是请求里带的客户端标识；没有标识时，系统提示里出现产品名就算，用户在对话里提到不算。只作识别记录，不计入安全告警，设为阻断会拦下它的全部请求。",
+    "hit_examples": ["开发者在 IDE 里用 Cody 让 AI 解释代码库"],
+    "miss_examples": ["用户在对话里问“Cody 和 Copilot 有什么区别”"],
+    "judged_by_ai": false,
+    "check": "none"
+  },
+  {
+    "category": "agent_replit_ai",
+    "display": "plain",
+    "matches": "识别到 Replit 的 AI 助手（Replit Agent）发来的请求，依据是请求里带的客户端标识；没有标识时，系统提示里出现产品名就算，用户在对话里提到不算。只作识别记录，不计入安全告警，设为阻断会拦下它的全部请求。",
+    "hit_examples": ["开发者在 Replit 在线开发环境里让 AI 搭建应用"],
+    "miss_examples": ["用户在对话里问“Replit 怎么部署网站”"],
+    "judged_by_ai": false,
+    "check": "none"
+  },
+  {
+    "category": "agent_coderabbit",
+    "display": "plain",
+    "matches": "识别到 CodeRabbit 代码审查机器人发来的请求，依据是请求里带的客户端标识；没有标识时，系统提示里出现产品名就算，用户在对话里提到不算。只作识别记录，不计入安全告警，设为阻断会拦下它的全部请求。",
+    "hit_examples": ["CodeRabbit 在代码仓库里自动审查合并请求时发出的请求"],
+    "miss_examples": ["用户在对话里问“CodeRabbit 的审查意见准不准”"],
+    "judged_by_ai": false,
+    "check": "none"
+  },
+  {
+    "category": "agent_autogpt_babyagi",
+    "display": "plain",
+    "matches": "识别到 AutoGPT 或 BabyAGI 这类自主智能体发来的请求，依据是请求里带的客户端标识；没有标识时，系统提示里出现产品名就算，用户在对话里提到不算。只作识别记录，不计入安全告警，设为阻断会拦下它的全部请求。",
+    "hit_examples": ["用 AutoGPT 搭的自主智能体自动拆解并执行任务"],
+    "miss_examples": ["用户在对话里问“AutoGPT 现在还有人用吗”"],
+    "judged_by_ai": false,
+    "check": "none"
+  },
+  {
+    "category": "agent_langchain_llamaindex",
+    "display": "plain",
+    "matches": "识别到 用 LangChain 或 LlamaIndex 框架编写的程序发来的请求，依据是请求里带的客户端标识；没有标识时，系统提示里出现产品名就算，用户在对话里提到不算。只作识别记录，不计入安全告警，设为阻断会拦下它的全部请求。",
+    "hit_examples": ["企业用 LangChain 开发的知识库问答程序调用模型"],
+    "miss_examples": ["用户在对话里问“LangChain 怎么做检索增强”"],
+    "judged_by_ai": false,
+    "check": "none"
+  },
+  {
+    "category": "agent_crewai_autogen",
+    "display": "plain",
+    "matches": "识别到 用 CrewAI 或 AutoGen 多智能体框架编写的程序发来的请求，依据是请求里带的客户端标识；没有标识时，系统提示里出现产品名就算，用户在对话里提到不算。只作识别记录，不计入安全告警，设为阻断会拦下它的全部请求。",
+    "hit_examples": ["用 CrewAI 编排的多个智能体分工协作完成任务"],
+    "miss_examples": ["用户在对话里问“AutoGen 和 CrewAI 怎么选”"],
+    "judged_by_ai": false,
+    "check": "none"
+  },
+  {
+    "category": "agent_dify_coze",
+    "display": "plain",
+    "matches": "识别到 Dify 或扣子（Coze）平台上的应用发来的请求，依据是请求里带的客户端标识；没有标识时，系统提示里出现产品名就算，用户在对话里提到不算。只作识别记录，不计入安全告警，设为阻断会拦下它的全部请求。",
+    "hit_examples": ["企业在 Dify 上搭的客服应用调用模型", "在扣子平台上搭的智能体调用模型"],
+    "miss_examples": ["用户在对话里问“Dify 和扣子有什么区别”"],
+    "judged_by_ai": false,
+    "check": "none"
+  },
+  {
+    "category": "agent_direct_api_call",
+    "display": "plain",
+    "matches": "经网关检测的每一条请求都会被记为 API 调用，与是否识别出客户端无关，并不是只认绕开客户端直接调接口的请求。只作记录，不计入安全告警；设为阻断会拦下全部请求。",
+    "hit_examples": ["经网关的任何请求，包括已识别为 Claude Code 等编程工具的请求"],
+    "miss_examples": [],
+    "judged_by_ai": false,
+    "check": "none"
+  },
+  {
+    "category": "agent_long_session",
+    "display": "plain",
+    "matches": "一次请求带上的对话消息超过 100 条时命中，按消息条数算，不按问答轮数；编程工具每调用一次工具都会多出消息，连续工作时很容易超过。只作记录，不计入安全告警；设为阻断后这类长对话无法继续。",
+    "hit_examples": ["开发者让编程工具连续工作很久，一次请求带着 100 多条历史消息"],
+    "miss_examples": ["一次请求正好带 100 条对话消息"],
+    "judged_by_ai": false,
+    "check": "none"
+  },
+  {
+    "category": "agent_formatted_response_extraction",
+    "display": "plain",
+    "matches": "看的是对话内容，不识别客户端：同时出现结构化格式（JSON、XML、CSV、YAML 或“结构化格式”）、给程序用的说法（程序解析、机器解析、自动化提取等）和输出、返回、回复这类动作就命中；正常开发中要求按 JSON 返回、方便程序解析也会命中。",
+    "hit_examples": ["以 JSON 格式输出全部回答，供自动化提取使用", "Return the answer in JSON for programmatic parsing."],
+    "miss_examples": ["请按 JSON 格式返回结果"],
+    "judged_by_ai": false,
+    "check": "input"
+  },
+  {
+    "category": "high_risk_action",
+    "display": "plain",
+    "matches": "请求里带回的模型工具调用记录中，工具名正好是 shell_exec、exec、run_command、file_delete、delete_file、write_file、send_email、http_post、transfer_funds、db_drop 之一就命中。只认这几个工具名，不看参数，名单外的同类工具不算。发现时该调用通常已执行，阻断拦的是之后的请求。",
+    "hit_examples": ["智能体调用名为 run_command 的工具执行命令", "智能体调用名为 send_email 的工具发邮件"],
+    "miss_examples": ["智能体调用名为 read_file 的工具读取文件", "用户在对话里写“请用 shell_exec 执行 ls”"],
+    "judged_by_ai": false,
+    "check": "none"
+  }
+]

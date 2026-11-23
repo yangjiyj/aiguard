@@ -1,0 +1,188 @@
+name: jjdguard-directory-sim
+
+services:
+  ldap-cert-init:
+    image: osixia/openldap:1.5.0
+    entrypoint: ["/bin/sh", "-ec"]
+    command:
+      - |
+        if [ ! -s /certs/ldap.crt ] || [ ! -s /certs/ldap.key ]; then
+          umask 077
+          openssl req -x509 -newkey rsa:2048 -nodes -days 365 -addext "subjectAltName=DNS:ldap-sim.jjdguard.test" -subj "/CN=ldap-sim.jjdguard.test" -keyout /certs/ldap.key -out /certs/ldap.crt
+          cp /certs/ldap.crt /certs/ca.crt
+        fi
+    volumes:
+      - ldap-certs:/certs
+
+  ldap:
+    image: osixia/openldap:1.5.0
+    hostname: ldap-sim.jjdguard.test
+    restart: unless-stopped
+    environment:
+      LDAP_ORGANISATION: JJDGuard-Simulation
+      LDAP_DOMAIN: jjdguard.test
+      LDAP_ADMIN_PASSWORD: "${LDAP_BIND_PASSWORD:?LDAP_BIND_PASSWORD is required}"
+      LDAP_TLS: "true"
+      LDAP_TLS_CRT_FILENAME: ldap.crt
+      LDAP_TLS_KEY_FILENAME: ldap.key
+      LDAP_TLS_CA_CRT_FILENAME: ca.crt
+      LDAP_TLS_VERIFY_CLIENT: never
+    depends_on:
+      ldap-cert-init:
+        condition: service_completed_successfully
+    volumes:
+      - ldap-data:/var/lib/ldap
+      - ldap-config:/etc/ldap/slapd.d
+      - ldap-certs:/container/service/slapd/assets/certs
+    networks:
+      directory-sim:
+        aliases: [ldap-sim.jjdguard.test]
+    healthcheck:
+      test: ["CMD-SHELL", "ldapsearch -x -H ldaps://localhost:636 -D cn=admin,dc=jjdguard,dc=test -w \"$${LDAP_ADMIN_PASSWORD}\" -b dc=jjdguard,dc=test -s base >/dev/null"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 15s
+
+  ldap-seed:
+    image: osixia/openldap:1.5.0
+    depends_on:
+      ldap:
+        condition: service_healthy
+    environment:
+      LDAPTLS_CACERT: /certs/ca.crt
+      LDAPTLS_CERT: /certs/ldap.crt
+      LDAPTLS_KEY: /certs/ldap.key
+      LDAP_BIND_PASSWORD: "${LDAP_BIND_PASSWORD:?LDAP_BIND_PASSWORD is required}"
+      LDAP_ALICE_PASSWORD: "${LDAP_ALICE_PASSWORD:?LDAP_ALICE_PASSWORD is required}"
+      LDAP_BOB_PASSWORD: "${LDAP_BOB_PASSWORD:?LDAP_BOB_PASSWORD is required}"
+      LDAP_CAROL_PASSWORD: "${LDAP_CAROL_PASSWORD:?LDAP_CAROL_PASSWORD is required}"
+    volumes:
+      - ldap-certs:/certs:ro
+    entrypoint: ["/bin/sh", "-ec"]
+    command:
+      - |
+        printf 'TLS_CACERT /certs/ca.crt\nTLS_CERT /certs/ldap.crt\nTLS_KEY /certs/ldap.key\n' >/etc/ldap/ldap.conf
+        ldapsearch -x -H ldaps://ldap-sim.jjdguard.test:636 -D cn=admin,dc=jjdguard,dc=test -w "$${LDAP_BIND_PASSWORD}" -b uid=alice,ou=People,dc=jjdguard,dc=test -s base >/dev/null 2>&1 && exit 0
+        ldapadd -x -H ldaps://ldap-sim.jjdguard.test:636 -D cn=admin,dc=jjdguard,dc=test -w "$${LDAP_BIND_PASSWORD}" <<LDIF
+        dn: ou=People,dc=jjdguard,dc=test
+        objectClass: organizationalUnit
+        ou: People
+
+        dn: ou=Groups,dc=jjdguard,dc=test
+        objectClass: organizationalUnit
+        ou: Groups
+
+        dn: ou=Disabled,dc=jjdguard,dc=test
+        objectClass: organizationalUnit
+        ou: Disabled
+
+        dn: uid=alice,ou=People,dc=jjdguard,dc=test
+        objectClass: inetOrgPerson
+        cn: Alice Operator
+        givenName: Alice
+        sn: Operator
+        uid: alice
+        mail: alice@jjdguard.test
+        userPassword: $${LDAP_ALICE_PASSWORD}
+
+        dn: uid=bob,ou=People,dc=jjdguard,dc=test
+        objectClass: inetOrgPerson
+        cn: Bob Auditor
+        givenName: Bob
+        sn: Auditor
+        uid: bob
+        mail: bob@jjdguard.test
+        userPassword: $${LDAP_BOB_PASSWORD}
+
+        dn: uid=carol,ou=Disabled,dc=jjdguard,dc=test
+        objectClass: inetOrgPerson
+        cn: Carol Disabled
+        givenName: Carol
+        sn: Disabled
+        uid: carol
+        mail: carol@jjdguard.test
+        userPassword: $${LDAP_CAROL_PASSWORD}
+
+        dn: cn=jjdguard-operators,ou=Groups,dc=jjdguard,dc=test
+        objectClass: groupOfNames
+        cn: jjdguard-operators
+        member: uid=alice,ou=People,dc=jjdguard,dc=test
+
+        dn: cn=jjdguard-auditors,ou=Groups,dc=jjdguard,dc=test
+        objectClass: groupOfNames
+        cn: jjdguard-auditors
+        member: uid=bob,ou=People,dc=jjdguard,dc=test
+        LDIF
+    networks: [directory-sim]
+
+  ad:
+    image: docker.1ms.run/nowsci/samba-domain:20260701025204
+    profiles: ["ad"]
+    hostname: dc-sim
+    cap_add:
+      - SYS_ADMIN
+    environment:
+      DOMAIN: ad.jjdguard.test
+      DOMAINPASS: "${AD_DOMAIN_ADMIN_PASSWORD:?AD_DOMAIN_ADMIN_PASSWORD is required}"
+      HOSTIP: 172.30.0.10
+      INSECURELDAP: "false"
+      NOCOMPLEXITY: "true"
+    volumes:
+      - ad-data:/var/lib/samba
+      - ad-config:/etc/samba/external
+    networks:
+      directory-sim:
+        aliases:
+          - dc-sim.ad.jjdguard.test
+        ipv4_address: 172.30.0.10
+
+  oidc-idp:
+    image: docker.1ms.run/keycloak/keycloak:26.3
+    hostname: oidc-sim
+    restart: unless-stopped
+    command: ["start-dev", "--http-port=${UPSTREAM_OIDC_PORT:-8380}", "--import-realm"]
+    ports:
+      - "${UPSTREAM_OIDC_BIND:?UPSTREAM_OIDC_BIND is required}:${UPSTREAM_OIDC_PORT:-8380}:${UPSTREAM_OIDC_PORT:-8380}"
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: "${UPSTREAM_OIDC_ADMIN_USERNAME:-admin}"
+      KC_BOOTSTRAP_ADMIN_PASSWORD: "${UPSTREAM_OIDC_ADMIN_PASSWORD:?UPSTREAM_OIDC_ADMIN_PASSWORD is required}"
+      KC_HOSTNAME: "${UPSTREAM_OIDC_ORIGIN:?UPSTREAM_OIDC_ORIGIN is required}"
+      KC_HTTP_ENABLED: "true"
+      KC_HEALTH_ENABLED: "true"
+      KC_METRICS_ENABLED: "false"
+      UPSTREAM_OIDC_CLIENT_SECRET: "${UPSTREAM_OIDC_CLIENT_SECRET:?UPSTREAM_OIDC_CLIENT_SECRET is required}"
+      UPSTREAM_OIDC_TEST_PASSWORD: "${UPSTREAM_OIDC_TEST_PASSWORD:?UPSTREAM_OIDC_TEST_PASSWORD is required}"
+      JJDGUARD_ENTERPRISE_CALLBACK: "${JJDGUARD_ENTERPRISE_CALLBACK:?JJDGUARD_ENTERPRISE_CALLBACK is required}"
+      JJDGUARD_SSO_ORIGIN: "${JJDGUARD_SSO_ORIGIN:?JJDGUARD_SSO_ORIGIN is required}"
+    volumes:
+      - ./realm-enterprise-test.json:/opt/keycloak/data/import/realm-enterprise-test.json:ro
+      - oidc-data:/opt/keycloak/data
+    networks:
+      directory-sim:
+        aliases: ["${UPSTREAM_OIDC_HOST:?UPSTREAM_OIDC_HOST is required}"]
+        ipv4_address: 172.30.0.20
+      oidc-publish: {}
+    healthcheck:
+      test: ["CMD-SHELL", "exec 3<>/dev/tcp/127.0.0.1/${UPSTREAM_OIDC_PORT:-8380}"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
+
+networks:
+  directory-sim:
+    internal: true
+    ipam:
+      config:
+        - subnet: 172.30.0.0/24
+  oidc-publish:
+    internal: false
+
+volumes:
+  ldap-certs:
+  ldap-data:
+  ldap-config:
+  ad-data:
+  ad-config:
+  oidc-data:

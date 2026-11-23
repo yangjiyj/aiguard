@@ -1,0 +1,76 @@
+.billing-model-distribution {
+  min-height: 260px;
+  max-height: 280px;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  padding-right: 4px;
+}
+
+.billing-model-cost-row {
+  padding: 9px 0;
+}
+
+.billing-model-cost-main {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr) 48px;
+  row-gap: 4px;
+  align-items: center;
+  gap: 4px;
+}
+
+.billing-model-cost-main .ant-btn {
+  justify-self: end;
+}
+
+.billing-model-cost-amount {
+  grid-column: 2;
+  grid-row: 2;
+  justify-self: end;
+}
+
+.billing-model-cost-share {
+  grid-column: 3;
+  grid-row: 2;
+}
+
+.billing-model-cost-rank {
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+}
+
+.billing-model-cost-name {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.billing-model-cost-amount,
+.billing-model-cost-share {
+  white-space: nowrap;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+}
+
+.billing-model-cost-track {
+  height: 4px;
+  margin-top: 6px;
+  margin-left: 24px;
+  border-radius: 2px;
+  background: var(--bg-tertiary);
+  overflow: hidden;
+}
+
+.billing-model-cost-track > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: #1677ff;
+}
+
+.billing-model-cost-details {
+  max-width: min(360px, calc(100vw - 64px));
+  overflow-wrap: anywhere;
+}

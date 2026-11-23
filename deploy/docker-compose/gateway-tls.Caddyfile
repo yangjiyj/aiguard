@@ -1,0 +1,18 @@
+{
+	auto_https off
+	admin off
+}
+
+# 网关 API 的 HTTPS 入口（OpenAI 兼容）。
+# gateway-tls 用 host 网络，Caddy 看到的是客户端真实 IP，
+# 自动透传 X-Forwarded-For 给 gateway-core（需配 TRUSTED_PROXY_CIDRS 信任实际 TCP 对端）。
+:8453 {
+	tls /certs/gateway.crt /certs/gateway.key
+	reverse_proxy {$GATEWAY_CORE_UPSTREAM:127.0.0.1:8080}
+}
+
+# 本地评估模型的 HTTPS 入口（可选，仅本机评估环境用）。
+:8463 {
+	tls /certs/gateway.crt /certs/gateway.key
+	reverse_proxy {$LOCAL_MODEL_UPSTREAM:127.0.0.1:8091}
+}

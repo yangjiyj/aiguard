@@ -1,0 +1,59 @@
+{
+  "id": "provider-xai",
+  "name": "xAI",
+  "vendor": "xAI",
+  "catalog_entries": [
+    {
+      "id": "grok",
+      "provider": "xai",
+      "provider_cn": "xAI",
+      "product": "grok",
+      "product_cn": "Grok",
+      "category": "chat",
+      "region": "global",
+      "domains": [
+        "grok.com",
+        "*.grok.com",
+        "grok.x.ai",
+        "x.ai"
+      ],
+      "path_rules": [
+        "/",
+        "/chat",
+        "contains:/chat",
+        "contains:/message",
+        "contains:/conversation"
+      ],
+      "request_decoder": "grok_web",
+      "response_decoder": "grok_web",
+      "retain_level": "content",
+      "risk_profile": "llm_web",
+      "enabled": true,
+      "priority": 80,
+      "source_url": "https://x.ai/"
+    },
+    {
+      "id": "xai_api",
+      "provider": "xai",
+      "provider_cn": "xAI",
+      "product": "xai_api",
+      "product_cn": "xAI API",
+      "category": "api",
+      "region": "global",
+      "domains": [
+        "api.x.ai"
+      ],
+      "path_rules": [
+        "/v1/"
+      ],
+      "request_decoder": "openai_compatible",
+      "response_decoder": "openai_compatible",
+      "retain_level": "content",
+      "risk_profile": "llm_api",
+      "enabled": true,
+      "priority": 80,
+      "source_url": "https://docs.x.ai/"
+    }
+  ],
+  "agent_definitions": []
+}

@@ -1,0 +1,158 @@
+{
+  "id": "provider-cursor",
+  "name": "Cursor",
+  "vendor": "Cursor",
+  "catalog_entries": [
+    {
+      "id": "cursor_codebase_indexing",
+      "provider": "cursor",
+      "provider_cn": "Cursor",
+      "product": "cursor_codebase_indexing",
+      "product_cn": "Cursor 代码库索引",
+      "category": "coding",
+      "region": "global",
+      "domains": [
+        "repo42.cursor.sh"
+      ],
+      "path_rules": [
+        "/"
+      ],
+      "request_decoder": "cursor_connect_json",
+      "response_decoder": "cursor_stream",
+      "retain_level": "content",
+      "risk_profile": "ai_ide_agent",
+      "enabled": true,
+      "priority": 98,
+      "source_url": "https://cursor.com/docs/enterprise/network-configuration"
+    },
+    {
+      "id": "cursor_agent",
+      "provider": "cursor",
+      "provider_cn": "Cursor",
+      "product": "cursor_agent",
+      "product_cn": "Cursor Agent",
+      "category": "coding",
+      "region": "global",
+      "domains": [
+        "api5.cursor.sh",
+        "agent.api5.cursor.sh",
+        "agentn.api5.cursor.sh"
+      ],
+      "path_rules": [
+        "/",
+        "/aiserver.v1",
+        "/aiserver.v1/"
+      ],
+      "request_decoder": "cursor_connect_json",
+      "response_decoder": "cursor_stream",
+      "retain_level": "content",
+      "risk_profile": "ai_ide_agent",
+      "enabled": true,
+      "priority": 97,
+      "source_url": "https://cursor.com/docs/enterprise/network-configuration"
+    },
+    {
+      "id": "cursor_tab",
+      "provider": "cursor",
+      "provider_cn": "Cursor",
+      "product": "cursor_tab",
+      "product_cn": "Cursor Tab / 代码补全",
+      "category": "coding",
+      "region": "global",
+      "domains": [
+        "api3.cursor.sh",
+        "api4.cursor.sh",
+        "us-asia.gcpp.cursor.sh",
+        "us-eu.gcpp.cursor.sh",
+        "us-only.gcpp.cursor.sh"
+      ],
+      "path_rules": [
+        "/",
+        "/aiserver.v1",
+        "/aiserver.v1/"
+      ],
+      "request_decoder": "cursor_connect_json",
+      "response_decoder": "cursor_stream",
+      "retain_level": "content",
+      "risk_profile": "ai_ide_agent",
+      "enabled": true,
+      "priority": 96,
+      "source_url": "https://cursor.com/docs/enterprise/network-configuration"
+    },
+    {
+      "id": "cursor_api",
+      "provider": "cursor",
+      "provider_cn": "Cursor",
+      "product": "cursor_api",
+      "product_cn": "Cursor API",
+      "category": "coding",
+      "region": "global",
+      "domains": [
+        "api2.cursor.sh",
+        "*.cursor.sh"
+      ],
+      "path_rules": [
+        "/",
+        "/aiserver.v1",
+        "/aiserver.v1/"
+      ],
+      "request_decoder": "cursor_connect_json",
+      "response_decoder": "cursor_stream",
+      "retain_level": "content",
+      "risk_profile": "ai_ide_agent",
+      "enabled": true,
+      "priority": 95,
+      "source_url": "https://cursor.com/docs/enterprise/network-configuration"
+    },
+    {
+      "id": "cursor_marketplace",
+      "provider": "cursor",
+      "provider_cn": "Cursor",
+      "product": "cursor_marketplace",
+      "product_cn": "Cursor 扩展与更新",
+      "category": "software-update",
+      "region": "global",
+      "domains": [
+        "marketplace.cursorapi.com",
+        "*.cursorapi.com",
+        "cursor-cdn.com",
+        "*.cursor-cdn.com",
+        "downloads.cursor.com",
+        "anysphere-binaries.s3.us-east-1.amazonaws.com"
+      ],
+      "path_rules": [
+        "/"
+      ],
+      "request_decoder": "software_update",
+      "response_decoder": "software_update",
+      "retain_level": "summary",
+      "risk_profile": "ai_ide_agent",
+      "enabled": true,
+      "priority": 70,
+      "source_url": "https://cursor.com/docs/enterprise/network-configuration"
+    },
+    {
+      "id": "cursor",
+      "provider": "cursor",
+      "provider_cn": "Cursor",
+      "product": "cursor",
+      "product_cn": "Cursor",
+      "category": "coding",
+      "region": "global",
+      "domains": [
+        "cursor.com"
+      ],
+      "path_rules": [
+        "/"
+      ],
+      "request_decoder": "coding_ai",
+      "response_decoder": "coding_ai",
+      "retain_level": "summary",
+      "risk_profile": "ai_ide_agent",
+      "enabled": true,
+      "priority": 60,
+      "source_url": "https://cursor.com/"
+    }
+  ],
+  "agent_definitions": []
+}

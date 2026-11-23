@@ -1,0 +1,6 @@
+# syntax=docker.1ms.run/docker/dockerfile:1.7@sha256:a57df69d0ea827fb7266491f2813635de6f17269be881f696fbfdf2d83dda33e
+ARG LOCAL_RUNTIME_IMAGE
+
+# The approved home runtime already contains the matching production build.
+# The release builder verifies the application source paths before wrapping it.
+FROM ${LOCAL_RUNTIME_IMAGE}

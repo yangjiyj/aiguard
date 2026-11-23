@@ -1,0 +1,2469 @@
+[
+  {
+    "id": "R001",
+    "tool": "Bash",
+    "arguments": {
+      "command": "DB_PASSWORD=S3cretT01 \\\n  rm -rf /opt/app"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT01"
+    ],
+    "must_contain": [
+      "rm",
+      "/opt/app"
+    ],
+    "note": "其他 类；当前已遮：续行 + 前置赋值（原 T01）"
+  },
+  {
+    "id": "R002",
+    "tool": "Bash",
+    "arguments": {
+      "command": "terraform destroy -auto-approve \\\n  -var \"db_password=S3cretT02\""
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT02"
+    ],
+    "must_contain": [
+      "terraform",
+      "destroy"
+    ],
+    "note": "其他 类；当前已遮：续行 + -var 赋值（原 T02）"
+  },
+  {
+    "id": "R003",
+    "tool": "Bash",
+    "arguments": {
+      "command": "git push -f \\\n  https://oauth2:S3cretT03@gitlab.corp/g/r.git main"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT03"
+    ],
+    "must_contain": [
+      "git",
+      "push"
+    ],
+    "note": "其他 类；当前已遮：续行 + URL userinfo（原 T03）"
+  },
+  {
+    "id": "R004",
+    "tool": "Bash",
+    "arguments": {
+      "command": "DB_PWD='S3cret T04' rm -rf /opt/app"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cret",
+      "T04"
+    ],
+    "must_contain": [
+      "rm",
+      "/opt/app"
+    ],
+    "note": "其他 类；当前已遮：引号值含空格的前置赋值（原 T04）"
+  },
+  {
+    "id": "R005",
+    "tool": "Bash",
+    "arguments": {
+      "command": "terraform destroy -auto-approve -var='db_password=S3cret T05'"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cret",
+      "T05"
+    ],
+    "must_contain": [
+      "terraform",
+      "destroy"
+    ],
+    "note": "其他 类；当前已遮：-var= 引号值含空格（原 T05）"
+  },
+  {
+    "id": "R006",
+    "tool": "Bash",
+    "arguments": {
+      "command": "GH_TOKEN=\"S3cret T06\" git push -f origin main"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cret",
+      "T06"
+    ],
+    "must_contain": [
+      "git",
+      "push"
+    ],
+    "note": "其他 类；当前已遮：双引号值含空格的前置赋值（原 T06）"
+  },
+  {
+    "id": "R007",
+    "tool": "Bash",
+    "arguments": {
+      "command": "PASS=S3cretT07 rm -rf /opt/app"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT07"
+    ],
+    "must_contain": [
+      "rm",
+      "/opt/app"
+    ],
+    "note": "其他 类；当前已遮：裸 PASS 变量（原 T07）"
+  },
+  {
+    "id": "R008",
+    "tool": "Bash",
+    "arguments": {
+      "command": "kubectl --token=S3cretT08 delete ns prod"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT08"
+    ],
+    "must_contain": [
+      "kubectl",
+      "delete"
+    ],
+    "note": "其他 类；当前已遮：--token=（原 T08）"
+  },
+  {
+    "id": "R009",
+    "tool": "Bash",
+    "arguments": {
+      "command": "kubectl --token S3cretT09 delete ns prod"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT09"
+    ],
+    "must_contain": [
+      "kubectl",
+      "delete"
+    ],
+    "note": "其他 类；当前已遮：--token 空格分隔（原 T09）"
+  },
+  {
+    "id": "R010",
+    "tool": "Bash",
+    "arguments": {
+      "command": "kubectl delete ns prod --server https://admin:S3cretT10@10.0.0.5:6443"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT10"
+    ],
+    "must_contain": [
+      "kubectl",
+      "delete"
+    ],
+    "note": "其他 类；当前已遮：--server URL userinfo（原 T10）"
+  },
+  {
+    "id": "R011",
+    "tool": "Bash",
+    "arguments": {
+      "command": "terraform destroy -auto-approve -var token=S3cretT11"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT11"
+    ],
+    "must_contain": [
+      "terraform",
+      "destroy"
+    ],
+    "note": "其他 类；当前已遮：-var token=（原 T11）"
+  },
+  {
+    "id": "R012",
+    "tool": "Bash",
+    "arguments": {
+      "command": "terraform destroy -var \"ak=LTAI5tT12AbCdEfGhIjKlMn\" -var \"sk=S3cretT12AbCdEfGhIjKlMnOpQr\""
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "LTAI5tT12",
+      "S3cretT12"
+    ],
+    "must_contain": [
+      "terraform",
+      "destroy"
+    ],
+    "note": "E 类；当前漏出：国内云 AK/SK 短名与 LTAI 前缀不认（原 T12）"
+  },
+  {
+    "id": "R013",
+    "tool": "Bash",
+    "arguments": {
+      "command": "terraform destroy -var \"conn=postgresql://u:S3cretT13@10.0.0.5/db\""
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT13"
+    ],
+    "must_contain": [
+      "terraform",
+      "destroy"
+    ],
+    "note": "其他 类；当前已遮：-var 值里的连接串 userinfo（原 T13）"
+  },
+  {
+    "id": "R014",
+    "tool": "Bash",
+    "arguments": {
+      "command": "PGPASSWORD=S3cretT14 dropdb -h 10.0.0.5 -U postgres prod"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT14"
+    ],
+    "must_contain": [
+      "dropdb",
+      "prod"
+    ],
+    "note": "检测缺口：SQL CLI：dropdb 不判破坏性；当前分析器不判破坏性，证据只写“子类（N 个目标）”，不泄露；补上检测后应满足 must_contain（原 T14，其他 类）"
+  },
+  {
+    "id": "R015",
+    "tool": "Bash",
+    "arguments": {
+      "command": "mysqladmin -uroot -p'S3cret T15' -f drop prod"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cret",
+      "T15"
+    ],
+    "must_contain": [
+      "mysqladmin",
+      "drop"
+    ],
+    "note": "检测缺口：SQL CLI：mysqladmin drop 不判破坏性；当前分析器不判破坏性，证据只写“子类（N 个目标）”，不泄露；补上检测后应满足 must_contain（原 T15，其他 类）"
+  },
+  {
+    "id": "R016",
+    "tool": "Bash",
+    "arguments": {
+      "command": "AWS_SECRET_ACCESS_KEY=S3cretT16 aws s3 rm s3://b --recursive"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT16"
+    ],
+    "must_contain": [
+      "aws",
+      "s3://b"
+    ],
+    "note": "检测缺口：云存储删除：aws s3 rm --recursive 不判破坏性；当前分析器不判破坏性，证据只写“子类（N 个目标）”，不泄露；补上检测后应满足 must_contain（原 T16，其他 类）"
+  },
+  {
+    "id": "R017",
+    "tool": "Bash",
+    "arguments": {
+      "command": "az storage blob delete-batch --account-name a --account-key S3cretT17KeyValue== --source c"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT17"
+    ],
+    "must_contain": [
+      "az",
+      "storage"
+    ],
+    "note": "检测缺口：云存储删除：az storage blob delete-batch 不判；--account-key 末段 KEY 不在名单，判定后会漏；当前分析器不判破坏性，证据只写“子类（N 个目标）”，不泄露；补上检测后应满足 must_contain（原 T17，F 类）"
+  },
+  {
+    "id": "R018",
+    "tool": "Bash",
+    "arguments": {
+      "command": "az storage container delete --name c --connection-string \"DefaultEndpointsProtocol=https;AccountName=a;AccountKey=S3cretT18==;EndpointSuffix=core.windows.net\""
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT18"
+    ],
+    "must_contain": [
+      "az",
+      "storage"
+    ],
+    "note": "检测缺口：云存储删除：az storage container delete 不判；连接串 AccountKey= 需覆盖；当前分析器不判破坏性，证据只写“子类（N 个目标）”，不泄露；补上检测后应满足 must_contain（原 T18，F 类）"
+  },
+  {
+    "id": "R019",
+    "tool": "Bash",
+    "arguments": {
+      "command": "ossutil rm oss://b/x -r -f -i LTAI5tT19AbCdEfGhIjKlMn -k S3cretT19AbCdEfGhIjKlMnOpQ"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT19"
+    ],
+    "must_contain": [
+      "ossutil",
+      "oss://b/x"
+    ],
+    "note": "检测缺口：云存储删除：ossutil rm 不判；-k 密钥无规则，判定后会漏；当前分析器不判破坏性，证据只写“子类（N 个目标）”，不泄露；补上检测后应满足 must_contain（原 T19，F 类）"
+  },
+  {
+    "id": "R020",
+    "tool": "Bash",
+    "arguments": {
+      "command": "rclone purge s3:bucket --s3-secret-access-key S3cretT20"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT20"
+    ],
+    "must_contain": [
+      "rclone",
+      "purge"
+    ],
+    "note": "检测缺口：云存储删除：rclone purge 不判破坏性；当前分析器不判破坏性，证据只写“子类（N 个目标）”，不泄露；补上检测后应满足 must_contain（原 T20，其他 类）"
+  },
+  {
+    "id": "R021",
+    "tool": "Bash",
+    "arguments": {
+      "command": "s3cmd del --recursive --force s3://b --secret_key=S3cretT21"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT21"
+    ],
+    "must_contain": [
+      "s3cmd",
+      "del"
+    ],
+    "note": "检测缺口：云存储删除：s3cmd del 不判破坏性；当前分析器不判破坏性，证据只写“子类（N 个目标）”，不泄露；补上检测后应满足 must_contain（原 T21，其他 类）"
+  },
+  {
+    "id": "R022",
+    "tool": "Bash",
+    "arguments": {
+      "command": "rsync -a --delete -e \"sshpass -p S3cretT22 ssh\" src/ root@10.0.0.5:/dst/"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT22"
+    ],
+    "must_contain": [
+      "rsync"
+    ],
+    "note": "检测缺口：rsync --delete 不判破坏性；当前分析器不判破坏性，证据只写“子类（N 个目标）”，不泄露；补上检测后应满足 must_contain（原 T22，其他 类）"
+  },
+  {
+    "id": "R023",
+    "tool": "Bash",
+    "arguments": {
+      "command": "RSYNC_PASSWORD=S3cretT23 rsync -a --delete src/ rsync://u@10.0.0.5/m/"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT23"
+    ],
+    "must_contain": [
+      "rsync"
+    ],
+    "note": "检测缺口：rsync --delete 不判破坏性；当前分析器不判破坏性，证据只写“子类（N 个目标）”，不泄露；补上检测后应满足 must_contain（原 T23，其他 类）"
+  },
+  {
+    "id": "R024",
+    "tool": "Bash",
+    "arguments": {
+      "command": "docker -H tcp://10.0.0.5:2375 --tlsverify rm -f c1 && podman rm -f c2 --url ssh://root:S3cretT24@10.0.0.5/run/podman.sock"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT24"
+    ],
+    "must_contain": [
+      "docker",
+      "rm"
+    ],
+    "note": "其他 类；当前已遮：第二段 podman 带 URL userinfo（原 T24）"
+  },
+  {
+    "id": "R025",
+    "tool": "Bash",
+    "arguments": {
+      "command": "helm uninstall app --kube-token S3cretT25"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT25"
+    ],
+    "must_contain": [
+      "helm",
+      "uninstall"
+    ],
+    "note": "其他 类；当前已遮：--kube-token（原 T25）"
+  },
+  {
+    "id": "R026",
+    "tool": "Bash",
+    "arguments": {
+      "command": "sudo -S rm -rf /opt/app <<< 'S3cretT26'"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT26"
+    ],
+    "must_contain": [
+      "rm",
+      "/opt/app"
+    ],
+    "note": "检测缺口：sudo 带选项（-S）绕过删除检测；当前分析器不判破坏性，证据只写“子类（N 个目标）”，不泄露；补上检测后应满足 must_contain（原 T26，其他 类）"
+  },
+  {
+    "id": "R027",
+    "tool": "Bash",
+    "arguments": {
+      "command": "echo 'S3cretT27' | sudo -S rm -rf /opt/app"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT27"
+    ],
+    "must_contain": [
+      "rm",
+      "/opt/app"
+    ],
+    "note": "检测缺口：sudo 带选项（-S）绕过删除检测，管道喂密码；当前分析器不判破坏性，证据只写“子类（N 个目标）”，不泄露；补上检测后应满足 must_contain（原 T27，其他 类）"
+  },
+  {
+    "id": "R028",
+    "tool": "Bash",
+    "arguments": {
+      "command": "sudo -u root rm -rf /opt/app"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "rm",
+      "/opt/app"
+    ],
+    "note": "检测缺口：sudo 带选项（-u）绕过删除检测；当前分析器不判破坏性，证据只写“子类（N 个目标）”，不泄露；补上检测后应满足 must_contain（原 T28，其他 类）"
+  },
+  {
+    "id": "R029",
+    "tool": "Bash",
+    "arguments": {
+      "command": "echo 'password: S3cretT29' > /etc/app/config.yaml"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT29"
+    ],
+    "must_contain": [
+      "echo",
+      "/etc/app/config.yaml"
+    ],
+    "note": "A 类；当前已遮：写文件内容 password:（原 T29）"
+  },
+  {
+    "id": "R030",
+    "tool": "Bash",
+    "arguments": {
+      "command": "echo \"DB_PASS=S3cretT30\" > .env"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT30"
+    ],
+    "must_contain": [
+      "echo",
+      ".env"
+    ],
+    "note": "A 类；当前已遮：写文件内容 DB_PASS=（原 T30）"
+  },
+  {
+    "id": "R031",
+    "tool": "Bash",
+    "arguments": {
+      "command": "echo 'S3cretT31' > /etc/app/db_password"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT31"
+    ],
+    "must_contain": [
+      "echo",
+      "/etc/app/db_password"
+    ],
+    "note": "A 类；当前漏出：写文件内容是裸口令，无键名（原 T31）"
+  },
+  {
+    "id": "R032",
+    "tool": "Bash",
+    "arguments": {
+      "command": "printf '%s\\n' 'machine h login u password S3cretT32' > ~/.netrc"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT32"
+    ],
+    "must_contain": [
+      "printf",
+      "~/.netrc"
+    ],
+    "note": "A 类；当前漏出：.netrc 的 password 无引号（原 T32）"
+  },
+  {
+    "id": "R033",
+    "tool": "Bash",
+    "arguments": {
+      "command": "echo '10.0.0.5:5432:*:postgres:S3cretT33' > ~/.pgpass"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT33"
+    ],
+    "must_contain": [
+      "echo",
+      "~/.pgpass"
+    ],
+    "note": "A 类；当前漏出：.pgpass 冒号分隔格式（原 T33）"
+  },
+  {
+    "id": "R034",
+    "tool": "Bash",
+    "arguments": {
+      "command": "echo \"https://u:S3cretT34@git.corp\" > ~/.git-credentials"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT34"
+    ],
+    "must_contain": [
+      "echo",
+      "~/.git-credentials"
+    ],
+    "note": "A 类；当前已遮：.git-credentials URL userinfo（原 T34）"
+  },
+  {
+    "id": "R035",
+    "tool": "Bash",
+    "arguments": {
+      "command": "echo \"{\\\"password\\\":\\\"S3cretT35\\\"}\" > /etc/app/cfg.json"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT35"
+    ],
+    "must_contain": [
+      "echo",
+      "/etc/app/cfg.json"
+    ],
+    "note": "A 类；当前已遮：写文件内容 JSON（原 T35）"
+  },
+  {
+    "id": "R036",
+    "tool": "Bash",
+    "arguments": {
+      "command": "echo '{\\\"token\\\":\\\"S3cretT36\\\"}' > /etc/app/cfg.json"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT36"
+    ],
+    "must_contain": [
+      "echo",
+      "/etc/app/cfg.json"
+    ],
+    "note": "A 类；当前已遮：写文件内容转义 JSON（原 T36）"
+  },
+  {
+    "id": "R037",
+    "tool": "Bash",
+    "arguments": {
+      "command": "echo 'api_key = S3cretT37' > ~/.config/app.ini"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT37"
+    ],
+    "must_contain": [
+      "echo",
+      "~/.config/app.ini"
+    ],
+    "note": "A 类；当前已遮：写文件内容 INI api_key =（原 T37）"
+  },
+  {
+    "id": "R038",
+    "tool": "Bash",
+    "arguments": {
+      "command": "echo 'export OPENAI_API_KEY=S3cretT38' >> ~/.bashrc"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT38"
+    ],
+    "must_contain": [
+      "echo",
+      "~/.bashrc"
+    ],
+    "note": "A 类；当前已遮：追加 export 到 .bashrc（原 T38）"
+  },
+  {
+    "id": "R039",
+    "tool": "Bash",
+    "arguments": {
+      "command": "echo 'secret: S3cretT39' > /etc/app/s.yaml"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT39"
+    ],
+    "must_contain": [
+      "echo",
+      "/etc/app/s.yaml"
+    ],
+    "note": "A 类；当前漏出：YAML secret: 键不在键值规则里（原 T39）"
+  },
+  {
+    "id": "R040",
+    "tool": "Bash",
+    "arguments": {
+      "command": "echo 'token: S3cretT40' > /etc/app/s.yaml"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT40"
+    ],
+    "must_contain": [
+      "echo",
+      "/etc/app/s.yaml"
+    ],
+    "note": "A 类；当前漏出：YAML token: 键不在键值规则里（原 T40）"
+  },
+  {
+    "id": "R041",
+    "tool": "Bash",
+    "arguments": {
+      "command": "cat <<EOF > .env\nTOKEN=S3cretT41\nEOF"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT41"
+    ],
+    "must_contain": [
+      "cat",
+      ".env"
+    ],
+    "note": "A 类；当前已遮：heredoc 正文省略（重定向在后）（原 T41）"
+  },
+  {
+    "id": "R042",
+    "tool": "Bash",
+    "arguments": {
+      "command": "cat > /etc/app/.env <<-'EOF'\n\tDB_PASSWORD=S3cretT42\n\tEOF"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT42"
+    ],
+    "must_contain": [
+      "cat",
+      "/etc/app/.env"
+    ],
+    "note": "A 类；当前已遮：<<- heredoc 正文省略（原 T42）"
+  },
+  {
+    "id": "R043",
+    "tool": "Bash",
+    "arguments": {
+      "command": "bash -c \"cat > x.env <<EOF\nPASS=S3cretT43\nEOF\""
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT43"
+    ],
+    "must_contain": [
+      "cat",
+      "x.env"
+    ],
+    "note": "A 类；当前已遮：嵌套 bash -c 里的 heredoc（原 T43）"
+  },
+  {
+    "id": "R044",
+    "tool": "Bash",
+    "arguments": {
+      "command": "kubectl delete -f - <<EOF\napiVersion: v1\nkind: Secret\ndata:\n  password: UzNjcmV0VDQ0\nEOF"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "UzNjcmV0VDQ0"
+    ],
+    "must_contain": [
+      "kubectl",
+      "delete"
+    ],
+    "note": "A 类；当前已遮：kubectl delete -f - 的 heredoc 正文省略（原 T44）"
+  },
+  {
+    "id": "R045",
+    "tool": "Bash",
+    "arguments": {
+      "command": "bash -c \"DB_PASSWORD=S3cretT45 rm -rf /opt/app\""
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT45"
+    ],
+    "must_contain": [
+      "rm",
+      "/opt/app"
+    ],
+    "note": "其他 类；当前已遮：嵌套 bash -c 取内层（原 T45）"
+  },
+  {
+    "id": "R046",
+    "tool": "Bash",
+    "arguments": {
+      "command": "sh -c 'GH_TOKEN=S3cretT46 git push --force origin main'"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT46"
+    ],
+    "must_contain": [
+      "git",
+      "push"
+    ],
+    "note": "其他 类；当前已遮：嵌套 sh -c 取内层（原 T46）"
+  },
+  {
+    "id": "R047",
+    "tool": "Bash",
+    "arguments": {
+      "command": "echo hf_T47AbCdEfGhIjKlMnOpQrStUv > ~/.cache/huggingface/token"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "hf_T47"
+    ],
+    "must_contain": [
+      "echo",
+      "~/.cache/huggingface/token"
+    ],
+    "note": "E 类；当前已遮：hf_ 前缀（原 T47）"
+  },
+  {
+    "id": "R048",
+    "tool": "Bash",
+    "arguments": {
+      "command": "echo pypi-AgEIcHlwaS5vcmcCJDT48abc-def_ghiJKLmnoPQRstu > ~/.pypirc"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "T48abc"
+    ],
+    "must_contain": [
+      "echo",
+      "~/.pypirc"
+    ],
+    "note": "E 类；当前漏出：pypi- 前缀不认（A 类省略也可覆盖）（原 T48）"
+  },
+  {
+    "id": "R049",
+    "tool": "Bash",
+    "arguments": {
+      "command": "echo sk_live_{{JOIN}}T49AbCdEfGhIjKlMnOpQrStUv > /etc/stripe.key"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "T49AbCd"
+    ],
+    "must_contain": [
+      "echo",
+      "/etc/stripe.key"
+    ],
+    "note": "E 类；当前漏出：sk_live_ 前缀不认（A 类省略也可覆盖）（原 T49）"
+  },
+  {
+    "id": "R050",
+    "tool": "Bash",
+    "arguments": {
+      "command": "echo LTAI5tT50AbCdEfGhIjKlMn > /etc/ak.txt"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "LTAI5tT50"
+    ],
+    "must_contain": [
+      "echo",
+      "/etc/ak.txt"
+    ],
+    "note": "E 类；当前漏出：阿里云 LTAI 前缀不认（A 类省略也可覆盖）（原 T50）"
+  },
+  {
+    "id": "R051",
+    "tool": "Bash",
+    "arguments": {
+      "command": "echo AKIDT51bAbCdEfGhIjKlMnOpQrStUvWxYz0123 > /etc/ak.txt"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "T51bAbCd"
+    ],
+    "must_contain": [
+      "echo",
+      "/etc/ak.txt"
+    ],
+    "note": "E 类；当前漏出：腾讯云 AKID 前缀不认（A 类省略也可覆盖）（原 T51b）"
+  },
+  {
+    "id": "R052",
+    "tool": "Bash",
+    "arguments": {
+      "command": "echo dop_v1_{{JOIN}}0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef > /etc/do.token"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "0123456789abcdef0123"
+    ],
+    "must_contain": [
+      "echo",
+      "/etc/do.token"
+    ],
+    "note": "E 类；当前漏出：dop_v1_ 前缀不认（A 类省略也可覆盖）（原 T52b）"
+  },
+  {
+    "id": "R053",
+    "tool": "Bash",
+    "arguments": {
+      "command": "echo SG.T53AbCdEfGhIjKlMnOpQr.StUvWxYz0123456789AbCdEfGhIjKlMnOpQrStU > /etc/sg.key"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "T53AbCd",
+      "StUvWxYz0123"
+    ],
+    "must_contain": [
+      "echo",
+      "/etc/sg.key"
+    ],
+    "note": "E 类；当前漏出：SendGrid SG. 前缀不认（A 类省略也可覆盖）（原 T53）"
+  },
+  {
+    "id": "R054",
+    "tool": "Bash",
+    "arguments": {
+      "command": "echo ghs_T54AbCdEfGhIjKlMnOpQrStUvWxYz012345 > /etc/gh.token"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "T54AbCd"
+    ],
+    "must_contain": [
+      "echo",
+      "/etc/gh.token"
+    ],
+    "note": "E 类；当前已遮：ghs_ 前缀（原 T54）"
+  },
+  {
+    "id": "R055",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl -s https://hooks.slack.com/services/T00000000/B00000000/S3cretT55XXXXXXXXXXXXXX -d @msg.json > /tmp/out.json"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT55"
+    ],
+    "must_contain": [],
+    "note": "非破坏性对照：Slack webhook 路径；写 /tmp 按设计不判破坏性，无触发段；同写法的触发段版本见 R092 起（目标改为 /etc/app）（原 T55，F 类）"
+  },
+  {
+    "id": "R056",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl -s 'https://open.feishu.cn/open-apis/bot/v2/hook/0a1b2c3d-T56e-4f5a-8b9c-0d1e2f3a4b5c' > /tmp/out.json"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "T56e"
+    ],
+    "must_contain": [],
+    "note": "非破坏性对照：飞书 webhook 路径；写 /tmp 按设计不判破坏性，无触发段；同写法的触发段版本见 R092 起（目标改为 /etc/app）（原 T56，F 类）"
+  },
+  {
+    "id": "R057",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl -X DELETE -H \"api-key: S3cretT57\" https://x/y > /tmp/out.json"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT57"
+    ],
+    "must_contain": [],
+    "note": "非破坏性对照：api-key 头；写 /tmp 按设计不判破坏性，无触发段；同写法的触发段版本见 R092 起（目标改为 /etc/app）（原 T57，F 类）"
+  },
+  {
+    "id": "R058",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl -H 'PRIVATE-TOKEN: glpat-T58AbCdEfGhIjKl' https://gitlab.corp/api > /tmp/x.json"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "T58AbCd"
+    ],
+    "must_contain": [],
+    "note": "非破坏性对照：PRIVATE-TOKEN 头；写 /tmp 按设计不判破坏性，无触发段；同写法的触发段版本见 R092 起（目标改为 /etc/app）（原 T58，F 类）"
+  },
+  {
+    "id": "R059",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl \"https://api.corp/x?sig=S3cretT59&sv=1\" > /tmp/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT59"
+    ],
+    "must_contain": [],
+    "note": "非破坏性对照：查询参数 sig=；写 /tmp 按设计不判破坏性，无触发段；同写法的触发段版本见 R092 起（目标改为 /etc/app）（原 T59，F 类）"
+  },
+  {
+    "id": "R060",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl \"https://api.corp/x?client_id=a&clientSecret=S3cretT60\" > /tmp/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT60"
+    ],
+    "must_contain": [],
+    "note": "非破坏性对照：查询参数 clientSecret=；写 /tmp 按设计不判破坏性，无触发段；同写法的触发段版本见 R092 起（目标改为 /etc/app）（原 T60，F 类）"
+  },
+  {
+    "id": "R061",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl \"https://api.corp/x?auth=S3cretT61\" > /tmp/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT61"
+    ],
+    "must_contain": [],
+    "note": "非破坏性对照：查询参数 auth=；写 /tmp 按设计不判破坏性，无触发段；同写法的触发段版本见 R092 起（目标改为 /etc/app）（原 T61，F 类）"
+  },
+  {
+    "id": "R062",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl -u admin:S3cretT62 https://x/y > /tmp/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT62"
+    ],
+    "must_contain": [],
+    "note": "非破坏性对照：curl -u；写 /tmp 按设计不判破坏性，无触发段；同写法的触发段版本见 R092 起（目标改为 /etc/app）（原 T62，F 类）"
+  },
+  {
+    "id": "R063",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl -H 'Authorization: token S3cretT63' https://x/y > /tmp/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT63"
+    ],
+    "must_contain": [],
+    "note": "非破坏性对照：Authorization: token；写 /tmp 按设计不判破坏性，无触发段；同写法的触发段版本见 R092 起（目标改为 /etc/app）（原 T63，F 类）"
+  },
+  {
+    "id": "R064",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl -H \"X-Vault-Token: S3cretT64\" https://vault/v1/x > /tmp/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT64"
+    ],
+    "must_contain": [],
+    "note": "非破坏性对照：X-Vault-Token 头；写 /tmp 按设计不判破坏性，无触发段；同写法的触发段版本见 R092 起（目标改为 /etc/app）（原 T64，F 类）"
+  },
+  {
+    "id": "R065",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl -H \"Ocp-Apim-Subscription-Key: S3cretT65\" https://x > /tmp/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT65"
+    ],
+    "must_contain": [],
+    "note": "非破坏性对照：Ocp-Apim-Subscription-Key 头；写 /tmp 按设计不判破坏性，无触发段；同写法的触发段版本见 R092 起（目标改为 /etc/app）（原 T65，F 类）"
+  },
+  {
+    "id": "R066",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl -b 'session=S3cretT66' https://x > /tmp/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT66"
+    ],
+    "must_contain": [],
+    "note": "非破坏性对照：curl -b cookie；写 /tmp 按设计不判破坏性，无触发段；同写法的触发段版本见 R092 起（目标改为 /etc/app）（原 T66，F 类）"
+  },
+  {
+    "id": "R067",
+    "tool": "Bash",
+    "arguments": {
+      "command": "wget --header='Authorization: Bearer S3cretT67abcdef' -O - https://x > /tmp/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT67"
+    ],
+    "must_contain": [],
+    "note": "非破坏性对照：wget --header Bearer；写 /tmp 按设计不判破坏性，无触发段；同写法的触发段版本见 R092 起（目标改为 /etc/app）（原 T67，F 类）"
+  },
+  {
+    "id": "R068",
+    "tool": "exec",
+    "arguments": {
+      "argv": [
+        "env",
+        "DB_PASSWORD=S3cret T68",
+        "rm",
+        "-rf",
+        "/opt/app"
+      ]
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cret",
+      "T68"
+    ],
+    "must_contain": [
+      "rm",
+      "/opt/app"
+    ],
+    "note": "检测缺口：argv 形态 env 包装后的 rm 不判破坏性；当前分析器不判破坏性，证据只写“子类（N 个目标）”，不泄露；补上检测后应满足 must_contain（原 T68，G 类）"
+  },
+  {
+    "id": "R069",
+    "tool": "shell",
+    "arguments": {
+      "command": [
+        "bash",
+        "-lc",
+        "GH_TOKEN='S3cret T69' git push -f origin main"
+      ]
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cret",
+      "T69"
+    ],
+    "must_contain": [
+      "git",
+      "push"
+    ],
+    "note": "G 类；当前已遮：Codex bash -lc 数组，引号值含空格（原 T69）"
+  },
+  {
+    "id": "R070",
+    "tool": "exec",
+    "arguments": {
+      "argv": [
+        "kubectl",
+        "--token",
+        "S3cret T70",
+        "delete",
+        "ns",
+        "prod"
+      ]
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cret",
+      "T70"
+    ],
+    "must_contain": [
+      "kubectl",
+      "delete"
+    ],
+    "note": "G 类；当前已遮：argv 形态 --token 值含空格（原 T70）"
+  },
+  {
+    "id": "R071",
+    "tool": "shell",
+    "arguments": {
+      "command": [
+        "terraform",
+        "destroy",
+        "-auto-approve",
+        "-var",
+        "db_password=S3cret T71"
+      ]
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cret",
+      "T71"
+    ],
+    "must_contain": [
+      "terraform",
+      "destroy"
+    ],
+    "note": "G 类；当前漏出：Codex 非 shell argv 被空格拼接，值含空格只遮前半（原 T71）"
+  },
+  {
+    "id": "R072",
+    "tool": "shell",
+    "arguments": {
+      "command": [
+        "powershell",
+        "-Command",
+        "Remove-Item \\\\srv\\share\\x -Recurse -Credential (New-Object PSCredential('corp\\bob', (ConvertTo-SecureString 'S3cretT51' -AsPlainText -Force)))"
+      ]
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT51"
+    ],
+    "must_contain": [
+      "Remove-Item"
+    ],
+    "note": "检测缺口：PowerShell 数组 -Command 带括号的 Remove-Item 不判破坏性；当前分析器不判破坏性，证据只写“子类（N 个目标）”，不泄露；补上检测后应满足 must_contain（原 T72，B 类）"
+  },
+  {
+    "id": "R073",
+    "tool": "Bash",
+    "arguments": {
+      "command": "powershell -EncodedCommand JABwAD0AJwBTADMAYwByAGUAdABUADUAMgAnADsAIABSAGUAbQBvAHYAZQAtAEkAdABlAG0AIABDADoAXABkAGEAdABhACAALQBSAGUAYwB1AHIAcwBlACAALQBGAG8AcgBjAGUA"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT52",
+      "JABwAD0AJwBTADMAYwBy"
+    ],
+    "must_contain": [
+      "powershell"
+    ],
+    "note": "检测缺口：字符串形态 -EncodedCommand 不解码、不判破坏性；当前分析器不判破坏性，证据只写“子类（N 个目标）”，不泄露；补上检测后应满足 must_contain（原 T73，D 类）"
+  },
+  {
+    "id": "R074",
+    "tool": "Bash",
+    "arguments": {
+      "command": "powershell -ec JABwAD0AJwBTADMAYwByAGUAdABUADUAMgAnADsAIABSAGUAbQBvAHYAZQAtAEkAdABlAG0AIABDADoAXABkAGEAdABhACAALQBSAGUAYwB1AHIAcwBlACAALQBGAG8AcgBjAGUA"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT52",
+      "JABwAD0AJwBTADMAYwBy"
+    ],
+    "must_contain": [
+      "powershell"
+    ],
+    "note": "检测缺口：字符串形态 -ec 不解码、不判破坏性；当前分析器不判破坏性，证据只写“子类（N 个目标）”，不泄露；补上检测后应满足 must_contain（原 T74，D 类）"
+  },
+  {
+    "id": "R075",
+    "tool": "Bash",
+    "arguments": {
+      "command": "powershell -e UgBlAG0AbwB2AGUALQBJAHQAZQBtACAAXABcAHMAcgB2AFwAcwBoAGEAcgBlAFwAeAAgAC0AUgBlAGMAdQByAHMAZQAgAC0AQwByAGUAZABlAG4AdABpAGEAbAAgACgATgBlAHcALQBPAGIAagBlAGMAdAAgAFAAUwBDAHIAZQBkAGUAbgB0AGkAYQBsACgAJwBjAG8AcgBwAFwAYgBvAGIAJwAsACAAKABDAG8AbgB2AGUAcgB0AFQAbwAtAFMAZQBjAHUAcgBlAFMAdAByAGkAbgBnACAAJwBTADMAYwByAGUAdABUADUAMQAnACAALQBBAHMAUABsAGEAaQBuAFQAZQB4AHQAIAAtAEYAbwByAGMAZQApACkAKQA="
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT51",
+      "UgBlAG0AbwB2AGUALQBJ"
+    ],
+    "must_contain": [
+      "powershell"
+    ],
+    "note": "检测缺口：字符串形态 -e（脚本含 -Credential）不判破坏性；当前分析器不判破坏性，证据只写“子类（N 个目标）”，不泄露；补上检测后应满足 must_contain（原 T75，D 类）"
+  },
+  {
+    "id": "R076",
+    "tool": "shell",
+    "arguments": {
+      "command": [
+        "powershell",
+        "-EncodedCommand",
+        "UgBlAG0AbwB2AGUALQBJAHQAZQBtACAAXABcAHMAcgB2AFwAcwBoAGEAcgBlAFwAeAAgAC0AUgBlAGMAdQByAHMAZQAgAC0AQwByAGUAZABlAG4AdABpAGEAbAAgACgATgBlAHcALQBPAGIAagBlAGMAdAAgAFAAUwBDAHIAZQBkAGUAbgB0AGkAYQBsACgAJwBjAG8AcgBwAFwAYgBvAGIAJwAsACAAKABDAG8AbgB2AGUAcgB0AFQAbwAtAFMAZQBjAHUAcgBlAFMAdAByAGkAbgBnACAAJwBTADMAYwByAGUAdABUADUAMQAnACAALQBBAHMAUABsAGEAaQBuAFQAZQB4AHQAIAAtAEYAbwByAGMAZQApACkAKQA="
+      ]
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT51",
+      "UgBlAG0AbwB2AGUALQBJ"
+    ],
+    "must_contain": [
+      "Remove-Item"
+    ],
+    "note": "检测缺口：数组形态 EncodedCommand 解码后脚本带括号，不判破坏性；当前分析器不判破坏性，证据只写“子类（N 个目标）”，不泄露；补上检测后应满足 must_contain（原 T76，D 类）"
+  },
+  {
+    "id": "R077",
+    "tool": "powershell",
+    "arguments": {
+      "command": "$pw='S3cretT77'; Remove-Item C:\\data -Recurse -Force"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT77"
+    ],
+    "must_contain": [
+      "Remove-Item"
+    ],
+    "note": "B 类；当前已遮：词法兜底，只取 Remove-Item 段（原 T77）"
+  },
+  {
+    "id": "R078",
+    "tool": "powershell",
+    "arguments": {
+      "command": "Remove-Item -Path \\\\10.0.0.5\\share\\x -Recurse -Credential (New-Object System.Management.Automation.PSCredential ('bob', (ConvertTo-SecureString -String 'S3cretT78' -AsPlainText -Force)))"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT78"
+    ],
+    "must_contain": [
+      "Remove-Item"
+    ],
+    "note": "B 类；当前漏出：词法兜底下 -Credential 内联 ConvertTo-SecureString -String（原 T78）"
+  },
+  {
+    "id": "R079",
+    "tool": "cmd",
+    "arguments": {
+      "command": [
+        "cmd",
+        "/c",
+        "net use \\\\10.0.0.5\\share S3cretT79 /user:bob && rd /s /q \\\\10.0.0.5\\share\\x"
+      ]
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT79"
+    ],
+    "must_contain": [
+      "rd"
+    ],
+    "note": "其他 类；当前已遮：cmd /c 只取 rd 段（原 T79）"
+  },
+  {
+    "id": "R080",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "UPDATE users SET password = crypt('S3cretT80', gen_salt('bf'))"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT80"
+    ],
+    "must_contain": [
+      "UPDATE",
+      "users"
+    ],
+    "note": "C 类；当前漏出：SQL 函数包裹口令 crypt('…')（原 T80）"
+  },
+  {
+    "id": "R081",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "UPDATE mysql.user SET authentication_string = PASSWORD('S3cretT81')"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT81"
+    ],
+    "must_contain": [
+      "UPDATE",
+      "mysql.user"
+    ],
+    "note": "C 类；当前已遮：PASSWORD('…')（原 T81）"
+  },
+  {
+    "id": "R082",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "UPDATE users SET pwd='S3cretT82'"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT82"
+    ],
+    "must_contain": [
+      "UPDATE",
+      "users"
+    ],
+    "note": "C 类；当前漏出：SQL 列名 pwd（原 T82）"
+  },
+  {
+    "id": "R083",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "UPDATE accounts SET api_key='S3cretT83'"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT83"
+    ],
+    "must_contain": [
+      "UPDATE",
+      "accounts"
+    ],
+    "note": "C 类；当前已遮：SQL 列名 api_key（原 T83）"
+  },
+  {
+    "id": "R084",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "UPDATE users SET token = 'S3cretT84'"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT84"
+    ],
+    "must_contain": [
+      "UPDATE",
+      "users"
+    ],
+    "note": "C 类；当前已遮：SQL 列名 token（原 T84）"
+  },
+  {
+    "id": "R085",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "UPDATE users SET password=md5('S3cretT85')"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT85"
+    ],
+    "must_contain": [
+      "UPDATE",
+      "users"
+    ],
+    "note": "C 类；当前漏出：SQL 函数包裹口令 md5('…')（原 T85）"
+  },
+  {
+    "id": "R086",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "UPDATE settings SET v='S3cretT86' WHERE 1=1"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT86"
+    ],
+    "must_contain": [
+      "UPDATE",
+      "settings"
+    ],
+    "note": "检测缺口：恒真 WHERE 1=1 不判无条件修改；判定后字面量应为 ?；当前分析器不判破坏性，证据只写“子类（N 个目标）”，不泄露；补上检测后应满足 must_contain（原 T86，C 类）"
+  },
+  {
+    "id": "R087",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "DELETE FROM users WHERE password = 'S3cretT87' OR 1=1"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT87"
+    ],
+    "must_contain": [
+      "DELETE",
+      "users"
+    ],
+    "note": "检测缺口：OR 1=1 恒真不判；判定后字面量应为 ?；当前分析器不判破坏性，证据只写“子类（N 个目标）”，不泄露；补上检测后应满足 must_contain（原 T87，C 类）"
+  },
+  {
+    "id": "R088",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "UPDATE users SET passwd = \"S3cretT88\""
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT88"
+    ],
+    "must_contain": [
+      "UPDATE",
+      "users"
+    ],
+    "note": "C 类；当前已遮：SQL 列名 passwd，双引号值（原 T88）"
+  },
+  {
+    "id": "R089",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "UPDATE users SET password_hash = '$2b$12$S3cretT89abcdefghijklmnopqrstuv'"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT89"
+    ],
+    "must_contain": [
+      "UPDATE",
+      "users"
+    ],
+    "note": "C 类；当前已遮：哈希值当前保留；按 SQL 字面量全替换为 ? 的新口径不应出现（原 T89）"
+  },
+  {
+    "id": "R090",
+    "tool": "Bash",
+    "arguments": {
+      "command": "rm -rf /opt/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa --token S3cretT90LongValue"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT90",
+      "S3cr"
+    ],
+    "must_contain": [
+      "rm",
+      "/opt/aaaaaaaaaa"
+    ],
+    "note": "其他 类；当前已遮：截断边界：凭据在 200 字附近（原 T90）"
+  },
+  {
+    "id": "R091",
+    "tool": "Bash",
+    "arguments": {
+      "command": "DB_PASSWORD=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxS3cretT91 rm -rf /opt/app"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretT91",
+      "xxxxxxxxxx"
+    ],
+    "must_contain": [
+      "rm",
+      "/opt/app"
+    ],
+    "note": "其他 类；当前已遮：超长凭据值跨截断点（原 T91）"
+  },
+  {
+    "id": "R092",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl -X DELETE -H \"api-key: S3cretR01\" https://x/y > /etc/app/out.json"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR01"
+    ],
+    "must_contain": [
+      "curl",
+      "/etc/app/out.json"
+    ],
+    "note": "F 类；当前已遮：api-key 头（原 R01）"
+  },
+  {
+    "id": "R093",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl -H 'PRIVATE-TOKEN: glpat-R02AbCdEfGhIjKl' https://gitlab.corp/api > /etc/app/x.json"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "R02AbCd"
+    ],
+    "must_contain": [
+      "curl",
+      "/etc/app/x.json"
+    ],
+    "note": "F 类；当前已遮：PRIVATE-TOKEN 头（原 R02）"
+  },
+  {
+    "id": "R094",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl \"https://api.corp/x?sig=S3cretR03&sv=1\" > /etc/app/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR03"
+    ],
+    "must_contain": [
+      "curl",
+      "/etc/app/x"
+    ],
+    "note": "F 类；当前已遮：查询参数 sig=（原 R03）"
+  },
+  {
+    "id": "R095",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl \"https://api.corp/x?client_id=a&clientSecret=S3cretR04\" > /etc/app/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR04"
+    ],
+    "must_contain": [
+      "curl",
+      "/etc/app/x"
+    ],
+    "note": "F 类；当前已遮：查询参数 clientSecret=（原 R04）"
+  },
+  {
+    "id": "R096",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl \"https://api.corp/x?auth=S3cretR05\" > /etc/app/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR05"
+    ],
+    "must_contain": [
+      "curl",
+      "/etc/app/x"
+    ],
+    "note": "F 类；当前漏出：查询参数 auth= 不在名单（原 R05）"
+  },
+  {
+    "id": "R097",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl -u admin:S3cretR06 https://x/y > /etc/app/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR06"
+    ],
+    "must_contain": [
+      "curl",
+      "/etc/app/x"
+    ],
+    "note": "F 类；当前已遮：curl -u（原 R06）"
+  },
+  {
+    "id": "R098",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl -uadmin:S3cretR07 https://x/y > /etc/app/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR07"
+    ],
+    "must_contain": [
+      "curl",
+      "/etc/app/x"
+    ],
+    "note": "F 类；当前已遮：curl -u 连写（原 R07）"
+  },
+  {
+    "id": "R099",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl -H 'Authorization: token S3cretR08' https://x/y > /etc/app/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR08"
+    ],
+    "must_contain": [
+      "curl",
+      "/etc/app/x"
+    ],
+    "note": "F 类；当前已遮：Authorization: token（原 R08）"
+  },
+  {
+    "id": "R100",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl -H \"X-Vault-Token: S3cretR09\" https://vault/v1/x > /etc/app/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR09"
+    ],
+    "must_contain": [
+      "curl",
+      "/etc/app/x"
+    ],
+    "note": "F 类；当前已遮：X-Vault-Token 头（原 R09）"
+  },
+  {
+    "id": "R101",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl -H \"Ocp-Apim-Subscription-Key: S3cretR10\" https://x > /etc/app/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR10"
+    ],
+    "must_contain": [
+      "curl",
+      "/etc/app/x"
+    ],
+    "note": "F 类；当前漏出：Ocp-Apim-Subscription-Key 头不认（原 R10）"
+  },
+  {
+    "id": "R102",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl -b 'session=S3cretR11' https://x > /etc/app/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR11"
+    ],
+    "must_contain": [
+      "curl",
+      "/etc/app/x"
+    ],
+    "note": "F 类；当前漏出：curl -b cookie 值（原 R11）"
+  },
+  {
+    "id": "R103",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl --cookie 'JSESSIONID=S3cretR12' https://x > /etc/app/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR12"
+    ],
+    "must_contain": [
+      "curl",
+      "/etc/app/x"
+    ],
+    "note": "F 类；当前漏出：curl --cookie 值（原 R12）"
+  },
+  {
+    "id": "R104",
+    "tool": "Bash",
+    "arguments": {
+      "command": "wget --header='Authorization: Bearer S3cretR13abcdef' -O - https://x > /etc/app/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR13"
+    ],
+    "must_contain": [
+      "wget",
+      "/etc/app/x"
+    ],
+    "note": "F 类；当前已遮：wget --header Bearer（原 R13）"
+  },
+  {
+    "id": "R105",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl -s https://hooks.slack.com/services/T00000000/B00000000/S3cretR14XXXXXXXXXXXXXX > /etc/app/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR14"
+    ],
+    "must_contain": [
+      "curl",
+      "/etc/app/x"
+    ],
+    "note": "F 类；当前漏出：Slack webhook 路径末段（原 R14）"
+  },
+  {
+    "id": "R106",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl \"https://oapi.dingtalk.com/robot/send?access_token=S3cretR15\" > /etc/app/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR15"
+    ],
+    "must_contain": [
+      "curl",
+      "/etc/app/x"
+    ],
+    "note": "F 类；当前已遮：钉钉 access_token=（原 R15）"
+  },
+  {
+    "id": "R107",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl -H \"apikey: S3cretR16\" https://x > /etc/app/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR16"
+    ],
+    "must_contain": [
+      "curl",
+      "/etc/app/x"
+    ],
+    "note": "F 类；当前已遮：apikey 头（原 R16）"
+  },
+  {
+    "id": "R108",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl -d 'grant_type=password&username=u&password=S3cretR17' https://x/token > /etc/app/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR17"
+    ],
+    "must_contain": [
+      "curl",
+      "/etc/app/x"
+    ],
+    "note": "F 类；当前已遮：表单 password=（原 R17）"
+  },
+  {
+    "id": "R109",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl -d \"client_secret=S3cretR18\" https://x/token > /etc/app/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR18"
+    ],
+    "must_contain": [
+      "curl",
+      "/etc/app/x"
+    ],
+    "note": "F 类；当前已遮：表单 client_secret=（原 R18）"
+  },
+  {
+    "id": "R110",
+    "tool": "Bash",
+    "arguments": {
+      "command": "curl --data-urlencode 'pass=S3cretR19' https://x > /etc/app/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR19"
+    ],
+    "must_contain": [
+      "curl",
+      "/etc/app/x"
+    ],
+    "note": "F 类；当前已遮：表单 pass=（原 R19）"
+  },
+  {
+    "id": "R111",
+    "tool": "Bash",
+    "arguments": {
+      "command": "mysql -uroot -pS3cretR20 -e 'select 1' > /etc/app/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR20"
+    ],
+    "must_contain": [
+      "mysql",
+      "/etc/app/x"
+    ],
+    "note": "F 类；当前已遮：mysql -p 连写（原 R20）"
+  },
+  {
+    "id": "R112",
+    "tool": "Bash",
+    "arguments": {
+      "command": "mysql -uroot -p'S3cret R21' -e 'select 1' > /etc/app/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cret",
+      "R21"
+    ],
+    "must_contain": [
+      "mysql",
+      "/etc/app/x"
+    ],
+    "note": "F 类；当前已遮：mysql -p 引号值含空格（原 R21）"
+  },
+  {
+    "id": "R113",
+    "tool": "Bash",
+    "arguments": {
+      "command": "mysqldump -h 10.0.0.5 -uroot --password='S3cret R22' db > /data/db.sql"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cret",
+      "R22"
+    ],
+    "must_contain": [
+      "mysqldump",
+      "/data/db.sql"
+    ],
+    "note": "F 类；当前已遮：--password= 引号值含空格（原 R22）"
+  },
+  {
+    "id": "R114",
+    "tool": "Bash",
+    "arguments": {
+      "command": "PGPASSWORD='S3cret R23' pg_dump -h 10.0.0.5 db > /data/db.sql"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cret",
+      "R23"
+    ],
+    "must_contain": [
+      "pg_dump",
+      "/data/db.sql"
+    ],
+    "note": "F 类；当前已遮：PGPASSWORD 引号值含空格（原 R23）"
+  },
+  {
+    "id": "R115",
+    "tool": "Bash",
+    "arguments": {
+      "command": "pg_dump \"host=10.0.0.5 user=u password=S3cretR24 dbname=db\" > /data/db.sql"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR24"
+    ],
+    "must_contain": [
+      "pg_dump",
+      "/data/db.sql"
+    ],
+    "note": "F 类；当前已遮：libpq 连接串 password=（原 R24）"
+  },
+  {
+    "id": "R116",
+    "tool": "Bash",
+    "arguments": {
+      "command": "mongodump --uri 'mongodb://u:S3cretR25@10.0.0.5/db' --archive > /data/m.archive"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR25"
+    ],
+    "must_contain": [
+      "mongodump",
+      "/data/m.archive"
+    ],
+    "note": "F 类；当前已遮：mongodb URI userinfo（原 R25）"
+  },
+  {
+    "id": "R117",
+    "tool": "Bash",
+    "arguments": {
+      "command": "redis-cli -a S3cretR26 --rdb /data/dump.rdb > /data/out"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR26"
+    ],
+    "must_contain": [
+      "redis-cli",
+      "/data/out"
+    ],
+    "note": "F 类；当前已遮：redis-cli -a（原 R26）"
+  },
+  {
+    "id": "R118",
+    "tool": "Bash",
+    "arguments": {
+      "command": "redis-cli --pass S3cretR27 info > /data/out"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR27"
+    ],
+    "must_contain": [
+      "redis-cli",
+      "/data/out"
+    ],
+    "note": "F 类；当前已遮：redis-cli --pass（原 R27）"
+  },
+  {
+    "id": "R119",
+    "tool": "Bash",
+    "arguments": {
+      "command": "sshpass -p 'S3cret R28' ssh root@10.0.0.5 cat /etc/x > /etc/app/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cret",
+      "R28"
+    ],
+    "must_contain": [
+      "sshpass",
+      "/etc/app/x"
+    ],
+    "note": "F 类；当前已遮：sshpass -p 引号值含空格（原 R28）"
+  },
+  {
+    "id": "R120",
+    "tool": "Bash",
+    "arguments": {
+      "command": "openssl enc -d -aes-256-cbc -k S3cretR29 -in a.enc > /etc/app/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR29"
+    ],
+    "must_contain": [
+      "openssl",
+      "/etc/app/x"
+    ],
+    "note": "F 类；当前已遮：openssl -k（原 R29）"
+  },
+  {
+    "id": "R121",
+    "tool": "Bash",
+    "arguments": {
+      "command": "openssl rsa -in k.pem -passin pass:S3cretR30 > /etc/app/k"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR30"
+    ],
+    "must_contain": [
+      "openssl",
+      "/etc/app/k"
+    ],
+    "note": "F 类；当前已遮：openssl -passin pass:（原 R30）"
+  },
+  {
+    "id": "R122",
+    "tool": "Bash",
+    "arguments": {
+      "command": "openssl rsa -in k.pem -passin env:KEYPASS > /etc/app/k"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "openssl",
+      "/etc/app/k"
+    ],
+    "note": "F 类；当前已遮：-passin env: 不是口令，对照（原 R31）"
+  },
+  {
+    "id": "R123",
+    "tool": "Bash",
+    "arguments": {
+      "command": "unzip -P S3cretR32 -p a.zip f > /etc/app/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR32"
+    ],
+    "must_contain": [
+      "unzip",
+      "/etc/app/x"
+    ],
+    "note": "F 类；当前漏出：unzip -P 不在工具选项表（原 R32）"
+  },
+  {
+    "id": "R124",
+    "tool": "Bash",
+    "arguments": {
+      "command": "7z x -pS3cretR33 -so a.7z > /etc/app/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR33"
+    ],
+    "must_contain": [
+      "7z",
+      "/etc/app/x"
+    ],
+    "note": "F 类；当前已遮：7z -p 连写（原 R33）"
+  },
+  {
+    "id": "R125",
+    "tool": "Bash",
+    "arguments": {
+      "command": "gpg --batch --passphrase S3cretR34 -d a.gpg > /etc/app/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR34"
+    ],
+    "must_contain": [
+      "gpg",
+      "/etc/app/x"
+    ],
+    "note": "F 类；当前已遮：gpg --passphrase（原 R34）"
+  },
+  {
+    "id": "R126",
+    "tool": "Bash",
+    "arguments": {
+      "command": "vault kv get -field=password secret/db > /etc/app/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "vault",
+      "/etc/app/x"
+    ],
+    "note": "F 类；当前已遮：-field=password 是字段名不是口令，对照（原 R35）"
+  },
+  {
+    "id": "R127",
+    "tool": "Bash",
+    "arguments": {
+      "command": "kubectl --token=S3cretR36 get secret db -o yaml > /etc/app/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR36"
+    ],
+    "must_contain": [
+      "kubectl",
+      "/etc/app/x"
+    ],
+    "note": "F 类；当前已遮：kubectl --token=（原 R36）"
+  },
+  {
+    "id": "R128",
+    "tool": "Bash",
+    "arguments": {
+      "command": "docker exec db mysql -uroot -pS3cretR37 -e 'select 1' > /etc/app/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR37"
+    ],
+    "must_contain": [
+      "docker",
+      "/etc/app/x"
+    ],
+    "note": "F 类；当前已遮：docker exec 里的 mysql -p（原 R37）"
+  },
+  {
+    "id": "R129",
+    "tool": "Bash",
+    "arguments": {
+      "command": "env DB_PASSWORD='S3cret R38' ./dump.sh > /etc/app/x"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cret",
+      "R38"
+    ],
+    "must_contain": [
+      "/etc/app/x"
+    ],
+    "note": "F 类；当前已遮：env 包装的赋值含空格（原 R38）"
+  },
+  {
+    "id": "R130",
+    "tool": "Bash",
+    "arguments": {
+      "command": "sudo -u root rm -rf /opt/app"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "rm",
+      "/opt/app"
+    ],
+    "note": "检测缺口：sudo 带选项（-u）绕过删除检测；当前分析器不判破坏性，证据只写“子类（N 个目标）”，不泄露；补上检测后应满足 must_contain（原 R39，其他 类）"
+  },
+  {
+    "id": "R131",
+    "tool": "Bash",
+    "arguments": {
+      "command": "sudo -S rm -rf /opt/app"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "rm",
+      "/opt/app"
+    ],
+    "note": "检测缺口：sudo 带选项（-S）绕过删除检测；当前分析器不判破坏性，证据只写“子类（N 个目标）”，不泄露；补上检测后应满足 must_contain（原 R40，其他 类）"
+  },
+  {
+    "id": "R132",
+    "tool": "Bash",
+    "arguments": {
+      "command": "sudo -E rm -rf /opt/app"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "rm",
+      "/opt/app"
+    ],
+    "note": "检测缺口：sudo 带选项（-E）绕过删除检测；当前分析器不判破坏性，证据只写“子类（N 个目标）”，不泄露；补上检测后应满足 must_contain（原 R41，其他 类）"
+  },
+  {
+    "id": "R133",
+    "tool": "Bash",
+    "arguments": {
+      "command": "sudo rm -rf /opt/app"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "rm",
+      "/opt/app"
+    ],
+    "note": "其他 类；当前已遮：不带选项的 sudo 能判定，作为 R39–R41 的对照（原 R42）"
+  },
+  {
+    "id": "R134",
+    "tool": "Bash",
+    "arguments": {
+      "command": "aws s3 rm s3://b --recursive"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "aws",
+      "s3://b"
+    ],
+    "note": "检测缺口：云存储删除：aws s3 rm --recursive 不判破坏性；当前分析器不判破坏性，证据只写“子类（N 个目标）”，不泄露；补上检测后应满足 must_contain（原 R43，其他 类）"
+  },
+  {
+    "id": "R135",
+    "tool": "Bash",
+    "arguments": {
+      "command": "powershell -ec JABwAD0AJwBTADMAYwByAGUAdABSADEAMAA/ACcAOwAgAFIAZQBtAG8AdgBlAC0ASQB0AGUAbQAgAEMAOgBcAGQAYQB0AGEAIAAtAFIAZQBjAHUAcgBzAGUA > /etc/app/out.txt"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR",
+      "JABwAD0AJwBTADMAYwBy"
+    ],
+    "must_contain": [
+      "powershell",
+      "/etc/app/out.txt"
+    ],
+    "note": "D 类；当前漏出：-ec 别名不解码，base64 含 / 绕过高熵兜底，原样输出（原 R44）"
+  },
+  {
+    "id": "R136",
+    "tool": "Bash",
+    "arguments": {
+      "command": "powershell -e JABwAD0AJwBTADMAYwByAGUAdABSADEAMAA/ACcAOwAgAFIAZQBtAG8AdgBlAC0ASQB0AGUAbQAgAEMAOgBcAGQAYQB0AGEAIAAtAFIAZQBjAHUAcgBzAGUA > /etc/app/out.txt"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR",
+      "JABwAD0AJwBTADMAYwBy"
+    ],
+    "must_contain": [
+      "powershell",
+      "/etc/app/out.txt"
+    ],
+    "note": "D 类；当前已遮：-e 解码后取触发段（原 R45）"
+  },
+  {
+    "id": "R137",
+    "tool": "Bash",
+    "arguments": {
+      "command": "powershell -EncodedCommand JABwAD0AJwBTADMAYwByAGUAdABSADEAMAA/ACcAOwAgAFIAZQBtAG8AdgBlAC0ASQB0AGUAbQAgAEMAOgBcAGQAYQB0AGEAIAAtAFIAZQBjAHUAcgBzAGUA > /etc/app/out.txt"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR",
+      "JABwAD0AJwBTADMAYwBy"
+    ],
+    "must_contain": [
+      "powershell",
+      "/etc/app/out.txt"
+    ],
+    "note": "D 类；当前已遮：-EncodedCommand 解码后取触发段（原 R46）"
+  },
+  {
+    "id": "R138",
+    "tool": "shell",
+    "arguments": {
+      "command": [
+        "powershell",
+        "-EncodedCommand",
+        "UgBlAG0AbwB2AGUALQBJAHQAZQBtACAAQwA6AFwAZABhAHQAYQAgAC0AUgBlAGMAdQByAHMAZQAgAC0ARgBvAHIAYwBlAA=="
+      ]
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "Remove-Item"
+    ],
+    "note": "D 类；当前已遮：数组形态 EncodedCommand 解码后触发（原 R47）"
+  },
+  {
+    "id": "R139",
+    "tool": "powershell",
+    "arguments": {
+      "command": "Remove-Item \\\\10.0.0.5\\share\\x -Recurse -Credential (New-Object PSCredential('bob', (ConvertTo-SecureString 'S3cretR48' -AsPlainText -Force)))"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR48"
+    ],
+    "must_contain": [
+      "Remove-Item"
+    ],
+    "note": "B 类；当前漏出：词法兜底下 -Credential 内联，括号粘在词上（原 R48）"
+  },
+  {
+    "id": "R140",
+    "tool": "powershell",
+    "arguments": {
+      "command": "Remove-Item C:\\x -Recurse -Credential $(New-Object PSCredential 'bob', $(ConvertTo-SecureString \"S3cretR49\" -AsPlainText -Force))"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR49"
+    ],
+    "must_contain": [
+      "Remove-Item"
+    ],
+    "note": "B 类；当前漏出：词法兜底下 -Credential $(…) 子表达式（原 R49）"
+  },
+  {
+    "id": "R141",
+    "tool": "powershell",
+    "arguments": {
+      "command": "$sec = ConvertTo-SecureString 'S3cretR50' -AsPlainText -Force; Remove-Item C:\\x -Recurse"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR50"
+    ],
+    "must_contain": [
+      "Remove-Item"
+    ],
+    "note": "B 类；当前已遮：前一句的 SecureString 不在触发段（原 R50）"
+  },
+  {
+    "id": "R142",
+    "tool": "powershell",
+    "arguments": {
+      "command": "Remove-Item C:\\x -Recurse; Set-Content -Path C:\\app\\.env -Value 'DB_PASSWORD=S3cretR51'"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR51"
+    ],
+    "must_contain": [
+      "Remove-Item"
+    ],
+    "note": "B 类；当前已遮：后一句 Set-Content 不在触发段（原 R51）"
+  },
+  {
+    "id": "R143",
+    "tool": "powershell",
+    "arguments": {
+      "command": "Set-Content -Path C:\\app\\secret.txt -Value 'S3cretR52'"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR52"
+    ],
+    "must_contain": [
+      "Set-Content"
+    ],
+    "note": "检测缺口：PowerShell Set-Content 覆盖文件不判破坏性；判定后 -Value 按文件内容省略；当前分析器不判破坏性，证据只写“子类（N 个目标）”，不泄露；补上检测后应满足 must_contain（原 R52，B 类）"
+  },
+  {
+    "id": "R144",
+    "tool": "cmd",
+    "arguments": {
+      "command": [
+        "cmd",
+        "/c",
+        "set DB_PASSWORD=S3cretR53&& del /s /q C:\\data"
+      ]
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR53"
+    ],
+    "must_contain": [
+      "del"
+    ],
+    "note": "其他 类；当前已遮：cmd 的 set 不在 del 触发段（原 R53）"
+  },
+  {
+    "id": "R145",
+    "tool": "shell",
+    "arguments": {
+      "command": [
+        "rm",
+        "-rf",
+        "/opt/My Dir"
+      ]
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [],
+    "must_contain": [
+      "rm",
+      "/opt/My Dir"
+    ],
+    "note": "G 类；当前已遮：无凭据；argv 被空格拼接后目标被拆成两个（存量问题，证据未加引号）（原 R54）"
+  },
+  {
+    "id": "R146",
+    "tool": "shell",
+    "arguments": {
+      "command": [
+        "env",
+        "GH_TOKEN=S3cret R55",
+        "git",
+        "push",
+        "-f",
+        "origin",
+        "main"
+      ]
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cret",
+      "R55"
+    ],
+    "must_contain": [
+      "git",
+      "push"
+    ],
+    "note": "检测缺口：argv 形态 env 包装的 git push -f 不判破坏性；当前分析器不判破坏性，证据只写“子类（N 个目标）”，不泄露；补上检测后应满足 must_contain（原 R55，G 类）"
+  },
+  {
+    "id": "R147",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "UPDATE users SET password = sha2(concat('S3cretR56', salt), 256)"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR56"
+    ],
+    "must_contain": [
+      "UPDATE",
+      "users"
+    ],
+    "note": "C 类；当前漏出：SQL 嵌套函数包裹口令（原 R56）"
+  },
+  {
+    "id": "R148",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "UPDATE users SET pass='S3cretR57'"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR57"
+    ],
+    "must_contain": [
+      "UPDATE",
+      "users"
+    ],
+    "note": "C 类；当前已遮：SQL 列名 pass（原 R57）"
+  },
+  {
+    "id": "R149",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "UPDATE users SET secret_key = 'S3cretR58'"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR58"
+    ],
+    "must_contain": [
+      "UPDATE",
+      "users"
+    ],
+    "note": "C 类；当前已遮：SQL 列名 secret_key（原 R58）"
+  },
+  {
+    "id": "R150",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "UPDATE users SET \"password\" = 'S3cretR59'"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR59"
+    ],
+    "must_contain": [
+      "UPDATE",
+      "users"
+    ],
+    "note": "C 类；当前漏出：SQL 双引号标识符列名（原 R59）"
+  },
+  {
+    "id": "R151",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "UPDATE users SET `password` = 'S3cretR60'"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR60"
+    ],
+    "must_contain": [
+      "UPDATE",
+      "users"
+    ],
+    "note": "C 类；当前漏出：SQL 反引号标识符列名（原 R60）"
+  },
+  {
+    "id": "R152",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "DELETE FROM users -- password S3cretR61\n"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR61"
+    ],
+    "must_contain": [
+      "DELETE",
+      "users"
+    ],
+    "note": "C 类；当前漏出：SQL 行注释里的口令（原 R61）"
+  },
+  {
+    "id": "R153",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "/* token=S3cretR62 */ DELETE FROM sessions"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR62"
+    ],
+    "must_contain": [
+      "DELETE",
+      "sessions"
+    ],
+    "note": "C 类；当前已遮：SQL 块注释（新口径注释应整体去掉）（原 R62）"
+  },
+  {
+    "id": "R154",
+    "tool": "run_sql",
+    "arguments": {
+      "query": "DROP USER 'bob'@'%'; CREATE USER 'bob'@'%' IDENTIFIED BY 'S3cretR63'"
+    },
+    "subcategory": "filesystem_delete",
+    "must_not_contain": [
+      "S3cretR63"
+    ],
+    "must_contain": [
+      "DROP",
+      "USER"
+    ],
+    "note": "C 类；当前已遮：只取 DROP USER 触发语句（原 R63）"
+  }
+]

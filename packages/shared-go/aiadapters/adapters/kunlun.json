@@ -1,0 +1,30 @@
+{
+  "id": "provider-kunlun",
+  "name": "昆仑万维",
+  "vendor": "昆仑万维",
+  "catalog_entries": [
+    {
+      "id": "tiangong",
+      "provider": "kunlun",
+      "provider_cn": "昆仑万维",
+      "product": "tiangong",
+      "product_cn": "天工 AI",
+      "category": "chat",
+      "region": "cn",
+      "domains": [
+        "tiangong.cn"
+      ],
+      "path_rules": [
+        "/"
+      ],
+      "request_decoder": "tiangong_web",
+      "response_decoder": "tiangong_web",
+      "retain_level": "content",
+      "risk_profile": "llm_web",
+      "enabled": true,
+      "priority": 70,
+      "source_url": "https://tiangong.cn/"
+    }
+  ],
+  "agent_definitions": []
+}

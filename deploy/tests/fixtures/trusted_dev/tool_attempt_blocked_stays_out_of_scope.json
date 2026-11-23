@@ -1,0 +1,35 @@
+{
+  "name": "tool_attempt_blocked_stays_out_of_scope",
+  "note": "tool_attempt_blocked is already informational by an earlier return in computeLifecycleFields; the rule declines so the sweep never writes a triage_route the live bridge would not write.",
+  "event": {
+    "event_type": "tool_attempt_blocked",
+    "severity": "high",
+    "action_taken": "audit",
+    "principal_key": "192.168.56.1",
+    "matched_summary": {
+      "agent_type": "agent_claude_code",
+      "findings": [
+        {
+          "rule_type": "agent_detect",
+          "type": "agent_behavior",
+          "category": "agent_claude_code",
+          "severity": "low",
+          "confidence": 0.9,
+          "counts_as_security_finding": false
+        },
+        {
+          "category": "prompt_leak_internal_rules",
+          "severity": "high",
+          "confidence": 0.9,
+          "counts_as_security_finding": true,
+          "type": "prompt_leak",
+          "content_source": "tool_result",
+          "message_role": "tool"
+        }
+      ]
+    }
+  },
+  "expect": {
+    "routed": false
+  }
+}

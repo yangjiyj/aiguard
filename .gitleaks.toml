@@ -1,0 +1,47 @@
+title = "JJDGuard gitleaks config"
+
+[[rules]]
+id = "explicit-test-openai-key"
+description = "Explicit fake OpenAI-style key used to verify the push gate"
+regex = '''sk-test[0-9A-Za-z_-]*'''
+entropy = 0
+keywords = ["sk-test"]
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Known non-production test fixtures and placeholders"
+regexes = [
+  '''=REDACTED$''',
+  '''AKIAIOSFODNN7EXAMPLE''',
+  '''ghp_abcdefghijklmnopqrstuvwxyz1234567890''',
+  '''sk-proj-abcdefghijklmnopqrstuvwxyz1234567890''',
+  '''sk-live-1234567890abcdef''',
+  '''abcd1234efgh5678ijkl''',
+  '''a1b2c3d4e5f60718''',
+  '''msv1\.opaque-[ab]''',
+  '''sha256:[0-9a-f]{64}''',
+  "lse-lic-2026=WxiAqCV0BUqVnopcPSrOWcVlowUoz1JQtGyEUCZ2f_Y",
+]
+paths = [
+  '''.*__pycache__/.*''',
+  '''apps/gateway-core/internal/auth/auth_test\.go''',
+  '''apps/proxy-server/internal/handler/security_test\.go''',
+  '''packages/shared-go/secrets/secrets_test\.go''',
+  '''apps/security-engine/tests/.*''',
+  '''apps/web-console/src/test/keys\.test\.tsx''',
+  '''reports/security/.*''',
+  '''\.venv-audit/.*''',
+  '''deploy/docker-compose/\.env''',
+  '''deploy/docker-compose/diagnose\.sh''',
+  '''apps/control-plane/internal/repository/pause_log_test\.go''',
+  '''apps/gateway-core/internal/agentguard/dlp_behavior_test\.go''',
+  '''apps/gateway-core/internal/handler/chat_runtime_context_test\.go''',
+  '''apps/gateway-core/internal/provider/adapter_stream_test\.go''',
+  '''apps/proxy-server/internal/handler/testdata/.*''',
+  "docs/superpowers/plans/2026-06-30-semantic-attack-detection-p4-bundled-model[.]md",
+  "docs/superpowers/plans/2026-07-05-p1a-source-aware-detection[.]md",
+  "apps/proxy-server/internal/handler/web_request_decoder_fixture_test[.]go",
+  "apps/proxy-server/internal/handler/decoder_vscodex_test[.]go",
+]

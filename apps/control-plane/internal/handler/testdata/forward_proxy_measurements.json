@@ -1,0 +1,19 @@
+{
+  "_说明": "proxy-server 正向代理真实上报体（由 apps/proxy-server proxy_metering_test.go 以 FORWARD_METERING_FIXTURE_OUT 导出，request_id/tenant_id/source_ip 在回放时替换）",
+  "chatgpt_web_usage_unknown": {
+    "model_name": "chatgpt",
+    "raw_usage": {"product": "chatgpt", "provider": "openai", "usage_parser": "none", "usage_source": "forward_proxy"},
+    "request_status": "success",
+    "usage": {},
+    "usage_source": "forward_proxy",
+    "usage_unknown": true
+  },
+  "openai_api_parsed": {
+    "model_name": "gpt-6-luna",
+    "raw_usage": {"product": "openai_api", "provider": "openai", "usage_parser": "sse", "usage_source": "forward_proxy", "usage_state": "upstream"},
+    "request_status": "success",
+    "usage": {"cache_write_input_tokens": 0, "cached_input_tokens": 0, "output_tokens": 300, "prompt_tokens": 1200, "reasoning_tokens": 0},
+    "usage_source": "forward_proxy",
+    "usage_unknown": false
+  }
+}

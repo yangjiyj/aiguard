@@ -1,0 +1,37 @@
+{
+  "id": "provider-qihoo360",
+  "name": "360",
+  "vendor": "360",
+  "catalog_entries": [
+    {
+      "id": "qihoo360_ai",
+      "provider": "qihoo360",
+      "provider_cn": "360",
+      "product": "360_ai",
+      "product_cn": "360 AI 搜索 / 智脑",
+      "category": "chat",
+      "region": "cn",
+      "domains": [
+        "bot.360.com",
+        "ai.360.com",
+        "so.360.com"
+      ],
+      "path_rules": [
+        "/",
+        "/chat",
+        "contains:/chat",
+        "contains:/message",
+        "contains:/conversation",
+        "contains:/completion"
+      ],
+      "request_decoder": "360_web",
+      "response_decoder": "360_web",
+      "retain_level": "content",
+      "risk_profile": "llm_web",
+      "enabled": true,
+      "priority": 75,
+      "source_url": "https://bot.360.com/"
+    }
+  ],
+  "agent_definitions": []
+}

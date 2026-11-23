@@ -1,0 +1,94 @@
+/* Alert workbench: selected finding stays alongside its factual evidence. */
+.alert-workbench-tabs { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.alert-workbench-tabs .ant-tabs { flex: 1; min-width: 0; }
+.alert-workbench-metrics { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 16px; margin: 8px 0 20px; }
+.alert-workbench-metrics section { background: var(--bg-elevated); border: 1px solid var(--border-color); border-radius: 12px; padding: 18px 20px; min-height: 132px; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+.alert-workbench-metrics span,.alert-workbench-metrics small { color: var(--text-secondary); }
+.alert-workbench-metrics strong { font-size: 28px; line-height: 1.2; font-weight: 650; color: var(--brand-blue); }
+.alert-workbench-metrics section:first-child strong { color: #e29393; }
+.alert-workbench-metrics section:nth-child(2) strong { color: #dca48c; }
+.alert-workbench-metrics strong.is-healthy { color: var(--brand-green); }
+.alert-workbench-metrics .ant-btn { height: auto; padding: 0; white-space: normal; text-align: left; }
+.alert-workbench-columns { display: grid; grid-template-columns: minmax(340px, .92fr) minmax(440px, 1.15fr); gap: 24px; align-items: start; }
+.alert-workbench-list,.alert-workbench-detail { min-width: 0; }
+.alert-workbench-column-title { color: var(--text-secondary); margin: 0 0 12px; overflow-wrap: anywhere; }
+.alert-workbench-card { transition: border-color .15s, background .15s; }
+.alert-workbench-card:hover { border-color: var(--brand-blue) !important; }
+.alert-workbench-card.is-selected { border-color: var(--brand-blue) !important; box-shadow: 0 0 0 1px color-mix(in srgb, var(--brand-blue) 28%, transparent); }
+.alert-workbench-card .ant-typography { overflow-wrap: anywhere; }
+.alert-workbench-card:focus-visible { outline: 2px solid var(--brand-blue); outline-offset: 2px; }
+.alert-workbench-detail { position: sticky; top: 20px; }
+.alert-workbench-detail-panel { border: 1px solid var(--border-color); border-radius: 12px; background: var(--bg-card); overflow: hidden; }
+.alert-workbench-detail-panel > .ant-empty { padding: 50px 15px; }
+.alert-workbench-detail-actions { border-bottom: 1px solid var(--border-color); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; padding: 16px 18px; background: var(--bg-elevated); }
+.alert-workbench-detail-body { padding: 20px; max-height: calc(100vh - 210px); overflow-y: auto; }
+.alert-workbench-facts .ant-descriptions { margin-top: 10px; }
+.alert-workbench-facts .ant-descriptions-item-label { min-width: 88px; }
+.alert-workbench-facts .ant-descriptions-item-content { overflow-wrap: anywhere; }
+.alert-workbench-page .audit-context-line { display: none; }
+.alert-workbench-page .audit-search-bar { background: transparent; border: 0; box-shadow: none; margin-bottom: 4px !important; }
+.alert-workbench-page .audit-search-bar .ant-card-body { padding: 0 0 6px; }
+@media (max-width: 1250px) { .alert-workbench-columns { gap: 16px; grid-template-columns: minmax(300px,.85fr) minmax(350px,1fr); } .alert-workbench-metrics { gap: 10px; } .alert-workbench-metrics section { padding: 14px; } }
+@media (max-width: 991px) { .alert-workbench-columns { grid-template-columns: minmax(0,1fr); } .alert-workbench-metrics { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+@media (max-width: 560px) { .alert-workbench-tabs { flex-wrap: wrap; gap: 4px; } .alert-workbench-tabs .ant-tabs { flex-basis: 100%; } .alert-workbench-metrics { gap: 8px; } .alert-workbench-metrics strong { font-size: 24px; } }
+
+.alert-retained-turn { width: 100%; border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; background: var(--bg-elevated); overflow-wrap: anywhere; }
+
+.alert-case-guide { display:flex; flex-wrap:wrap; gap:8px 20px; padding:12px 16px; margin-bottom:12px; border-radius:8px; background:var(--bg-secondary); color:var(--text-secondary); font-size:12px; }
+.alert-case-guide strong { color:var(--text-primary); }
+.alert-case-member { padding:12px; border:1px solid var(--border-color); border-radius:8px; width:100%; font-size:12px; overflow-wrap:anywhere; }
+.alert-case-member > div { margin-bottom:6px; }
+.alert-case-evidence-text { white-space:pre-wrap; overflow-wrap:anywhere; max-height:280px; overflow:auto; padding:12px; background:var(--bg-elevated); border:1px solid var(--border-color); border-radius:8px; margin-top:8px; }
+.alert-case-evidence-text mark { background:#f5d580; color:#241b08; }
+.alert-case-detail-body > .ant-tabs > .ant-tabs-nav { position:sticky; top:-20px; background:var(--bg-card); z-index:1; }
+
+/* Keep the scan list short while evidence remains independently readable. */
+.alert-workbench-list-items { max-height: clamp(320px, calc(100dvh - 330px), 680px); overflow-y: auto; scrollbar-gutter: stable; padding: 1px 5px 1px 1px; margin-bottom: 12px; }
+.alert-workbench-card-compact { border: 1px solid var(--border-color); border-left: 4px solid; border-radius: 8px; background: var(--bg-card); padding: 10px 12px; margin-bottom: 8px; cursor: pointer; }
+.alert-workbench-card-compact.is-selected { background: var(--bg-hover); }
+.alert-compact-heading { display: flex; align-items: center; gap: 8px; }
+.alert-compact-heading > .ant-typography { flex: 1; min-width: 0; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.alert-compact-heading .ant-avatar,.alert-compact-heading .ant-tag { flex: none; }
+.alert-compact-meta,.alert-compact-footer { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; margin-top: 6px; font-size: 12px; }
+.alert-compact-footer .ant-btn { margin-left: auto; padding: 0; height: 22px; }
+.alert-workbench-list > .ant-pagination { padding-top: 4px; }
+@media (max-width: 991px) { .alert-workbench-list-items { max-height: none; overflow: visible; } }
+
+/* 处理车道页签：需行动 / 观察 / 测评流量 */
+.alert-lane-bar { margin-bottom: 4px; }
+.alert-lane-bar > .ant-tabs > .ant-tabs-nav { margin-bottom: 12px; }
+.alert-lane-tab { display: inline-flex; align-items: baseline; gap: 8px; font-weight: 600; }
+.alert-lane-tab b { font-size: 12px; font-weight: 600; padding: 1px 8px; border-radius: 10px; background: var(--bg-elevated); color: var(--text-secondary); font-variant-numeric: tabular-nums; min-width: 24px; text-align: center; }
+.alert-lane-tab:empty { display: none; }
+.alert-lane-tab.is-action b { background: color-mix(in srgb, #e24b4a 18%, transparent); color: #f08a89; }
+.alert-lane-tab.is-watch b { background: color-mix(in srgb, #faad14 16%, transparent); color: #e0b050; }
+.alert-lane-tab.is-eval b { background: color-mix(in srgb, #4a8fe2 16%, transparent); color: #7fb2ee; }
+.alert-lane-note { margin-bottom: 12px; }
+
+/* 案件卡片：发生了什么 → 在哪里 → 谁 → 次数与状态 */
+.alert-workbench-card-compact { padding: 12px 14px 10px; display: flex; flex-direction: column; gap: 6px; border-left-width: 4px; }
+.alert-workbench-card-compact.is-sev-critical { border-left-color: #e24b4a; }
+.alert-workbench-card-compact.is-sev-high { border-left-color: #fa8c16; }
+.alert-workbench-card-compact.is-sev-medium { border-left-color: #faad14; }
+.alert-workbench-card-compact.is-sev-low { border-left-color: #52c41a; }
+.alert-card-head { display: flex; align-items: center; gap: 8px; }
+.alert-card-what { flex: 1; min-width: 0; font-size: 15px; font-weight: 650; color: var(--text-primary); overflow-wrap: anywhere; }
+.alert-card-head .ant-tag { flex: none; margin: 0; }
+.alert-card-where { font-size: 12.5px; color: var(--text-secondary); overflow-wrap: anywhere; }
+.alert-card-who { display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--text-secondary); min-width: 0; }
+.alert-card-who span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.alert-card-who .ant-avatar { flex: none; font-size: 10px; background: var(--bg-elevated); color: var(--text-secondary); }
+.alert-card-foot { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 10px; margin-top: 2px; padding-top: 8px; border-top: 1px dashed var(--border-color); font-size: 12px; }
+.alert-card-foot .ant-tag { margin: 0; }
+.alert-card-foot .ant-btn { margin-left: auto; padding: 0; height: 22px; }
+.alert-card-repeat { display: inline-flex; align-items: baseline; gap: 6px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--text-primary); background: var(--bg-elevated); border-radius: 6px; padding: 1px 8px; }
+.alert-card-repeat i { font-style: normal; font-weight: 400; font-size: 11.5px; color: var(--text-secondary); }
+
+/* 详情标题：风险名在前，主体退为副标题 */
+.alert-case-title-block { display: flex; flex-direction: column; gap: 2px; }
+.alert-case-title { font-size: 17px; line-height: 1.35; }
+
+/* 概况页：来源一句话 + 缺失项 */
+.alert-origin { display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border: 1px solid var(--border-color); border-left: 3px solid var(--brand-blue); border-radius: 8px; background: var(--bg-elevated); }
+.alert-origin-sentence { font-size: 14px; line-height: 1.6; overflow-wrap: anywhere; }
+.alert-origin-missing { margin: 0; padding-left: 18px; color: var(--text-secondary); font-size: 12.5px; line-height: 1.7; }

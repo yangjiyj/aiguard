@@ -1,0 +1,17 @@
+.policy-redaction-config {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid var(--border-color, #d9d9d9);
+  border-radius: 8px;
+}
+.policy-redaction-config > p { margin: 0; }
+.policy-redaction-config > label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.policy-redaction-config > label > .ant-select,
+.policy-redaction-config > label > .ant-input { width: 100%; }
+.policy-redaction-config .policy-drawer-switch { margin: 0; }

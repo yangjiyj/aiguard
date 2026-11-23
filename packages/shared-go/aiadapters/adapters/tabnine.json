@@ -1,0 +1,30 @@
+{
+  "id": "provider-tabnine",
+  "name": "Tabnine",
+  "vendor": "Tabnine",
+  "catalog_entries": [
+    {
+      "id": "tabnine",
+      "provider": "tabnine",
+      "provider_cn": "Tabnine",
+      "product": "tabnine",
+      "product_cn": "Tabnine",
+      "category": "coding",
+      "region": "global",
+      "domains": [
+        "api.tabnine.com",
+        "tabnine.com",
+        "*.tabnine.com"
+      ],
+      "path_rules": null,
+      "request_decoder": "coding_ai",
+      "response_decoder": "coding_ai",
+      "retain_level": "content",
+      "risk_profile": "ai_ide_agent",
+      "enabled": true,
+      "priority": 75,
+      "source_url": "https://www.tabnine.com/"
+    }
+  ],
+  "agent_definitions": []
+}

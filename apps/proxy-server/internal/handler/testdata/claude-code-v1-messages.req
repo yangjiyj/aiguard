@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-4-5",
+  "max_tokens": 32000,
+  "stream": true,
+  "system": [
+    {"type": "text", "text": "You are Claude Code, Anthropic's official CLI for Claude.", "cache_control": {"type": "ephemeral"}},
+    {"type": "text", "text": "You are an interactive CLI tool that helps users with software engineering tasks.\n\nHere is useful information about the environment you are running in:\n<env>\nWorking directory: /Users/dev/acme-app\nIs directory a git repo: Yes\nPlatform: darwin\nToday's date: 2026-07-05\n</env>\n\ngitStatus: This is the git status at the start of the conversation.\nCurrent branch: main\nStatus:\n(clean)\nRecent commits:\nabc1234 fix: login retry\n\n<system-reminder>\nAs you answer the user's questions, you can use the following context:\n# userEmail\nThe user's email address is dev@acme.example.\n</system-reminder>", "cache_control": {"type": "ephemeral"}}
+  ],
+  "tools": [
+    {"name": "Bash", "description": "Executes a bash command and returns its output.", "input_schema": {"type": "object", "properties": {"command": {"type": "string", "description": "The command to execute"}}, "required": ["command"]}},
+    {"name": "Read", "description": "Reads a file from the local filesystem.", "input_schema": {"type": "object", "properties": {"file_path": {"type": "string"}}, "required": ["file_path"]}}
+  ],
+  "messages": [
+    {"role": "user", "content": "GWTEST-P1C-0705-CC-01 帮我看看数据库连接串在哪个文件"},
+    {"role": "assistant", "content": [
+      {"type": "text", "text": "我来搜索一下配置文件。"},
+      {"type": "tool_use", "id": "toolu_01A", "name": "Bash", "input": {"command": "grep -r DATABASE_URL config/"}}
+    ]},
+    {"role": "user", "content": [
+      {"type": "tool_result", "tool_use_id": "toolu_01A", "content": [{"type": "text", "text": "config/prod.env:DATABASE_URL=postgres://svc:S3cretPw@10.0.0.8:5432/app"}]}
+    ]},
+    {"role": "user", "content": [
+      {"type": "text", "text": "GWTEST-P1C-0705-CC-02 把这个密码轮换一下"}
+    ]}
+  ],
+  "metadata": {"user_id": "session-3f6c"}
+}

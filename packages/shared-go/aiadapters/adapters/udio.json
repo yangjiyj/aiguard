@@ -1,0 +1,30 @@
+{
+  "id": "provider-udio",
+  "name": "Udio",
+  "vendor": "Udio",
+  "catalog_entries": [
+    {
+      "id": "udio",
+      "provider": "udio",
+      "provider_cn": "Udio",
+      "product": "udio",
+      "product_cn": "Udio",
+      "category": "audio",
+      "region": "global",
+      "domains": [
+        "udio.com"
+      ],
+      "path_rules": [
+        "/"
+      ],
+      "request_decoder": "audio_web",
+      "response_decoder": "audio_web",
+      "retain_level": "summary",
+      "risk_profile": "audio_ai",
+      "enabled": true,
+      "priority": 50,
+      "source_url": "https://udio.com/"
+    }
+  ],
+  "agent_definitions": []
+}

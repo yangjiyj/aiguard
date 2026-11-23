@@ -1,0 +1,99 @@
+{
+  "name": "provider_down_policy_noise",
+  "description": "已停用渠道的 ID 只出现在不生效的字段里（enabled=false 的候选、非 fixed 策略遗留的 fixed_provider_id、模型层策略的关键词）：路由并没有指向它，不能误报渠道停用",
+  "fixture": {
+    "teams": [
+      {
+        "key": "dev",
+        "mode": "allowlist",
+        "models": [
+          "sol"
+        ]
+      }
+    ],
+    "providers": [
+      {
+        "key": "p1",
+        "name": "主渠道",
+        "type": "openai",
+        "base_url": "https://api.example.com"
+      },
+      {
+        "key": "p2",
+        "name": "旧备用渠道",
+        "type": "openai",
+        "base_url": "https://old.example.com",
+        "status": "disabled"
+      }
+    ],
+    "models": [
+      {
+        "key": "sol",
+        "provider": "p1",
+        "name": "gpt-6.1-sol"
+      }
+    ],
+    "users": [
+      {
+        "key": "zs",
+        "username": "zhangsan",
+        "team": "dev"
+      }
+    ],
+    "routing_policies": [
+      {
+        "scope_type": "model",
+        "scope_ref": "gpt-6.1-sol",
+        "strategy": "priority",
+        "schema_version": 2,
+        "config": {
+          "strategy": "priority",
+          "cost_basis": "none",
+          "fixed_provider_id": "{prov:p2}",
+          "providers": [
+            {
+              "provider_id": "{prov:p1}",
+              "enabled": true,
+              "priority": 1,
+              "weight": 0
+            },
+            {
+              "provider_id": "{prov:p2}",
+              "enabled": false,
+              "priority": 2,
+              "weight": 0
+            }
+          ]
+        }
+      },
+      {
+        "scope_type": "model",
+        "scope_ref": "gpt-6-luna",
+        "layer": "model",
+        "strategy": "conditional",
+        "schema_version": 1,
+        "config": {
+          "high_keywords": [
+            "{prov:p2}"
+          ],
+          "default_model": "gpt-6.1-sol"
+        }
+      }
+    ]
+  },
+  "input": {
+    "kind": "health",
+    "scope": "admin"
+  },
+  "expect": {
+    "tier": "L2",
+    "forbid_keywords": [
+      "旧备用渠道"
+    ],
+    "l3": {
+      "forbid_keywords": [
+        "旧备用渠道"
+      ]
+    }
+  }
+}
