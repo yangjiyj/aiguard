@@ -381,7 +381,7 @@
    "密级：秘密，请勿外传此报告"
   ],
   "judged_by_ai": false,
-  "matches": "认中文密级标记：机密、绝密、秘密要处在标记的位置（如“机密文件”“【绝密】”“密级：秘密”），且前后 80 字内提到文件、资料、合同、数据等，“内部文件”“内部资料”本身就算。作普通名词用（如“保守商业机密”）或前面写着“不是”“示例”的不算；问“这是内部资料吗”也会命中。经网关接入时，模型回答和本地文件工具（如 Write、Edit）参数里出现，内置策略只留证、不拦截；shell 命令照常拦截。",
+  "matches": "认中文密级标记：机密、绝密、秘密要处在标记的位置（如“机密文件”“【绝密】”“密级：秘密”），且前后 80 字内提到文件、资料等；“机密★10年”“【机密】”标头直接认。作普通名词用（如“保守商业机密”）或前面写着“不是”“示例”的不算；问“是内部资料吗”也命中。经网关接入时，模型回答和本地文件工具（如 Write、Edit）参数里出现，内置策略只留证、不拦截；shell 命令照常拦截。",
   "miss_examples": [
    "我们要保守商业机密",
    "这不是内部文件"
@@ -395,7 +395,7 @@
    "CONFIDENTIAL - Q3 board report draft"
   ],
   "judged_by_ai": false,
-  "matches": "认英文密级词 confidential、top secret、classified、internal use（不分大小写），且前后 80 字内出现 report、document、file、contract、memo 等文档词。只有密级词、没有文档词的不算。经网关接入时，模型回答和本地文件工具（如 Write、Edit）参数里出现，内置策略只留证、不拦截；shell 命令照常拦截。",
+  "matches": "认英文密级词 confidential、top secret、classified、internal use（不分大小写），且前后 80 字内出现 report、document、file 等文档词；整行大写标头不要文档词。经网关接入时，模型回答和本地文件工具（如 Write、Edit）参数里出现，内置策略只留证、不拦截；shell 命令照常拦截。",
   "miss_examples": [
    "Please keep this confidential.",
    "Classified ads are cheap here"
@@ -1249,7 +1249,7 @@
    "CVV：123"
   ],
   "judged_by_ai": false,
-  "matches": "认 CVV、CVC、CID、“信用卡安全码”“卡片安全码”加冒号或等号后面的 3–4 位数字。前后 160 字内没有连写的有效卡号时降为中危，但仍计入告警。单写“安全码”不认；CID 不分大小写，网址参数 cid=1024 也会命中。",
+  "matches": "认 CVV、CVC、CID、“信用卡安全码”“卡片安全码”加冒号或等号后面的 3–4 位数字；“CVV 123”“安全码 123”无冒号写法须同段有卡号。前后 160 字内没有连写的有效卡号时降为中危，但仍计入告警。CID 不分大小写，网址参数 cid=1024 也会命中。",
   "miss_examples": [
    "CVV 是卡背面的三位数",
    "CVV 码泄露了怎么办？"
@@ -2779,7 +2779,7 @@
    "登录密码：Ex@mple2024!"
   ],
   "judged_by_ai": false,
-  "matches": "认 password、passwd、pwd、passphrase 或“登录密码”“账户密码”“用户密码”“明文密码”加冒号或等号后的取值，且像真密码：10 位以上，大小写字母、数字、符号至少占三类，还要足够随机。单写“密码：”不认；弱密码、${变量}、占位词不命中。",
+  "matches": "认 password、passwd、pwd、passphrase 或“登录密码”“账户密码”“用户密码”“明文密码”加冒号或等号后的取值，“密码是/为/：”“口令是/为”后的也认，且像真密码：10 位以上，大小写字母、数字、符号至少占三类，还要足够随机。弱密码、${变量}、占位词不命中。",
   "miss_examples": [
    "忘记登录密码怎么办？",
    "password: ${DB_PASSWORD}"

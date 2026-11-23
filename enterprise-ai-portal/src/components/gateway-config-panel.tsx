@@ -4,24 +4,28 @@ import {gatewayClientConfig} from '@/lib/gateway-client-config';
 import {gatewayAccessOptions,chooseGatewayEndpoint,inspectGatewayResponse} from '@/lib/gateway-access';
 import {copyEmployeeKey} from './employee-key-panel';
 const preferenceKey='jjdguard.gateway.endpoint';
+const preferenceEvent='jjdguard-gateway-endpoint-change';
+const subscribeNothing=()=>()=>{};
+const readOrigin=()=>window.location.origin;
+const subscribePreference=(onChange:()=>void)=>{window.addEventListener('storage',onChange);window.addEventListener(preferenceEvent,onChange);return()=>{window.removeEventListener('storage',onChange);window.removeEventListener(preferenceEvent,onChange)}};
+const readPreference=()=>{try{return localStorage.getItem(preferenceKey)||''}catch{/* Storage can be disabled. */return ''}};
+const serverSnapshot=()=>'';
 export function GatewayConfigPanel({config,error,compact=false}:{compact?:boolean;config?:ReturnType<typeof gatewayClientConfig>|null;error?:string}){
  const [notice,setNotice]=React.useState('');
- const [origin,setOrigin]=React.useState('');
- const [preferred,setPreferred]=React.useState('');
+ const origin=React.useSyncExternalStore(subscribeNothing,readOrigin,serverSnapshot);
+ const stored=React.useSyncExternalStore(subscribePreference,readPreference,serverSnapshot);
+ const [memoryChoice,setMemoryChoice]=React.useState<string|null>(null);
+ const preferred=memoryChoice??stored;
  const [checking,setChecking]=React.useState(false);
  const sequence=React.useRef({current:0,active:true});
- React.useEffect(()=>{
-  setOrigin(window.location.origin);
-  const update=()=>{try{setPreferred(localStorage.getItem(preferenceKey)||'')}catch{/* Storage can be disabled. */}};
-  update();window.addEventListener('storage',update);window.addEventListener('jjdguard-gateway-endpoint-change',update);
-  return()=>{window.removeEventListener('storage',update);window.removeEventListener('jjdguard-gateway-endpoint-change',update)};
- },[]);
  const settings=config?.access??{gateway_public_base_url:config?.openai};
  const options=gatewayAccessOptions(settings,origin);
  const selected=chooseGatewayEndpoint(options,settings,preferred);
  const selectedConfig=gatewayClientConfig(selected,origin,settings);
- React.useEffect(()=>{const state={current:0,active:true};sequence.current=state;setNotice('');setChecking(false);return()=>{state.active=false}},[selected]);
- const choose=(url:string)=>{setPreferred(url);try{localStorage.setItem(preferenceKey,url);window.dispatchEvent(new Event('jjdguard-gateway-endpoint-change'))}catch{/* The in-memory selection still works. */}};
+ const [shownFor,setShownFor]=React.useState(selected);
+ if(shownFor!==selected){setShownFor(selected);setNotice('');setChecking(false)}
+ React.useEffect(()=>{const state={current:0,active:true};sequence.current=state;return()=>{state.active=false}},[selected]);
+ const choose=(url:string)=>{try{localStorage.setItem(preferenceKey,url);setMemoryChoice(null);window.dispatchEvent(new Event(preferenceEvent))}catch{/* The in-memory selection still works. */setMemoryChoice(url)}};
  const copy=async(value:string)=>{try{await copyEmployeeKey(value);setNotice('调用地址已复制')}catch{setNotice('复制失败，请手动选择地址')}};
  const check=async()=>{
   const state=sequence.current;const requestSequence=++state.current;setChecking(true);setNotice('');

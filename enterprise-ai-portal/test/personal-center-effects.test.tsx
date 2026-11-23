@@ -21,25 +21,25 @@ async function mount(element:React.ReactNode,fetchImpl:typeof fetch,check:(conta
  try{await act(async()=>{root.render(element);await new Promise(resolve=>setTimeout(resolve,0))});await check(container)}
  finally{await act(async()=>root.unmount());globalThis.fetch=originalFetch;Object.assign(globalThis,{window:originalWindow,document:originalDocument});if(originalNavigator)Object.defineProperty(globalThis,'navigator',originalNavigator);dom.window.close()}
 }
-test('billing failure executes effects and leaves real Key controls usable',async()=>{
+test('billing failure executes effects and keeps the billing page usable',async()=>{
  const seen:string[]=[];
  await mount(React.createElement(BillingPage),async(input)=>{
   const path=String(input);seen.push(path);
   if(path.endsWith('/billing'))return Response.json({error:'unavailable'},{status:500});
   if(path.endsWith('/keys'))return Response.json({data:[fixture]});
   if(path.endsWith('/model-access'))return Response.json({data:{modelIds:['approved'],modelSources:{approved:'department'},extraGrants:[],staleModels:[]}});
-  if(path.endsWith('/employee-key'))return Response.json({error:'authorization_denied'},{status:403});
   return Response.json({user:{name:'fixture'},data:{openai:'https://gateway.test/v1',anthropic:'https://gateway.test',warnings:[]}});
  },async container=>{
   assert.ok(seen.some(p=>p.endsWith('/billing')));assert.ok(seen.some(p=>p.endsWith('/keys')));
-  assert.ok(container.textContent?.includes('账单数据暂不可用'));assert.ok(container.textContent?.includes('可用个人密钥'));assert.ok(container.textContent?.includes('approved'));
+  assert.ok(container.textContent?.includes('1 / 1'));
+  assert.ok(container.textContent?.includes('账单数据暂不可用'));
   assert.equal(container.textContent?.includes('private-project-id'),false);
-  const copy=[...container.querySelectorAll('button')].find(b=>b.textContent==='复制完整 Key');assert.ok(copy);assert.equal(copy.disabled,false);
+  for(const tab of ['用量概览','钱包','限额']){const button=[...container.querySelectorAll('button')].find(b=>b.textContent===tab);assert.ok(button);assert.equal(button.disabled,false)}
  });
 });
-test('revoke dialog owns focus, traps Tab and closes with Escape',async()=>{
+test('delete dialog owns focus, traps Tab and closes with Escape',async()=>{
  await mount(React.createElement(ApiKeysPanel,{initialKeys:[fixture],projects:[]}),async()=>new Response(null,{status:204}),async container=>{
-  const trigger=[...container.querySelectorAll('button')].find(b=>b.textContent==='吊销')!;trigger.focus();
+  const trigger=[...container.querySelectorAll('button')].find(b=>b.textContent==='删除')!;trigger.focus();
   await act(async()=>trigger.click());
   const dialog=container.querySelector('[role="dialog"]')!;assert.ok(dialog);assert.ok(dialog.contains(document.activeElement));
   const buttons=[...dialog.querySelectorAll('button')];buttons.at(-1)!.focus();
@@ -108,7 +108,7 @@ test('旧 Key 重置须确认并显示新密钥，旧行吊销且模型限制保
   await act(async()=>reset.click());assert.equal(calls.some(path=>path.endsWith('/reset')),false);
   const confirmation=[...container.querySelectorAll('button')].find(button=>button.textContent==='确认重置 Key')!;await act(async()=>confirmation.click());
   assert.equal(calls.filter(path=>path.endsWith('/reset')).length,1);
-  assert.ok(container.textContent?.includes('已吊销'));assert.ok(container.textContent?.includes('approved'));
+  assert.ok(container.textContent?.includes('已失效'));assert.ok(container.textContent?.includes('approved'));
   assert.equal(container.querySelector('input[aria-label="完整 API Key"]')?.getAttribute('type'),'password');
  });
 });
@@ -186,20 +186,17 @@ test('personal Key deletion requires one confirmation and removes only after ser
  });
 });
 
-test('deleting the managed Key clears child metadata and old controls while keeping explicit claim available',async()=>{
- const metadata={id:'employee-to-delete',prefix:'old-managed-prefix',generation:2,status:'active',created_at:fixture.created_at,claim_available:true};
- let exists=true;
+test('managed personal Key offers reset and claim but no delete or revoke',async()=>{
+ const metadata={id:'employee-managed',prefix:'old-managed-prefix',generation:2,status:'active',created_at:fixture.created_at,claim_available:true};
+ const methods:string[]=[];
  await mount(React.createElement(ApiKeysPanel,{initialKeys:[{...fixture,id:metadata.id,prefix:metadata.prefix,employee_key:true}],projects:[]}),async(input,init)=>{
-  if(init?.method==='DELETE'){exists=false;return new Response(null,{status:204});}
+  methods.push(init?.method??'GET');
   assert.ok(String(input).endsWith('/employee-key'));
-  return exists?Response.json({data:metadata}):Response.json({error:'employee_key_not_found'},{status:404});
+  return Response.json({data:metadata});
  },async container=>{
-  assert.ok(container.textContent?.includes('重置个人 Key'));
-  const trigger=[...container.querySelectorAll('button')].find(button=>button.textContent==='删除')!;
-  await act(async()=>trigger.click());
-  const confirm=[...container.querySelectorAll('button')].find(button=>button.textContent==='确认删除')!;
-  await act(async()=>{confirm.click();await new Promise(resolve=>setTimeout(resolve,0))});
-  assert.ok(!container.textContent?.includes(metadata.prefix));assert.ok(!container.textContent?.includes('重置个人 Key'));
-  assert.ok(!container.textContent?.includes('吊销个人 Key'));assert.ok(container.textContent?.includes('领取个人 Key'));
+  const labels=[...container.querySelectorAll('button')].map(button=>button.textContent);
+  assert.ok(labels.includes('重置个人 Key'));assert.ok(labels.includes('领取完整 Key'));
+  assert.ok(!labels.includes('删除'));assert.ok(!labels.some(label=>label?.includes('吊销')));
+  assert.ok(!methods.includes('DELETE'));
  });
 });

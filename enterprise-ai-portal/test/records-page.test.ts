@@ -58,7 +58,8 @@ test('缓存数值真实渲染：桌面、移动端与展开详情；零缓存�
   const { ChevronDown } = await import('lucide-react');
   const page = await source('../src/app/records/page.tsx');
   // 直接编译页面私有行组件，避免为测试增加 Next 页面不支持的命名导出。
-  const component = page.slice(page.indexOf('function CallRecordRows('), page.indexOf('function FileRecordRows('));
+  const tpsHelpers = page.slice(page.indexOf('function outputTps('), page.indexOf('function StatusBadge('));
+  const component = tpsHelpers + page.slice(page.indexOf('function CallRecordRows('), page.indexOf('function FileRecordRows('));
   const compiled = ts.transpileModule(component, {
     compilerOptions: { jsx: ts.JsxEmit.React, module: ts.ModuleKind.None },
   }).outputText;
